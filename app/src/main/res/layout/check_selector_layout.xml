@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="90dp">
+
+        <LinearLayout
+            android:id="@+id/liear_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/checkbox_in"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_icon_check"
+                android:button="@null" />
+
+            <TextView
+                android:id="@+id/tv_private_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/private_class_name"
+                android:textColor="@drawable/selector_text_color"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tv_private_time"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/private_class_name"
+                android:textColor="@color/check_selector"
+                android:textSize="18sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lear_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/checkbox_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_icon_check"
+                android:button="@null" />
+
+            <TextView
+                android:id="@+id/tv_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/user_class_name"
+                android:textColor="@drawable/selector_text_color"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tv_user_time"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/user_class_name"
+                android:textColor="@color/check_selector"
+                android:textSize="18sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+
+        <CheckBox
+            android:id="@+id/view_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:layout_marginTop="35dp"
+            android:layout_toLeftOf="@id/lear_out"
+            android:layout_toRightOf="@id/liear_in"
+            android:background="@drawable/selector_icon_check_color"
+            android:button="@null" />
+    </RelativeLayout>
+</RelativeLayout>

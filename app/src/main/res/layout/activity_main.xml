@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/iv_back"
+    android:gravity="center"
+    android:orientation="horizontal"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/relay_sign_in"
+        android:layout_width="300dp"
+        android:layout_height="350dp"
+        android:background="#0FC0CB">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            android:background="@mipmap/img_face_wigth" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="20dp"
+            android:text="@string/go_class"
+            android:textColor="#fff"
+            android:textSize="26sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relay_sign_out"
+        android:layout_width="300dp"
+        android:layout_height="350dp"
+        android:layout_marginLeft="180dp"
+        android:background="#7E4689">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            android:background="@mipmap/img_face_wigth" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="20dp"
+            android:text="@string/out_class"
+            android:textColor="#fff"
+            android:textSize="26sp" />
+    </RelativeLayout>
+</LinearLayout>

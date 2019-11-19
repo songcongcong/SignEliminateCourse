@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">SignEliminateClass</string>
+
+    <string name="msg_network_error">网络错误,请重试</string>
+    <string name="msg_unknown_error">未知错误,请重试</string>
+    <string name="loading">正在加载中...</string>
+    <string name="commen_notmake">功能尚未上线,敬请期待...</string>
+
+    <string name="private_class_name">私教签课</string>
+    <string name="user_class_name">用户签课</string>
+
+    <string name="private_out_class_name">私教消课</string>
+    <string name="user_out_class_name">用户消课</string>
+    <string name="go_class">上课</string>
+    <string name="out_class">下课</string>
+</resources>

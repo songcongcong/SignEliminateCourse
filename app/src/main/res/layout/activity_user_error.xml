@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/iv_back"
+    tools:context=".mvp.ui.UserErrorActivity">
+
+    <ImageView
+        android:id="@+id/img_back"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:background="@mipmap/icon_back" />
+
+    <com.scc.signeliminateclass.widget.CircleImageView
+        android:id="@+id/user_error_surface"
+        android:layout_width="600dp"
+        android:layout_height="600dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:clickable="false"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher" />
+
+    <LinearLayout
+        android:id="@+id/liear_error_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_error_surface"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/img_tips"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_vertical"
+            android:background="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/tv_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="请手动输入用户手机号查询"
+            android:textColor="@color/check_selector"
+            android:textSize="20sp" />
+
+        <RelativeLayout
+            android:id="@+id/relat_user_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/recycle_item_bg"
+            android:orientation="vertical"
+            android:paddingBottom="15dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/img_error_user"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/tv_error_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_toRightOf="@id/img_error_user"
+                android:text="小明"
+                android:textColor="@color/tv_user_color"
+                android:textSize="22sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/check_layout"
+        layout="@layout/check_selector_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="550dp" />
+
+    <EditText
+        android:id="@+id/ed_user_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/liear_error_user"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="50dp"
+        android:background="@drawable/recycle_item_bg"
+        android:hint="输入用户手机号码："
+        android:paddingLeft="20dp"
+        android:paddingTop="25dp"
+        android:paddingBottom="25dp"
+        android:textSize="20sp"
+        android:visibility="visible" />
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/check_layout"
+        android:layout_below="@id/liear_error_user"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp">
+
+        <TextView
+            android:id="@+id/tv_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_blue_bg"
+            android:paddingLeft="40dp"
+            android:paddingTop="20dp"
+            android:paddingRight="40dp"
+            android:paddingBottom="20dp"
+            android:text="拍照"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/user_error_recycleview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/check_layout"
+        android:layout_below="@id/ed_user_phone"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginRight="50dp"
+        android:visibility="visible" />
+
+</RelativeLayout>

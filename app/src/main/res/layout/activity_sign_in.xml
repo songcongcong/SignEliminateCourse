@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/iv_back">
+
+
+    <ImageView
+        android:id="@+id/img_back"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:background="@mipmap/icon_back" />
+
+    <RelativeLayout
+        android:id="@+id/relayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp">
+
+
+        <com.scc.signeliminateclass.widget.SurFaceView
+            android:id="@+id/sup_sufview_in"
+            android:layout_width="600dp"
+            android:layout_height="600dp"
+            android:layout_centerHorizontal="true"
+            android:background="#00000000"
+            android:clickable="false" />
+
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/check_include"
+        layout="@layout/check_selector_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="500dp" />
+
+    <LinearLayout
+        android:id="@+id/liear_li"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/relayout"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/tv_in"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_btn_color"
+            android:button="@null"
+            android:focusable="true"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="私教签课"
+            android:textColor="#fff"
+            android:textSize="28sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/liear"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/relayout"
+        android:layout_marginLeft="130dp"
+        android:layout_marginTop="50dp"
+        android:layout_toRightOf="@id/liear_li"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/tv_out"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_btn_color"
+            android:button="@null"
+            android:focusable="false"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="用户签课"
+            android:textColor="#fff"
+            android:textSize="28sp" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/sigin_recycle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/check_include"
+        android:layout_below="@id/liear"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="50dp"
+        android:visibility="gone" />
+
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+
+    <ImageView
+        android:id="@+id/img_ic"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/liear" />
+</RelativeLayout>

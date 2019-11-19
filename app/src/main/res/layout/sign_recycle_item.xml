@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+    <CheckBox
+        android:id="@+id/rb_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp" />
+
+
+    <TextView
+        android:id="@+id/tv_sign_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="80dp"
+        android:layout_toRightOf="@id/rb_btn"
+        android:text="tv_sign_time"
+        android:textColor="@color/white"
+        android:textSize="22sp" />
+
+    <ImageView
+        android:id="@+id/iv_private_pic"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="50dp"
+        android:layout_toRightOf="@id/tv_sign_time" />
+
+    <ImageView
+        android:id="@+id/iv_user_pic"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="50dp"
+        android:layout_toRightOf="@id/iv_private_pic"
+        />
+</RelativeLayout>
