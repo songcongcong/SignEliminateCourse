@@ -1,9 +1,9 @@
 package com.scc.signeliminateclass;
 
-import android.app.Application;
 import android.os.Handler;
 
 import androidx.multidex.MultiDex;
+import androidx.multidex.MultiDexApplication;
 
 import com.scc.signeliminateclass.di.compontent.DaggerApplicationCompontent;
 import com.scc.signeliminateclass.di.module.ApplicationModule;
@@ -13,7 +13,7 @@ import com.scc.signeliminateclass.di.module.ApplicationModule;
  * @author
  * @data 2019/11/8
  */
-public class MyApplication extends Application {
+public class MyApplication extends MultiDexApplication {
     private static MyApplication instance;
     protected static Handler handler;
     protected static int mainThreadId;

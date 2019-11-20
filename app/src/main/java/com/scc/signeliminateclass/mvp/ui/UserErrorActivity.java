@@ -7,12 +7,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -31,35 +29,28 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.scc.signeliminateclass.R;
-import com.scc.signeliminateclass.adapter.SignInAdapter;
-import com.scc.signeliminateclass.adapter.UserEClassErrorAdapter;
 import com.scc.signeliminateclass.adapter.UserErrorAdapter;
 import com.scc.signeliminateclass.base.BaseMvpActivity;
 import com.scc.signeliminateclass.bean.PictureInfo;
 import com.scc.signeliminateclass.bean.UserOutFaceErrorListInfo;
-import com.scc.signeliminateclass.bean.UserOutListInfo;
 import com.scc.signeliminateclass.bean.UserPhoneListInfo;
 import com.scc.signeliminateclass.mvp.impl.UserErrorPresenterImpl;
 import com.scc.signeliminateclass.mvp.uiinterface.UserUiInterface;
 import com.scc.signeliminateclass.utils.AppUtils;
 import com.scc.signeliminateclass.utils.ContensUtils;
 import com.scc.signeliminateclass.utils.FileUtil;
-import com.scc.signeliminateclass.utils.ImageUtil;
 import com.scc.signeliminateclass.utils.SPUtils;
-import com.scc.signeliminateclass.utils.TimeUtil;
-import com.scc.signeliminateclass.widget.CircleImageView;
+import com.scc.signeliminateclass.widget.GlideCircleTransform;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +65,7 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
     @Inject
     UserErrorPresenterImpl impl;
     @BindView(R.id.user_error_surface)
-    CircleImageView userErrorSurface;
+    ImageView userErrorSurface;
     @BindView(R.id.img_tips)
     ImageView imgTips;
     @BindView(R.id.tv_error_name)
@@ -129,6 +120,16 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
     private static final int RC_CHOOSE_CAMERA = 101;
     @BindView(R.id.img_back)
     ImageView imgBack;
+    @BindView(R.id.rb_btn)
+    CheckBox rbBtn;
+    @BindView(R.id.tv_sign_time)
+    TextView tvSignTime;
+    @BindView(R.id.iv_private_pic)
+    ImageView ivPrivatePic;
+    @BindView(R.id.iv_user_pic)
+    ImageView ivUserPic;
+    @BindView(R.id.sign_recycle_item)
+    RelativeLayout signRecycleItem;
     /**
      * file 相机回调的路径
      */
@@ -189,7 +190,10 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
         }
 
 
-        List<UserOutListInfo.MessageBean> prurl = (List<UserOutListInfo.MessageBean>) getIntent().getSerializableExtra("prurl");
+        String prurl = getIntent().getStringExtra("prurl");
+        String userUrl = getIntent().getStringExtra("userurl");
+        String mTime = getIntent().getStringExtra("time");
+
 
         int privated = (int) SPUtils.get(this, "orgId", 0);
         Log.d("song", "用户activity：" + privated);
@@ -197,13 +201,15 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
 //        impl.getMemberByCourse(this, AppUtils.ORG_ID, AppUtils.STORE_ID, String.valueOf(outClassId));
         String nickName = (String) SPUtils.get(this, "nickName", "");
         mName = nickName;
-        Log.d("song", "用户activity----取值：" + privated+",:"+mName);
 
         // 来自那个一个activity
         int flag = getIntent().getIntExtra("flag", 0);
         if (flag == 1) {
+            tvPrivateName.setText(getResources().getString(R.string.private_class_name));
+            tvUserName.setText(getResources().getString(R.string.user_class_name));
             liearErrorUser.setVisibility(View.VISIBLE);
             edUserPhone.setVisibility(View.VISIBLE);
+            signRecycleItem.setVisibility(View.GONE);
             // 输入手机号查询会员列表
             edUserPhone.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -224,14 +230,22 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
         } else {
             if (privated != 0) {
                 Log.d("song", "用户activity----不等于0：" + privated);
+                tvPrivateName.setText(getResources().getString(R.string.private_out_class_name));
+                tvUserName.setText(getResources().getString(R.string.user_out_class_name));
                 liearErrorUser.setVisibility(View.GONE);
                 edUserPhone.setVisibility(View.GONE);
-                userErrorRecycleview.setVisibility(View.VISIBLE);
+                userErrorRecycleview.setVisibility(View.GONE);
                 tvPicture.setVisibility(View.VISIBLE);
-                if (prurl != null && prurl.size() > 0) {
-                    SignInAdapter signInAdapter = new SignInAdapter(this, prurl);
-                    userErrorRecycleview.setLayoutManager(new LinearLayoutManager(this));
-                    userErrorRecycleview.setAdapter(signInAdapter);
+                signRecycleItem.setVisibility(View.VISIBLE);
+                rbBtn.setChecked(true);
+                if (!TextUtils.isEmpty(mTime) && !TextUtils.isEmpty(prurl) &&!TextUtils.isEmpty(userUrl)) {
+                    tvSignTime.setText(mTime);
+                    // 私教图片
+                    Glide.with(this).load(prurl).transform(new GlideCircleTransform(this))
+                            .into(ivPrivatePic);
+                    // 会员图片
+                    Glide.with(this).load(userUrl).transform(new GlideCircleTransform(this))
+                            .into(ivUserPic);
                 }
                 subscribeClick(tvPicture, o -> {
                     if (ContensUtils.checkAndApplyfPermissionActivity(UserErrorActivity.this, new String[]{Manifest.permission.CAMERA,
@@ -261,10 +275,12 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
 
 
     // activity跳转----签课跳转
-    public static void startActivity(Activity activity, int code, int flag, List<UserOutListInfo.MessageBean> prurl) {
+    public static void startActivity(Activity activity, int code, int flag, String prurl, String userurl, String mTime) {
         Intent intent = new Intent(activity, UserErrorActivity.class);
         intent.putExtra("flag", flag);
-        intent.putExtra("prurl", (Serializable) prurl);
+        intent.putExtra("prurl", prurl);
+        intent.putExtra("userurl", userurl);
+        intent.putExtra("time", mTime);
         activity.startActivityForResult(intent, code);
     }
 
@@ -311,7 +327,13 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case RC_CHOOSE_CAMERA: // 相机回调
-                photoClip(tempUri);  // 调用裁剪方法
+//                photoClip(tempUri);  // 调用裁剪方法
+                if (data != null) {
+                    setImageToView(data);
+                } else {
+                    Bitmap bitmap = BitmapFactory.decodeFile(cameraSavePath.toString());
+                    setImageNllToView(bitmap);
+                }
                 break;
             case CROP_SMALL_PICTURE: // 普通手机裁剪回调
                 if (data != null) {
@@ -372,14 +394,21 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
         if (extras != null) {
             Bitmap photo = extras.getParcelable("data");
             if (mName != null) {
-                Bitmap bitmap = ImageUtil.drawTextToCenter(this, photo, mName,
-                        26, getResources().getColor(R.color.img_color));
-                Bitmap bitmap1 = ImageUtil.drawTextToLeftBottom(this, bitmap, TimeUtil.getPictureCurrentTime(), 26,
-                        getResources().getColor(R.color.img_color), 30, 80);
-                File file = FileUtil.getFile(bitmap1);
+                File file = AppUtils.drawTextPicture(this, photo, mName);
                 impl.upLoadPicture(this, file.toString());
             }
 
+        }
+    }
+
+    /* * 相机回调图片为空
+     *
+     * @param
+     */
+    protected void setImageNllToView(Bitmap mbitmap) {
+        if (mName != null) {
+            File file = AppUtils.drawTextPicture(this, mbitmap, mName);
+            impl.upLoadPicture(this, file.toString()); // 上传图片
         }
     }
 
@@ -480,6 +509,7 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
         setResult(USER_RESULTCODE, intent);
         finish();
     }
+
 //
 //    // 消课---查询用户列表
 //    @Override

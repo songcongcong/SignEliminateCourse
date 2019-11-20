@@ -35,11 +35,19 @@ public class SignInAdapter extends RecyclerView.Adapter<SignInAdapter.MyViewHold
     private List<UserOutListInfo.MessageBean> mList;
     private CompoundButton lastCheckedRB = null;
     private int index;
+    private boolean isCheck;
+    private boolean isSelector;
+    private int mPosition;
     public SignInAdapter(Context context, List<UserOutListInfo.MessageBean> mList) {
         this.context = context;
         this.mList = mList;
     }
-
+    public SignInAdapter(Context context, List<UserOutListInfo.MessageBean> mList, boolean check, int position) {
+        this.context = context;
+        this.mList = mList;
+        this.isSelector = check;
+        this.mPosition = position;
+    }
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -58,24 +66,30 @@ public class SignInAdapter extends RecyclerView.Adapter<SignInAdapter.MyViewHold
         // 会员图片
         Glide.with(context).load(mList.get(position).getMember_sign_image()).transform(new GlideCircleTransform(context))
                 .into(holder.mUrPic);
-
-        if (position == 0) {
+        if (isSelector && mPosition != -1 && mPosition == position) {
+            Log.d("song","为true："+mPosition);
+            mList.get(mPosition).setSelector(isSelector);
+            holder.mRadioButton.setChecked(isSelector);
+        }
+        if (position == 0 && !isCheck && !isSelector) {
             mList.get(position).setSelector(true);
             holder.mRadioButton.setChecked(true);
+            Log.d("song","第一个：");
         }
         list.add(holder);
         holder.mRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                isCheck = true;
+                if(isChecked) {
                     index = position;
                 }
 
-                for(MyViewHolder mv : list){
+                for(MyViewHolder mv : list) {
                     mv.mRadioButton.setChecked(false);
                     mList.get(position).setSelector(false);
                 }
-                if(isChecked){
+                if(isChecked) {
                     holder.mRadioButton.setChecked(true);
                     mList.get(position).setSelector(true);
                 } else {
@@ -84,11 +98,12 @@ public class SignInAdapter extends RecyclerView.Adapter<SignInAdapter.MyViewHold
                 }
 
                 if (onItemListener != null) {
-                    onItemListener.onChilkListener(mList.get(position).isSelector(), mList.get(position).getId());
+                    onItemListener.onChilkListener(mList.get(position).isSelector(), mList.get(position).getId(),
+                            position);
                 }
                 if (onItemChilkListener != null) {
                     onItemChilkListener.onChilkListener(mList.get(position).getEmployee_sign_image(),
-                            mList.get(position).getMember_sign_image(), mList.get(position).getSign_time());
+                            mList.get(position).getMember_sign_image(), mList.get(position).getSign_time(), mList.get(position).isSelector());
                 }
             }
 
@@ -96,12 +111,12 @@ public class SignInAdapter extends RecyclerView.Adapter<SignInAdapter.MyViewHold
 
         if (mList.get(position).isSelector()) {
             if (onItemListener != null) {
-                Log.d("song", "默认选中:" + mList.get(position).isSelector() + "m:" + mList.get(position).getId());
-                onItemListener.onChilkListener(mList.get(position).isSelector(), mList.get(position).getId());
+                Log.d("song", "默认选中:" + mList.get(position).isSelector() + "m:" + mList.get(position).getId()+",:"+position);
+                onItemListener.onChilkListener(mList.get(position).isSelector(), mList.get(position).getId(), position);
             }
             if (onItemChilkListener != null) {
                 onItemChilkListener.onChilkListener(mList.get(position).getEmployee_sign_image(),
-                        mList.get(position).getMember_sign_image(), mList.get(position).getSign_time());
+                        mList.get(position).getMember_sign_image(), mList.get(position).getSign_time(), mList.get(position).isSelector());
             }
         }
     }
@@ -130,7 +145,7 @@ public class SignInAdapter extends RecyclerView.Adapter<SignInAdapter.MyViewHold
     private onItemListener onItemListener;
 
     public interface onItemListener {
-        void onChilkListener(boolean isSelector, int id);
+        void onChilkListener(boolean isSelector, int id, int position);
     }
 
     public void setOnItemListener(SignInAdapter.onItemListener onItemListener) {
@@ -140,10 +155,14 @@ public class SignInAdapter extends RecyclerView.Adapter<SignInAdapter.MyViewHold
     private onItemChilkListener onItemChilkListener;
 
     public interface onItemChilkListener {
-        void onChilkListener(String mPrUrl, String mUserUrl, String time);
+        void onChilkListener(String mPrUrl, String mUserUrl, String time, boolean isCheck);
     }
 
     public void setOnItemChilkListener(onItemChilkListener onItemListener) {
         this.onItemChilkListener = onItemListener;
+    }
+
+    public List<UserOutListInfo.MessageBean> getmList() {
+        return mList;
     }
 }

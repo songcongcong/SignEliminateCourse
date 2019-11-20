@@ -13,7 +13,7 @@
         android:id="@+id/relay_sign_in"
         android:layout_width="300dp"
         android:layout_height="350dp"
-        android:background="#0FC0CB">
+        android:background="@drawable/shape_class_bg">
 
         <ImageView
             android:layout_width="150dp"
@@ -38,7 +38,7 @@
         android:layout_width="300dp"
         android:layout_height="350dp"
         android:layout_marginLeft="180dp"
-        android:background="#7E4689">
+        android:background="@drawable/shape_outclass_bg">
 
         <ImageView
             android:layout_width="150dp"

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,56 +42,107 @@ import com.scc.signeliminateclass.mvp.uiinterface.TestErrorUiInterface;
 import com.scc.signeliminateclass.utils.AppUtils;
 import com.scc.signeliminateclass.utils.ContensUtils;
 import com.scc.signeliminateclass.utils.FileUtil;
-import com.scc.signeliminateclass.utils.ImageUtil;
 import com.scc.signeliminateclass.utils.SPUtils;
-import com.scc.signeliminateclass.utils.TimeUtil;
-import com.scc.signeliminateclass.widget.CircleImageView;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
+/**
+ * TestErrorActivity
+ */
 public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> implements TestErrorUiInterface {
-
+    /**
+     * TAG
+     */
     private static final String TAG = "TestErrorActivity";
+    /**
+     * 添加注解
+     */
     @Inject
     TestErrorPresenterImpl impl;
+    /**
+     * testSufviewIn
+     */
     @BindView(R.id.text_sufview_in)
-    CircleImageView testSufviewIn;
+    ImageView testSufviewIn;
+    /**
+     * liearError
+     */
     @BindView(R.id.liear_error)
     LinearLayout liearError;
+    /**
+     * errorRecycle
+     */
     @BindView(R.id.error_recycle)
     RecyclerView errorRecycle;
+    /**
+     * checkboxIn
+     */
     @BindView(R.id.checkbox_in)
     CheckBox checkboxIn;
+    /**
+     * tvPrivateName
+     */
     @BindView(R.id.tv_private_name)
     TextView tvPrivateName;
+    /**
+     * tvPrivateTime
+     */
     @BindView(R.id.tv_private_time)
     TextView tvPrivateTime;
+    /**
+     * liearIn
+     */
     @BindView(R.id.liear_in)
     LinearLayout liearIn;
+    /**
+     * checkboxOut
+     */
     @BindView(R.id.checkbox_out)
     CheckBox checkboxOut;
+    /**
+     * tvUserName
+     */
     @BindView(R.id.tv_user_name)
     TextView tvUserName;
+    /**
+     * tvUserTime
+     */
     @BindView(R.id.tv_user_time)
     TextView tvUserTime;
+    /**
+     * learOut
+     */
     @BindView(R.id.lear_out)
     LinearLayout learOut;
+    /**
+     * viewSelector
+     */
     @BindView(R.id.view_selector)
     CheckBox viewSelector;
+    /**
+     * imgTips
+     */
     @BindView(R.id.img_tips)
     ImageView imgTips;
+    /**
+     * tvTips
+     */
     @BindView(R.id.tv_tips)
     TextView tvTips;
+    /**
+     * tvPicture
+     */
     @BindView(R.id.tv_picture)
     TextView tvPicture;
 
@@ -100,12 +150,24 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
      * 选择相机
      */
     private static final int RC_CHOOSE_CAMERA = 101;
+    /**
+     * ivUser
+     */
     @BindView(R.id.iv_user)
     ImageView ivUser;
+    /**
+     * tvTestUserName
+     */
     @BindView(R.id.tv_test_user_name)
     TextView tvTestUserName;
+    /**
+     * errorRecycleOut
+     */
     @BindView(R.id.error_recycle_out)
     RecyclerView errorRecycleOut;
+    /**
+     * imgBack
+     */
     @BindView(R.id.img_back)
     ImageView imgBack;
     /**
@@ -120,29 +182,54 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
     /**
      * 裁剪回调
      */
-    private static final int CROP_SMALL_PICTURE = 102;//裁剪
+    private static final int CROP_SMALL_PICTURE = 102; //裁剪
     /**
      * 小米裁剪回调
      */
-    private static final int CROP_SMALL_PICTURE_MIUI = 103;//小米裁剪
+    private static final int CROP_SMALL_PICTURE_MIUI = 103; //小米裁剪
     /**
      * uritempFile
      */
     private Uri uritempFile;
 
-    //权限
+    /**
+     * 相机权限
+     */
     public static final String CAMERA_PERMISSION = Manifest.permission.CAMERA;
-
+    /**
+     * test - 请求码
+     */
     public static final int TEST_REQUESTCODE = 1;
+    /**
+     * test - 结果码
+     */
     public static final int TEST_RESULTCODE = 2;
-
+    /**
+     * mRelayoutItem
+     */
     private RelativeLayout mRelayoutItem;
+    /**
+     * mId
+     */
     private int mId;
+    /**
+     * mNickName
+     */
     private String mNickName;
+    /**
+     * flag
+     */
     private int flag;
-
+    /**
+     * mOutClassId
+     */
     private int mOutClassId;
 
+    private List<UserOutListInfo.MessageBean> mList;
+
+    private boolean isChecked;
+
+    private int mPosition;
     @Override
     protected TestErrorPresenterImpl initInjector() {
         component.inject(this);
@@ -169,9 +256,17 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
             cameraSavePath.getParentFile().mkdirs();
         }
         flag = getIntent().getIntExtra("flag", 0);
+        mList = new ArrayList<>();
         subscribeClick(imgBack, o -> {
             finish();
         });
+        if (flag == 1) {
+            tvPrivateName.setText(getResources().getString(R.string.private_class_name));
+            tvUserName.setText(getResources().getString(R.string.user_class_name));
+        } else {
+            tvPrivateName.setText(getResources().getString(R.string.private_out_class_name));
+            tvUserName.setText(getResources().getString(R.string.user_out_class_name));
+        }
         // 请求接口---私教人脸识别失败，获取私教列表
         impl.getPrivateEmployee(this, AppUtils.ORG_ID, AppUtils.STORE_ID);
     }
@@ -190,7 +285,7 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
         } else {
             try {
                 tempUri = Uri.fromFile(cameraSavePath); // 传递路径
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);// 更改系统默认存储路径
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri); // 更改系统默认存储路径
                 startActivityForResult(intent, RC_CHOOSE_CAMERA);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -209,6 +304,8 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
                     }
                     break;
                 }
+                default:
+                    break;
         }
     }
 
@@ -217,7 +314,14 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case RC_CHOOSE_CAMERA: // 相机回调
-                photoClip(tempUri);  // 调用裁剪方法
+//                photoClip(tempUri);  // 调用裁剪方法
+                if (data != null) {
+                    setImageToView(data);
+                } else {
+                    Bitmap bitmap = BitmapFactory.decodeFile(cameraSavePath.toString());
+                    setImageNllToView(bitmap);
+                    Log.d("song", "相机回调data:" + cameraSavePath.toString());
+                }
                 break;
             case CROP_SMALL_PICTURE: // 普通手机裁剪回调
                 if (data != null) {
@@ -227,13 +331,15 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
             case CROP_SMALL_PICTURE_MIUI:  // 小米适配----裁剪之后intent系统获取不到，只能显示裁剪之后的图片，而不是从intent中获取
                 setImageMiuiToView();
                 break;
+                default:
+                    break;
         }
     }
 
     /**
      * 裁剪图片方法实现
      *
-     * @param uri
+     * @param uri uri
      */
     private void photoClip(Uri uri) {
         // 调用系统中自带的图片剪裁
@@ -253,7 +359,8 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
         intent.putExtra("outputY", 150);
         intent.putExtra("return-data", true);
         if (Build.MODEL.contains("MI") || Build.MODEL.contains("Redmi 6A")) {
-            uritempFile = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/test/" + System.currentTimeMillis() + ".jpg");
+            uritempFile = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/test/"
+                    + System.currentTimeMillis() + ".jpg");
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uritempFile);
             intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
             intent.putExtra("noFaceDetection", true);
@@ -278,17 +385,23 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
         if (extras != null) {
             Bitmap photo = extras.getParcelable("data");
             if (mNickName != null) {
-                Bitmap bitmap = ImageUtil.drawTextToCenter(this, photo, mNickName,
-                        26, getResources().getColor(R.color.img_color));
-                Bitmap bitmap1 = ImageUtil.drawTextToLeftBottom(this, bitmap, TimeUtil.getPictureCurrentTime(), 26,
-                        getResources().getColor(R.color.img_color), 30, 80);
-                File file = FileUtil.getFile(bitmap1);
+                File file = AppUtils.drawTextPicture(this, photo, mNickName);
                 impl.upLoadPicture(this, file.toString()); // 上传图片
             }
 
         }
     }
 
+    /* * 相机回调图片为空
+     *
+     * @param
+     */
+    protected void setImageNllToView(Bitmap mbitmap) {
+            if (mNickName != null) {
+                File file = AppUtils.drawTextPicture(this, mbitmap, mNickName);
+                impl.upLoadPicture(this, file.toString()); // 上传图片
+            }
+    }
     // 将bitmap转化为string
     public String bitmapToString(Bitmap bitmap) {
         //将Bitmap转换成字符串
@@ -388,11 +501,14 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
 
     @Override
     public void setUpLoadPicture(PictureInfo pictureInfo) {
-        Log.d("song", "testErrorActivity：" + ",:" + pictureInfo.getImage() + ",私教id：" + mId);
+        Log.d("song", "testErrorActivity：" + ",:" + pictureInfo.getImage() + ",私教id：" + mId+",:"+mPosition+",:"+isChecked);
         // 拍照成功跳转到签课页面
         Intent intent = new Intent();
         intent.putExtra("primgUrl", pictureInfo.getImage());
         intent.putExtra("prId", mId);
+        intent.putExtra("mListIntent", (Serializable) mList);
+        intent.putExtra("check", isChecked);
+        intent.putExtra("position", mPosition);
         setResult(TEST_RESULTCODE, intent);
         finish();
     }
@@ -411,11 +527,13 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
             SignInAdapter signInAdapter = new SignInAdapter(this, message);
             errorRecycleOut.setLayoutManager(new LinearLayoutManager(this));
             errorRecycleOut.setAdapter(signInAdapter);
-
+            mList = signInAdapter.getmList();
             signInAdapter.setOnItemListener(new SignInAdapter.onItemListener() {
                 @Override
-                public void onChilkListener(boolean isSelector, int id) {
+                public void onChilkListener(boolean isSelector, int id, int position) {
                     mOutClassId = id;
+                    isChecked = isSelector;
+                    mPosition = position;
                 }
             });
 
@@ -428,7 +546,5 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
                 }
             });
         }
-
     }
-
 }

@@ -46,25 +46,64 @@ import io.reactivex.functions.Consumer;
 /**
  * Description:This is a fast-dev and common base activity.
  * Created by RockPhoenix on 2017/12/22 on 17:58.
+ *
+ */
+
+/**
+ * SuppressWarnings
+ * @param <T>
  */
 @SuppressWarnings("unused")
+/**
+ * SuppressLint
+ */
 @SuppressLint("CheckResult")
-public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseActivity implements BaseUiInterface, NetWorkBroadReceiver.NetWorkState {
+public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseActivity
+        implements BaseUiInterface, NetWorkBroadReceiver.NetWorkState {
 
     /**
      * Using activity class name as the log tag.
      */
     protected final String LOG_TAG = getClass().getSimpleName();
+    /**
+     * bar_layout
+     */
     protected ViewGroup bar_layout = null;
+    /**
+     * mProgressDialog
+     */
     private ProgressDialog mProgressDialog;
+    /**
+     * enterAnimation
+     */
     private int enterAnimation = R.anim.fragment_slide_left_in;
+    /**
+     * outAnimation
+     */
     private int outAnimation = R.anim.fragment_slide_left_out;
+    /**
+     * unbinder
+     */
     private Unbinder unbinder;
+    /**
+     * impl
+     */
     protected T impl;
-    //是否在前台显示
+    /**
+     * 是否在前台显示
+     */
     public static boolean isForeground = false;
+    /**
+     * component
+     */
     public ActivityCompontent component;
+    /**
+     * evevt
+     */
     public static  NetWorkBroadReceiver.NetWorkState evevt;
+    /**
+     * netType
+     */
     private int netType;
 
     @Override
@@ -88,27 +127,37 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
         setStatusBar();
     }
 
-    //初始化Presenter
+    /**
+     *
+     */
     private void injectPresenter() {
         impl = initInjector();
         impl.attachView(this);
     }
 
-    //初始化Compontent
+    /**
+     * 初始化Compontent
+     */
     private void initActivityComponent() {
         component = DaggerActivityCompontent.builder()
                 .activityModule(new ActivityModule(this))
                 .build();
     }
 
-    // 初始化判断有没有网络
-    public boolean initNetWork(){
+    /**
+     * 初始化判断有没有网络
+     * @return boolean
+     */
+    public boolean initNetWork() {
         netType = NetUtil.getNetWorkState(this);
         return isNetConnect();
     }
 
-    // 判断有无网络
-    public boolean isNetConnect(){
+    /**
+     * 判断有无网络
+     * @return boolean
+     */
+    public boolean isNetConnect() {
         if (netType == 1) {
             return true;
         } else if (netType == 0) {
@@ -119,20 +168,29 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
         return false;
     }
 
-    // 网络变化之后的类型
+    /**
+     * 网络变化之后的类型
+     * @param state
+     */
     @Override
     public void onNetWorkChange(int state) {
         this.netType = state;
         isNetConnect();
-        Log.d("song","baseactivity："+state);
     }
 
+    /**
+     * init
+     * @return t
+     */
     protected abstract T initInjector();
 
-    //设置状态栏
+    /**
+     * 设置状态栏
+     */
     public void setStatusBar() {
         //使状态栏透明并使布局向上填充
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+                && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             //透明状态栏
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -153,7 +211,8 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
 //                bar_layout.post(() -> {
 //                    //标题栏高度
 //                    int height = bar_layout.getHeight();
-//                    android.widget.RelativeLayout.LayoutParams params = (android.widget.RelativeLayout.LayoutParams) bar_layout.getLayoutParams();
+//                    android.widget.RelativeLayout.LayoutParams params
+//                    = (android.widget.RelativeLayout.LayoutParams) bar_layout.getLayoutParams();
 //                    //导航栏高度+通知栏高度
 //                    params.height = height + statusBarHeight;
 //                    bar_layout.setLayoutParams(params);
@@ -183,25 +242,27 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
     protected void onDestroy() {
         Log.d(LOG_TAG, "----- onDestroy -----");
         impl.detachView();
-        if (unbinder != null)
+        if (unbinder != null) {
             unbinder.unbind();
+        }
         ActivityContainer.finishSingleActivity(this);
         super.onDestroy();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        if (newConfig.fontScale != 1)//非默认值
+        if (newConfig.fontScale != 1) { //非默认值
             getResources();
+        }
         super.onConfigurationChanged(newConfig);
     }
 
     @Override
     public Resources getResources() {
         Resources res = super.getResources();
-        if (res.getConfiguration().fontScale != 1) {//非默认值
+        if (res.getConfiguration().fontScale != 1) { //非默认值
             Configuration newConfig = new Configuration();
-            newConfig.setToDefaults();//设置默认
+            newConfig.setToDefaults(); //设置默认
             res.updateConfiguration(newConfig, res.getDisplayMetrics());
         }
         return res;
@@ -236,14 +297,15 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
     @CallSuper
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(LOG_TAG, "--- onActivityResult --- requestCode=" + requestCode + ",resultCode=" +
-                resultCode + ", data=" + data);
+        Log.d(LOG_TAG, "--- onActivityResult --- requestCode=" + requestCode + ",resultCode="
+                + resultCode + ", data=" + data);
         super.onActivityResult(requestCode, resultCode, data);
     }
 
 
     /**
      * Specify the avtivity_group_details file this activity should display by calling {@link #setContentView(int)}.
+     * @return t
      */
     @LayoutRes
     protected abstract int getLayoutId();
@@ -283,19 +345,35 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
      */
     protected abstract void init();
 
+    /**
+     * setEnterAnimation
+     * @param animation animation
+     */
     protected void setEnterAnimation(int animation) {
         this.enterAnimation = animation;
     }
 
+    /**
+     * setOutAnimation
+     * @param animation animation
+     */
     protected void setOutAnimation(int animation) {
         this.outAnimation = animation;
     }
 
+    /**
+     * getTransitionEnterAnim
+     * @return int
+     */
     @AnimRes
     protected int getTransitionEnterAnim() {
         return enterAnimation;
     }
 
+    /**
+     * getTransitionOutAnim
+     * @return int
+     */
     @AnimRes
     protected int getTransitionOutAnim() {
         return outAnimation;
@@ -366,10 +444,18 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
         return (T) (view.findViewById(id));
     }
 
+    /**
+     * toastShort
+     * @param msg msg
+     */
     protected void toastShort(@StringRes int msg) {
         ToastUtils.showToast(msg);
     }
 
+    /**
+     * toastShort
+     * @param msg msg
+     */
     protected void toastShort(@NonNull String msg) {
         ToastUtils.showToast(msg);
     }
@@ -401,10 +487,18 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
         overridePendingTransition(getTransitionEnterAnim(), getTransitionOutAnim());
     }
 
+    /**
+     * subscribeFeatureStub
+     * @param viewId viewId
+     */
     protected void subscribeFeatureStub(@IdRes int viewId) {
         subscribeFeatureStub($(viewId));
     }
 
+    /**
+     * subscribeFeatureStub
+     * @param view view
+     */
     protected void subscribeFeatureStub(View view) {
         subscribeClick(view, o -> toastForNotImplementedFeature());
     }
@@ -414,6 +508,8 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
      *
      * @see #subscribeClick(View, Consumer)
      * @see #$(int)
+     * @param id id
+     * @param consumer cunsumer
      */
     protected void subscribeClick(@IdRes int id, Consumer<Object> consumer) {
         subscribeClick($(id), consumer);
@@ -483,6 +579,9 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
 
     /**
      * 判断软键盘是否弹出
+     * @param context context
+     * @param v v
+     * @return boolean
      */
     public boolean isShowKeyboard(Context context, View v) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);

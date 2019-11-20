@@ -19,7 +19,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center_vertical"
-            android:background="@mipmap/ic_launcher" />
+            android:background="@mipmap/iv_bg" />
 
         <TextView
             android:id="@+id/class_success"

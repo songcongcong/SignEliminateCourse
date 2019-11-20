@@ -7,10 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -19,6 +21,7 @@ import androidx.core.app.ActivityCompat;
 
 
 import com.scc.signeliminateclass.MyApplication;
+import com.scc.signeliminateclass.R;
 
 import java.io.File;
 
@@ -29,9 +32,13 @@ import java.io.File;
  */
 public class AppUtils {
 
-    // 参数orgid
+    /**
+     * 参数orgid
+     */
     public static final String ORG_ID = "234892mid";
-    // 参数storeid
+    /**
+     * 参数storeid
+     */
     public static final String STORE_ID = "3";
 
     /**
@@ -63,6 +70,9 @@ public class AppUtils {
 
     /**
      * 获取版本名称
+     *
+     * @param context context
+     * @return versionName
      */
     public static String getAppVersionName(Context context) {
         String versionName = "";
@@ -82,6 +92,9 @@ public class AppUtils {
 
     /**
      * 获取版本号
+     *
+     * @param context context
+     * @return versioncode
      */
     public static int getAppVersionCode(Context context) {
         int versioncode = -1;
@@ -96,10 +109,17 @@ public class AppUtils {
         return versioncode;
     }
 
+    /**
+     * 获取IMEL
+     *
+     * @param context context
+     * @return id
+     */
     public static String getIMEI(Context context) {
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context
                 .TELEPHONY_SERVICE);
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -108,13 +128,15 @@ public class AppUtils {
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
             return tm.getDeviceId();
-        }else{
+        } else {
             return null;
         }
     }
 
     /**
      * 显示软键盘
+     *
+     * @param et et
      */
     public static void openSoftInput(EditText et) {
         InputMethodManager inputMethodManager = (InputMethodManager) et.getContext()
@@ -124,6 +146,8 @@ public class AppUtils {
 
     /**
      * 隐藏软键盘
+     *
+     * @param et et
      */
     public static void hideSoftInput(EditText et) {
         InputMethodManager inputMethodManager = (InputMethodManager) et.getContext()
@@ -142,7 +166,7 @@ public class AppUtils {
         boolean sdCardExist = Environment.getExternalStorageState().equals(Environment
                 .MEDIA_MOUNTED);   //判断sd卡是否存在
         if (sdCardExist) {
-            sdDir = Environment.getExternalStorageDirectory();//获取跟目录
+            sdDir = Environment.getExternalStorageDirectory(); //获取跟目录
         }
         return sdDir;
     }
@@ -150,7 +174,8 @@ public class AppUtils {
     /**
      * 安装文件
      *
-     * @param data
+     * @param context context
+     * @param data    data
      */
     public static void promptInstall(Context context, Uri data) {
         Intent promptInstall = new Intent(Intent.ACTION_VIEW)
@@ -160,6 +185,12 @@ public class AppUtils {
         context.startActivity(promptInstall);
     }
 
+    /**
+     * copy2clipboard
+     *
+     * @param context context
+     * @param text    text
+     */
     public static void copy2clipboard(Context context, String text) {
         ClipboardManager cm = (ClipboardManager) context.getSystemService(Context
                 .CLIPBOARD_SERVICE);
@@ -195,5 +226,45 @@ public class AppUtils {
             // 如果是子线程, 借助handler让其运行在主线程
             getHandler().post(r);
         }
+    }
+
+    /**
+     * 为图片添加水印
+     *
+     * @param context   context
+     * @param mbitmap   mbitmap
+     * @param mNickName mNickName
+     * @return file
+     */
+    public static File drawTextPicture(Context context, Bitmap mbitmap, String mNickName) {
+        if (!TextUtils.isEmpty(mNickName)) {
+            Bitmap bitmap = ImageUtil.drawTextToCenter(context, mbitmap, mNickName,
+                    150, context.getResources().getColor(R.color.img_color));
+            Bitmap bitmap1 = ImageUtil.drawTextToLeftBottom(context, bitmap, TimeUtil.getPictureCurrentTime(), 130,
+                    context.getResources().getColor(R.color.img_color), 500, 300);
+            File file = FileUtil.getFile(bitmap1);
+            return file;
+        }
+        return null;
+    }
+
+    /**
+     * 为图片添加水印
+     *
+     * @param context   context
+     * @param mbitmap   mbitmap
+     * @param mNickName mNickName
+     * @return file
+     */
+    public static File drawTextFaceSuccPicture(Context context, Bitmap mbitmap, String mNickName) {
+        if (!TextUtils.isEmpty(mNickName)) {
+            Bitmap bitmap = ImageUtil.drawTextToCenter(context, mbitmap, mNickName,
+                    50, context.getResources().getColor(R.color.img_color));
+            Bitmap bitmap1 = ImageUtil.drawTextToLeftBottom(context, bitmap, TimeUtil.getPictureCurrentTime(), 50,
+                    context.getResources().getColor(R.color.img_color), 150, 160);
+            File file = FileUtil.getFile(bitmap1);
+            return file;
+        }
+        return null;
     }
 }

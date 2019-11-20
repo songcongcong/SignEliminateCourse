@@ -62,9 +62,13 @@ public class StartClassActivity extends AppCompatActivity {
         if (isStart == 1) {
             tvStartClass.setText("开始上课吧");
             classSuccess.setText("签课成功");
+            tvPrivateName.setText(getResources().getString(R.string.private_class_name));
+            tvUserName.setText(getResources().getString(R.string.user_class_name));
         } else {
             tvStartClass.setText("恭喜上课完成");
-            classSuccess.setText("消客成功");
+            classSuccess.setText("消课成功");
+            tvPrivateName.setText(getResources().getString(R.string.private_out_class_name));
+            tvUserName.setText(getResources().getString(R.string.user_out_class_name));
         }
     }
 

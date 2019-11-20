@@ -68,7 +68,7 @@ public class MHFace {
         client = new AipFace(APP_ID, API_KEY, SECRET_KEY);
         // 可选：设置网络连接参数
         client.setConnectionTimeoutInMillis(2000);
-        client.setSocketTimeoutInMillis(5000);
+        client.setSocketTimeoutInMillis(3000);
 
     }
 
@@ -87,7 +87,7 @@ public class MHFace {
 //	}
 
     /**
-     * @Title: face2Bytes
+     * @Title: face2Bytesa
      * @Description: TODO(作用 ：)
      * @param: @param file
      * @param: @return

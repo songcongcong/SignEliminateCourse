@@ -16,4 +16,7 @@
 
     <color name="class_success">#FF6633</color>\
     <color name="img_color">#ff0000</color>
+    <color name="color_sign">#0FC0CB</color>
+    <color name="color_out">#7E4689</color>
+
 </resources>
