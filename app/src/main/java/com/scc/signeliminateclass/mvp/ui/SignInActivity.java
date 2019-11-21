@@ -56,13 +56,13 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * SignInActivity
@@ -163,8 +163,14 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
      */
     @BindView(R.id.sigin_recycle)
     RecyclerView siginRecycle;
+    /**
+     * winpayLoadingBg
+     */
     @BindView(R.id.winpay_loading_bg)
     ImageView winpayLoadingBg;
+    /**
+     * signLinear
+     */
     @BindView(R.id.sign_linear)
     LinearLayout signLinear;
     /**
@@ -293,14 +299,14 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
      * 用户---根据课程id查询人脸是否成功
      */
     private static final String CLASSOUT_URL = "outfile";
-    /**
-     * 用户保存成功时间
-     */
-    private static final String USER_TIME = "userTime";
-    /**
-     * 上课私教时间
-     */
-    private static final String CURRENT_TIME = "currentTime";
+//    /**
+//     * 用户保存成功时间
+//     */
+//    private static final String USER_TIME = "userTime";
+//    /**
+//     * 上课私教时间
+//     */
+//    private static final String CURRENT_TIME = "currentTime";
     /**
      * 判断按钮只点击一次
      */
@@ -318,8 +324,18 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
      * 无网络时将图片存入sp
      */
     private static final String NO_NETWORK = "noNetWork";
-
+    /**
+     * mList
+     */
     private  List<UserOutListInfo.MessageBean>  mList;
+    /**
+     * netWorkAvalible
+     */
+    private boolean netWorkAvalible;
+    /**
+     * signInAdapter
+     */
+    private SignInAdapter signInAdapter;
     /**
      * handler
      */
@@ -344,7 +360,8 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                                 impl.testUserFacePass(SignInActivity.this, AppUtils.ORG_ID, AppUtils.STORE_ID, mUserID);
                             } else {
                                 if (mOutUserId != 0) {
-                                    Log.d("song", "用户id：" + mUserID + ",:" + AppUtils.ORG_ID + ",:" + AppUtils.STORE_ID);
+                                    Log.d("song", "用户id：" + mUserID + ",:"
+                                            + AppUtils.ORG_ID + ",:" + AppUtils.STORE_ID);
                                     impl.testMemberFaceExit(SignInActivity.this, AppUtils.ORG_ID, AppUtils.STORE_ID,
                                             mUserID, String.valueOf(mOutUserId));
                                 }
@@ -375,8 +392,7 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
 
         }
     };
-    private boolean netWorkAvalible;
-    private SignInAdapter signInAdapter;
+
 
 
     @Override
@@ -448,7 +464,8 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                 signInAdapter.notifyDataSetChanged();
             }
         }
-//        List<UserOutListInfo.MessageBean> flagList = (List<UserOutListInfo.MessageBean>) getIntent().getSerializableExtra("flagList");
+//        List<UserOutListInfo.MessageBean> flagList = (List<UserOutListInfo.MessageBean>)
+//        getIntent().getSerializableExtra("flagList");
 //        if (flagList != null && flagList.size()>0) {
 //            siginRecycle.setVisibility(View.VISIBLE);
 //        }
@@ -515,11 +532,11 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                         SPUtils.put(this, PRIVATE_ID, prId);
                         SPUtils.put(this, PRIVATE_URL, primgUrl);
                         if (flag == 2) {
-                            Log.d("song","识别失败");
+                            Log.d("song", "识别失败");
                             isResult = true;
                             SPUtils.remove(this, "prid");
                             SPUtils.put(this, "prid", prId);
-                            if (mListIntent != null && mListIntent.size()>0) {
+                            if (mListIntent != null && mListIntent.size() > 0) {
                                 getPrivateCourse(mListIntent, check, position);
                             }
 //                            // 查询私教列表
@@ -558,17 +575,17 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                         int privated = (int) SPUtils.get(this, PRIVATE_ID, 0);
 
                         // 会员跳转传递
-                        String userTime = (String) SPUtils.get(this, USER_TIME, "");
+//                        String userTime = (String) SPUtils.get(this, USER_TIME, "");
 
                         // 获取课程id----私教人脸识别成功，显示的列表
                         int mClassId = (int) SPUtils.get(this, "outUserId", 0);
 
                         if (flag == 1) {
                             impl.saveMessage(this, AppUtils.ORG_ID, AppUtils.STORE_ID, String.valueOf(privated),
-                                    prfile, String.valueOf(userIdError), userImg, userTime);
+                                    prfile, String.valueOf(userIdError), userImg, TimeUtil.getCurrentTime());
                         } else {
                             impl.saveExitMessage(this, AppUtils.ORG_ID, AppUtils.STORE_ID, String.valueOf(mClassId),
-                                    prfile, userImg, userTime);
+                                    prfile, userImg, TimeUtil.getCurrentTime());
                         }
                     }
                 }
@@ -610,10 +627,7 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
         checkboxIn.setSelected(true);
         tvPrivateName.setSelected(true);
         tvPrivateTime.setVisibility(View.VISIBLE);
-        SPUtils.remove(this, CURRENT_TIME);
-        SPUtils.put(this, CURRENT_TIME, TimeUtil.getCurrentTime());
-        String currentTime = (String) SPUtils.get(this, CURRENT_TIME, "");
-        tvPrivateTime.setText(currentTime);
+        tvPrivateTime.setText(TimeUtil.getCurrentTime());
     }
 
     /**
@@ -627,10 +641,7 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
         checkboxOut.setSelected(true);
         tvUserName.setSelected(true);
         tvUserTime.setVisibility(View.VISIBLE);
-        SPUtils.remove(this, USER_TIME);
-        SPUtils.put(this, USER_TIME, TimeUtil.getCurrentTime());
-        String userTime = (String) SPUtils.get(this, USER_TIME, "");
-        tvUserTime.setText(userTime);
+        tvUserTime.setText(TimeUtil.getCurrentTime());
 
         // 改变中间的连接线状态
         viewSelector.setSelected(true);
@@ -723,7 +734,8 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                 final Bitmap rawbitmap = BitmapFactory.decodeByteArray(byteArrayOutputStream.toByteArray(),
                         0, byteArrayOutputStream.size());
                 if (!TextUtils.isEmpty(info.getPrivateMessage().getNickname())) {
-                    File file = AppUtils.drawTextFaceSuccPicture(this, rawbitmap, info.getPrivateMessage().getNickname());
+                    File file = AppUtils.drawTextFaceSuccPicture(this, rawbitmap,
+                            info.getPrivateMessage().getNickname());
                     if (!netWorkAvalible) {
                         SPUtils.put(this, NO_NETWORK, file.toString());
                     }
@@ -833,17 +845,17 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
         String urfile = (String) SPUtils.get(this, USER_URL, ""); // 签课-- 会员图片
         int privated = (int) SPUtils.get(this, PRIVATE_ID, 0); // 签课--私教id
         int userId = (int) SPUtils.get(this, USER_ID, 0); //签课 --会员id
-        String userTime = (String) SPUtils.get(this, USER_TIME, "");
+
         if (isUserSaveSucc) {
             if (flag == 1) {
                 impl.saveMessage(this, AppUtils.ORG_ID, AppUtils.STORE_ID, String.valueOf(privated),
-                        prfile, String.valueOf(userId), urfile, userTime);
+                        prfile, String.valueOf(userId), urfile, TimeUtil.getCurrentTime());
             } else {
                 String outfile = (String) SPUtils.get(this, CLASSOUT_URL, "");
                 // 获取课程id----私教人脸识别成功，显示的列表
                 int mClassId = (int) SPUtils.get(this, "outUserId", 0);
                 impl.saveExitMessage(this, AppUtils.ORG_ID, AppUtils.STORE_ID, String.valueOf(mClassId),
-                        prfile, outfile, userTime);
+                        prfile, outfile, TimeUtil.getCurrentTime());
             }
         }
     }
@@ -866,8 +878,17 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
         }
     }
 
+    /**
+     * mPvUrl
+     */
     private String mPvUrl;
+    /**
+     * mUserImgUrl
+     */
     private String mUserImgUrl;
+    /**
+     * mTime
+     */
     private  String mTime;
     /**
      * 判断私教查询列表点击返回键
@@ -900,7 +921,8 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                 privatePass = 3;
                 final Bitmap rawbitmap = BitmapFactory.decodeByteArray(byteArrayOutputStream.toByteArray(),
                         0, byteArrayOutputStream.size());
-                File file = AppUtils.drawTextFaceSuccPicture(this, rawbitmap, outFaceExitInfo.getMemberMessage().getName());
+                File file = AppUtils.drawTextFaceSuccPicture(this, rawbitmap,
+                        outFaceExitInfo.getMemberMessage().getName());
                 if (!netWorkAvalible) {
                     SPUtils.put(this, NO_NETWORK, file.toString());
                 }
@@ -1001,6 +1023,9 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
 
     /**
      * 适配已签课列表
+     * @param list list
+     * @param check check
+     * @param position  position
      */
     private void getPrivateCourse(List<UserOutListInfo.MessageBean>  list, boolean check, int position) {
        if (list.size() > 0) {

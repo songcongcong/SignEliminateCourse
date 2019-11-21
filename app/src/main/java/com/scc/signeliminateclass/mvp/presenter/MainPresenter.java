@@ -7,5 +7,11 @@ import android.content.Context;
  * @data 2019/9/22
  */
 public interface MainPresenter {
+    /**
+     * checkMessage
+     * @param context context
+     * @param orgId orgId
+     * @param  store store
+     */
     void checkMessage(Context context, String orgId, String store);
 }

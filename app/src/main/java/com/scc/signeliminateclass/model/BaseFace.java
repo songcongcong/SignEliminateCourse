@@ -27,7 +27,13 @@ import java.io.Serializable;
 */
 public class BaseFace  implements Serializable {
 
+	/**
+	 * probability
+	 */
 	private String probability;
+	/**
+	 * type
+	 */
 	private String type;
 	/**
 	 * @return the probability

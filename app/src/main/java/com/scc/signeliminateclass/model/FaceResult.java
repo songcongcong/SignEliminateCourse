@@ -26,11 +26,17 @@ import java.util.List;
 * 2019年7月5日     cmj           v1.0.0               修改原因
 */
 public class FaceResult {
-
+	/**
+	 * face_num
+	 */
 	private String face_num;
-	
+	/**
+	 * face_list
+	 */
 	private List<FaceList> face_list;
-	
+	/**
+	 * user_list
+	 */
 	private List<UserList> user_list;
 	
 

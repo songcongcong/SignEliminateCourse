@@ -19,7 +19,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_centerInParent="true"
-            android:background="@mipmap/img_face_wigth" />
+            android:background="@mipmap/img_bg4" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_centerInParent="true"
-            android:background="@mipmap/img_face_wigth" />
+            android:background="@mipmap/img_bg4" />
 
         <TextView
             android:layout_width="wrap_content"

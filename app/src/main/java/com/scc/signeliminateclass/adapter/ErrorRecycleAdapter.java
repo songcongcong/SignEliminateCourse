@@ -22,14 +22,23 @@ import java.util.List;
  * @data 2019/11/11
  */
 public class ErrorRecycleAdapter extends RecyclerView.Adapter<ErrorRecycleAdapter.MyViewHolder> {
-
+    /**
+     * mList
+     */
     private List<PrivateErrorListInfo.MessageBean> mList;
-
+    /**
+     * 上下文
+     */
     private Context context;
 
-    public ErrorRecycleAdapter(List<PrivateErrorListInfo.MessageBean> mList, Context context) {
-        this.mList = mList;
-        this.context = context;
+    /**
+     * 构造器
+     * @param list list
+     * @param mcontext mcontext
+     */
+    public ErrorRecycleAdapter(List<PrivateErrorListInfo.MessageBean> list, Context mcontext) {
+        this.mList = list;
+        this.context = mcontext;
     }
 
     @NonNull
@@ -60,12 +69,26 @@ public class ErrorRecycleAdapter extends RecyclerView.Adapter<ErrorRecycleAdapte
         return mList.size();
     }
 
+    /**
+     * ViewHolder
+     */
     public class MyViewHolder extends BaseViewHolder {
-
+        /**
+         * mUserName
+         */
         private final TextView mUserName;
+        /**
+         * mRelayout
+         */
         private final RelativeLayout mRelayout;
+        /**
+         * mImg
+         */
         private final ImageView mImg;
-
+        /**
+         * MyViewHolder
+         * @param view view
+         */
         public MyViewHolder(View view) {
             super(view);
             mUserName = view.findViewById(R.id.tv_user_name);
@@ -74,14 +97,29 @@ public class ErrorRecycleAdapter extends RecyclerView.Adapter<ErrorRecycleAdapte
         }
     }
 
-    // 定义接口
+    /**
+     *  定义接口
+     */
     private onItemChilkListenre onItemChilkListenre;
 
+    /**
+     * setOnItemChilkListenre
+     * @param onItemChilkListenre onItemChilkListenre
+     */
     public void setOnItemChilkListenre(ErrorRecycleAdapter.onItemChilkListenre onItemChilkListenre) {
         this.onItemChilkListenre = onItemChilkListenre;
     }
 
+    /**
+     * onItemChilkListenre
+     */
     public interface onItemChilkListenre {
+        /**
+         * OnItemChilkListener
+         * @param nickName nickName
+         * @param imgUrl imgUrl
+         * @param id id
+         */
         void OnItemChilkListener(String nickName, String imgUrl, int id);
     }
 }

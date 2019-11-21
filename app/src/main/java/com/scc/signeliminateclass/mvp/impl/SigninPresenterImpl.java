@@ -10,7 +10,6 @@ import com.scc.signeliminateclass.bean.PictureInfo;
 import com.scc.signeliminateclass.bean.SaveMessageInfo;
 import com.scc.signeliminateclass.bean.TestFacePassInfo;
 import com.scc.signeliminateclass.bean.TestUserFacePassInfo;
-import com.scc.signeliminateclass.bean.UserOutFaceErrorListInfo;
 import com.scc.signeliminateclass.bean.UserOutFaceExitInfo;
 import com.scc.signeliminateclass.bean.UserOutListInfo;
 import com.scc.signeliminateclass.bean.UserSaveMessageInfo;
@@ -24,7 +23,6 @@ import javax.inject.Inject;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.internal.operators.flowable.FlowableOnBackpressureDrop;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -34,21 +32,35 @@ import okhttp3.RequestBody;
  * @data 2019/9/22
  */
 public class SigninPresenterImpl extends BasePresenterImpl<SigninUiInterface> implements SinginPresenter {
+    /**
+     * 注解构造器
+     */
     @Inject
     public SigninPresenterImpl() {
     }
 
-    //注解M层
+    /**
+     * 注解M层
+     */
     @Inject
     SigninBiz biz;
 
-    //初始化 UI层
+    /**
+     * 初始化 UI层
+     */
     SigninUiInterface uiInterface;
 
+    /**
+     * 设置UI层
+     * @param uiInterface uiInterface
+     */
     public void setUiInterface(SigninUiInterface uiInterface) {
         this.uiInterface = uiInterface;
     }
 
+    /**
+     * mDisposable
+     */
     private Disposable mDisposable;
 
     @Override
@@ -68,7 +80,7 @@ public class SigninPresenterImpl extends BasePresenterImpl<SigninUiInterface> im
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("song","testFasePass"+e.toString());
+                        Log.d("song", "testFasePass" + e.toString());
                     }
 
                     @Override
@@ -145,7 +157,8 @@ public class SigninPresenterImpl extends BasePresenterImpl<SigninUiInterface> im
     }
 
     @Override
-    public void saveMessage(Context context, String orgId, String stroeId, String privateId, String privateImageUrl, String userId, String userImgUrl, String time) {
+    public void saveMessage(Context context, String orgId, String stroeId, String privateId,
+                            String privateImageUrl, String userId, String userImgUrl, String time) {
         biz.saveMessage(context, orgId, stroeId, privateId, privateImageUrl, userId,
                 userImgUrl, time).subscribe(new Observer<SaveMessageInfo>() {
             @Override
@@ -156,13 +169,13 @@ public class SigninPresenterImpl extends BasePresenterImpl<SigninUiInterface> im
             @Override
             public void onNext(SaveMessageInfo saveMessageInfo) {
                 uiInterface.setSaveMessage(saveMessageInfo);
-                Log.d("song","签课保存成功："+saveMessageInfo.getCode());
+                Log.d("song", "签课保存成功：" + saveMessageInfo.getCode());
                 mDisposable.dispose();
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.d("song","签课保存识别："+e.toString());
+                Log.d("song", "签课保存识别：" + e.toString());
 
             }
 
@@ -230,7 +243,8 @@ public class SigninPresenterImpl extends BasePresenterImpl<SigninUiInterface> im
     }
 
     @Override
-    public void saveExitMessage(Context context, String orgId, String store, String classId, String mPrImgUrl, String mUserImgUrl, String time) {
+    public void saveExitMessage(Context context, String orgId, String store, String classId,
+                                String mPrImgUrl, String mUserImgUrl, String time) {
         biz.saveExitMessage(context, orgId, store, classId, mPrImgUrl, mUserImgUrl, time)
                 .subscribe(new Observer<UserSaveMessageInfo>() {
                     @Override

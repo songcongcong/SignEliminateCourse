@@ -21,8 +21,13 @@ public class NetUtil {
     /** 
      * 无线网络 
      */  
-    private static final int NETWORK_WIFI = 1;  
-  
+    private static final int NETWORK_WIFI = 1;
+
+    /**
+     * getNetWorkState
+     * @param context context
+     * @return int
+     */
     public static int getNetWorkState(Context context) {
         // 得到连接管理器对象  
         ConnectivityManager connectivityManager = (ConnectivityManager) context

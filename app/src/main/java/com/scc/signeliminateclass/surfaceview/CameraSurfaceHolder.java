@@ -9,9 +9,21 @@ import android.view.SurfaceView;
  * 相机界面SurfaceView的Holder类
  */
 public class CameraSurfaceHolder {
+    /**
+     * context
+     */
     Context context;
+    /**
+     * surfaceHolder
+     */
     SurfaceHolder surfaceHolder;
+    /**
+     * surfaceView
+     */
     SurfaceView surfaceView;
+    /**
+     * callback
+     */
     SurfaceViewCallback callback = new SurfaceViewCallback();
 
     /**
@@ -29,6 +41,9 @@ public class CameraSurfaceHolder {
         callback.setContext(context);
     }
 
+    /**
+     * Stop
+     */
     public void Stop() {
 //        if (surfaceHolder != null) {
 //        surfaceHolder.removeCallback(callback);
@@ -36,6 +51,9 @@ public class CameraSurfaceHolder {
 //        }
     }
 
+    /**
+     * start
+     */
     public void start() {
         callback.surfaceChanged(surfaceHolder, 0, 0, 0);
     }

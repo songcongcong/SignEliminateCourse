@@ -1,7 +1,7 @@
 package com.scc.signeliminateclass.base;
 
 import android.app.Activity;
-import android.content.Intent;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,9 +32,19 @@ public class BaseFragment extends RxFragment implements ISupportFragment {
      * Using fragment class name as the log tag.
      */
     protected final String LOG_TAG = getClass().getSimpleName();
+    /**
+     * mDelegate
+     */
     private SupportFragmentDelegate mDelegate = new SupportFragmentDelegate(this);
+    /**
+     * _mActivity
+     */
     protected FragmentActivity _mActivity;
 
+    /**
+     * getLayoutView
+     * @return view
+     */
     public View getLayoutView() {
         return null;
     }
@@ -278,7 +288,8 @@ public class BaseFragment extends RxFragment implements ISupportFragment {
     }
 
 
-    /****************************************以下为可选方法(Optional methods)******************************************************/
+    /****************************************以下为可选方法(Optional methods)
+     * ******************************************************/
     // 自定制Support时，可移除不必要的方法
 
     /**
@@ -290,6 +301,7 @@ public class BaseFragment extends RxFragment implements ISupportFragment {
 
     /**
      * 显示软键盘,调用该方法后,会在onPause时自动隐藏软键盘
+     * @param view view
      */
     protected void showSoftInput(final View view) {
         mDelegate.showSoftInput(view);
@@ -305,15 +317,29 @@ public class BaseFragment extends RxFragment implements ISupportFragment {
         mDelegate.loadRootFragment(containerId, toFragment);
     }
 
-    public void loadRootFragment(int containerId, ISupportFragment toFragment, boolean addToBackStack, boolean allowAnim) {
+    /**
+     * loadRootFragment
+     * @param containerId containerId
+     * @param toFragment toFragment
+     * @param addToBackStack addToBackStack
+     * @param allowAnim allowAnim
+     */
+    public void loadRootFragment(int containerId, ISupportFragment toFragment,
+                                 boolean addToBackStack, boolean allowAnim) {
         mDelegate.loadRootFragment(containerId, toFragment, addToBackStack, allowAnim);
     }
 
+    /**
+     * start
+     * @param toFragment toFragment
+     */
     public void start(ISupportFragment toFragment) {
         mDelegate.start(toFragment);
     }
 
     /**
+     *
+     * @param toFragment toFragment
      * @param launchMode Similar to Activity's LaunchMode.
      */
     public void start(final ISupportFragment toFragment, @LaunchMode int launchMode) {
@@ -322,6 +348,8 @@ public class BaseFragment extends RxFragment implements ISupportFragment {
 
     /**
      * Launch an fragment for which you would like a result when it poped.
+     * @param toFragment toFragment
+     * @param requestCode replaceFragment
      */
     public void startForResult(ISupportFragment toFragment, int requestCode) {
         mDelegate.startForResult(toFragment, requestCode);
@@ -329,15 +357,24 @@ public class BaseFragment extends RxFragment implements ISupportFragment {
 
     /**
      * Launch a fragment while poping self.
+     * @param toFragment toFragment
      */
     public void startWithPop(ISupportFragment toFragment) {
         mDelegate.startWithPop(toFragment);
     }
 
+    /**
+     * replaceFragment
+     * @param toFragment toFragment
+     * @param addToBackStack addToBackStack
+     */
     public void replaceFragment(ISupportFragment toFragment, boolean addToBackStack) {
         mDelegate.replaceFragment(toFragment, addToBackStack);
     }
 
+    /**
+     * pop
+     */
     public void pop() {
         mDelegate.pop();
     }
@@ -357,6 +394,9 @@ public class BaseFragment extends RxFragment implements ISupportFragment {
 
     /**
      * 获取栈内的fragment对象
+     * @param fragmentClass fragmentClass
+     * @param <T> T
+     * @return ISupportFragment
      */
     public <T extends ISupportFragment> T findChildFragment(Class<T> fragmentClass) {
         return SupportHelper.findFragment(getChildFragmentManager(), fragmentClass);

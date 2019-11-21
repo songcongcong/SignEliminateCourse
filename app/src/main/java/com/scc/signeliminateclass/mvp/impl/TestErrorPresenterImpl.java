@@ -2,19 +2,14 @@ package com.scc.signeliminateclass.mvp.impl;
 
 
 import android.content.Context;
-import android.provider.Telephony;
 import android.util.Log;
-import android.widget.EditText;
 
 import com.scc.signeliminateclass.base.BasePresenterImpl;
 import com.scc.signeliminateclass.bean.PictureInfo;
 import com.scc.signeliminateclass.bean.PrivateErrorListInfo;
 import com.scc.signeliminateclass.bean.UserOutListInfo;
-import com.scc.signeliminateclass.mvp.model.SigninBiz;
 import com.scc.signeliminateclass.mvp.model.TestErrorBiz;
-import com.scc.signeliminateclass.mvp.presenter.SinginPresenter;
 import com.scc.signeliminateclass.mvp.presenter.TestErrorPresenter;
-import com.scc.signeliminateclass.mvp.uiinterface.SigninUiInterface;
 import com.scc.signeliminateclass.mvp.uiinterface.TestErrorUiInterface;
 
 import java.io.File;
@@ -32,21 +27,35 @@ import okhttp3.RequestBody;
  * @data 2019/9/22
  */
 public class TestErrorPresenterImpl extends BasePresenterImpl<TestErrorUiInterface> implements TestErrorPresenter {
+    /**
+     * 注解构造器
+     */
     @Inject
     public TestErrorPresenterImpl() {
     }
 
-    //注解M层
+    /**
+     * 注解M层
+     */
     @Inject
     TestErrorBiz biz;
 
-    //初始化 UI层
+    /**
+     * 初始化 UI层
+     */
     TestErrorUiInterface uiInterface;
 
+    /**
+     * 设置UI层
+     * @param uiInterface uiInterface
+     */
     public void setUiInterface(TestErrorUiInterface uiInterface) {
         this.uiInterface = uiInterface;
     }
 
+    /**
+     * mDisposable
+     */
     private Disposable mDisposable;
 
     @Override
@@ -119,13 +128,13 @@ public class TestErrorPresenterImpl extends BasePresenterImpl<TestErrorUiInterfa
             @Override
             public void onNext(UserOutListInfo outListInfo) {
                 uiInterface.getPrivateCourse(outListInfo);
-                Log.d("song","会员请求成功66："+outListInfo.getMessage().toString());
+                Log.d("song", "会员请求成功66：" + outListInfo.getMessage().toString());
                 mDisposable.dispose();
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.d("song","会员请求失败："+ e.toString());
+                Log.d("song", "会员请求失败：" + e.toString());
             }
 
             @Override

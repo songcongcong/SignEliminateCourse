@@ -24,13 +24,30 @@ package com.scc.signeliminateclass.model;
 * 2019年7月5日     cmj           v1.0.0               修改原因
 */
 public class MHFaceModel {
-	
-	  private String log_id;
-	  private String error_msg;
-	  private String cached;
-	  private String error_code;
-	  private String timestamp;
-	  private FaceResult result;
+	/**
+	 * log_id
+	 */
+	private String log_id;
+	/**
+	 * error_msg
+	 */
+	private String error_msg;
+	/**
+	 * cached
+	 */
+	private String cached;
+	/**
+	 * error_code
+	 */
+	private String error_code;
+	/**
+	 * timestamp
+	 */
+	private String timestamp;
+	/**
+	 * result
+	 */
+	private FaceResult result;
 	  
 	  
 	/**

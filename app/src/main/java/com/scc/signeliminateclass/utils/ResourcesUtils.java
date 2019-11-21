@@ -68,7 +68,7 @@ public class ResourcesUtils {
      * @return 资源文件对应像素值
      */
     public static int getDimen(int id) {
-        return AppUtils.getContext().getResources().getDimensionPixelSize(id);// 返回具体像素值
+        return AppUtils.getContext().getResources().getDimensionPixelSize(id); // 返回具体像素值
     }
 
     /**

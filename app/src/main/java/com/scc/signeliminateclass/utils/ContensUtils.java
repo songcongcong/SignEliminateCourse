@@ -22,6 +22,9 @@ public class ContensUtils {
      * lastTime
      */
     private long lastTime;
+    /**
+     * isFirst
+     */
     private static boolean isFirst;
 
     /**
@@ -92,10 +95,10 @@ public class ContensUtils {
 
     /**
      * 删除单个应用
-     *
      * @param context context
-     * @param key     value
-     * @param appkey  Appkey
+     * @param key key
+     * @param appkey appkey
+     * @param sharedPreferences sharedPreferences
      */
     private static void removeAppkey(Context context, String key, String appkey, SharedPreferences sharedPreferences) {
         List<String> installingApps = getAppKey(context, appkey, sharedPreferences);
@@ -118,10 +121,10 @@ public class ContensUtils {
 
     /**
      * 添加应用的key
-     *
-     * @param context      context
-     * @param key          value
-     * @param uninstallKey Appkey
+     * @param context context
+     * @param  key key
+     * @param uninstallKey uninstallKey
+     * @param preferences preferences
      */
     private static void setAppKey(Context context, String key, String uninstallKey, SharedPreferences preferences) {
         List<String> installingApps = getAppKey(context, uninstallKey, preferences);
@@ -143,7 +146,8 @@ public class ContensUtils {
 //     * @param value   value
 //     * @param appkey  Appkey
 //     */
-//    private static void setAppMapKey(Context context, MyHashMap<String> value, String appkey, SharedPreferences preferences) {
+//    private static void setAppMapKey(Context context, MyHashMap<String> value,
+//    String appkey, SharedPreferences preferences) {
 //        List<MyHashMap<String>> installingApps = getAppMapKey(context, appkey, preferences);
 //        String charAt;
 //        if (installingApps.size() >= 0) {
@@ -169,7 +173,8 @@ public class ContensUtils {
 //     * @param appkey  appkey
 //     * @return appList
 //     */
-//    private static List<MyHashMap<String>> getAppMapKey(Context context, String appkey, SharedPreferences preferences) {
+//    private static List<MyHashMap<String>> getAppMapKey(Context context, String appkey,
+//    SharedPreferences preferences) {
 //        String string = preferences.getString(appkey, "");
 //        String str2 = string.replace(" ", "");
 //        List<String> list = Arrays.asList(str2.split(","));
@@ -179,10 +184,10 @@ public class ContensUtils {
 
     /**
      * 获取应用的key
-     *
-     * @param context      context
+     * @param context context
      * @param uninstallKey uninstallKey
-     * @return appList
+     * @param preferences preferences
+     * @return  List<String>
      */
     private static List<String> getAppKey(Context context, String uninstallKey, SharedPreferences preferences) {
         String string = preferences.getString(uninstallKey, "");
@@ -195,10 +200,10 @@ public class ContensUtils {
 
     /**
      * 获取卸栽的应用key
-     *
-     * @param context      context
+     * @param context context
      * @param uninstallKey uninstallKey
-     * @return appList
+     * @param preferences preferences
+     * @return List<String>
      */
     public static List<String> getFileAppsKey(Context context, String uninstallKey, SharedPreferences preferences) {
         List<String> appList = getAppKey(context, uninstallKey, preferences);
@@ -207,10 +212,10 @@ public class ContensUtils {
 
     /**
      * 添加卸栽的应用key
-     *
-     * @param context      context
-     * @param key          key
+     * @param context context
+     * @param key key
      * @param uninstallKey uninstallKey
+     * @param preferences preferences
      */
     public static void setFileAppsKey(Context context, String key, String uninstallKey, SharedPreferences preferences) {
         setAppKey(context, key, uninstallKey, preferences);
@@ -218,8 +223,9 @@ public class ContensUtils {
 
     /**
      * 删除卸栽的应用key
-     *
      * @param context context
+     * @param preferences preferences
+     * @param key key
      */
     public static void removeFileAppsKey(Context context, SharedPreferences preferences, String key) {
 //        removeAppkey(context, key, uninstallKey, preferences);
@@ -232,6 +238,7 @@ public class ContensUtils {
      *
      * @param context      context
      * @param uninstallKey uninstallKey
+     * @param preferences  preferences
      * @return appList
      */
     public static List<String> getPictureAppsKey(Context context, String uninstallKey, SharedPreferences preferences) {
@@ -245,15 +252,18 @@ public class ContensUtils {
      * @param context      context
      * @param key          key
      * @param uninstallKey uninstallKey
+     * @param preferences preferences
      */
-    public static void setPictureAppsKey(Context context, String key, String uninstallKey, SharedPreferences preferences) {
+    public static void setPictureAppsKey(Context context, String key, String uninstallKey,
+                                         SharedPreferences preferences) {
         setAppKey(context, key, uninstallKey, preferences);
     }
 
     /**
      * 删除卸栽的应用key
-     *
      * @param context context
+     * @param preferences preferences
+     * @param key key
      */
     public static void removePictureAppsKey(Context context, SharedPreferences preferences, String key) {
         preferences.edit().remove(key).apply();
@@ -267,7 +277,8 @@ public class ContensUtils {
 //     * @param uninstallKey uninstallKey
 //     * @return appList
 //     */
-//    public static List<MyHashMap<String>> getMapAppsKey(Context context, String uninstallKey, SharedPreferences preferences) {
+//    public static List<MyHashMap<String>> getMapAppsKey(Context context, String uninstallKey,
+//    SharedPreferences preferences) {
 //        List<MyHashMap<String>> appList = getAppMapKey(context, uninstallKey, preferences);
 //        return appList;
 //    }
@@ -279,14 +290,16 @@ public class ContensUtils {
 //     * @param value   value
 //     * @param appkey  appkey
 //     */
-//    public static void setMapAppsKey(Context context, MyHashMap<String> value, String appkey, SharedPreferences preferences) {
+//    public static void setMapAppsKey(Context context, MyHashMap<String> value, String appkey,
+//    SharedPreferences preferences) {
 //        setAppMapKey(context, value, appkey, preferences);
 //    }
 
     /**
      * 删除卸栽的应用key
-     *
      * @param context context
+     * @param preferences preferences
+     * @param key key
      */
     public static void removeMapAppsKey(Context context, SharedPreferences preferences, String key) {
         preferences.edit().remove(key).apply();

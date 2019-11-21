@@ -20,12 +20,25 @@ import java.io.ByteArrayOutputStream;
  * 单独的任务类。继承AsyncTask，来处理从相机实时获取的耗时操作
  */
 public class FaceTask extends AsyncTask {
+    /**
+     * mData
+     */
     private byte[] mData;
+    /**
+     * mCamera
+     */
     Camera mCamera;
+    /**
+     * TAG
+     */
     private static final String TAG = "CameraTag";
-    //构造函数
-    FaceTask(byte[] data , Camera camera)
-    {
+
+    /**
+     * 构造函数
+     * @param data data
+     * @param camera camera
+     */
+    FaceTask(byte[] data , Camera camera) {
         this.mData = data;
         this.mCamera = camera;
 
@@ -46,7 +59,8 @@ public class FaceTask extends AsyncTask {
             Log.i(TAG, "onPreviewFrame: rawbitmap:" + rawbitmap.toString());
 
             //若要存储可以用下列代码，格式为jpg
-            /*BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(Environment.getExternalStorageDirectory().getPath()+"/fp.jpg"));
+            /*BufferedOutputStream bos = new
+            BufferedOutputStream(new FileOutputStream(Environment.getExternalStorageDirectory().getPath()+"/fp.jpg"));
             img.compressToJpeg(rect, 100, bos);
             bos.flush();
             bos.close();

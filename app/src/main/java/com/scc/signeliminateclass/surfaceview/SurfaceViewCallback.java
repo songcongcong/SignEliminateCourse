@@ -11,18 +11,46 @@ import android.view.SurfaceHolder;
  * 相机界面SurfaceView的回调类
  */
 public final class SurfaceViewCallback implements SurfaceHolder.Callback, Camera.PreviewCallback {
-
+    /**
+     * context
+     */
     Context context;
+    /**
+     * TAG
+     */
     static final String TAG = "Camera";
+    /**
+     * mFrontCamera
+     */
     FrontCamera mFrontCamera = new FrontCamera();
+    /**
+     * previewing
+     */
     boolean previewing = mFrontCamera.getPreviewing();
+    /**
+     * mCamera
+     */
     Camera mCamera;
+    /**
+     * mFaceTask
+     */
     FaceTask mFaceTask;
 
+    /**
+     * setContext
+     * @param context context
+     */
     public void setContext(Context context) {
         this.context = context;
     }
 
+    /**
+     * surfaceChanged
+     * @param arg0 arg0
+     * @param arg1 arg1
+     * @param arg2 arg2
+     * @param arg3 arg3
+     */
     public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
         if (previewing) {
             mCamera.stopPreview();
@@ -40,6 +68,10 @@ public final class SurfaceViewCallback implements SurfaceHolder.Callback, Camera
         }
     }
 
+    /**
+     * surfaceCreated
+     * @param holder holder
+     */
     public void surfaceCreated(SurfaceHolder holder) {
         //初始化前置摄像头
         mFrontCamera.setCamera(mCamera);
@@ -56,11 +88,19 @@ public final class SurfaceViewCallback implements SurfaceHolder.Callback, Camera
 
     }
 
+    /**
+     * surfaceDestroyed
+     * @param holder holder
+     */
     public void surfaceDestroyed(SurfaceHolder holder) {
         holder.removeCallback(this);
         mFrontCamera.StopCamera(mCamera);
     }
 
+    /**
+     * surfaceDestroyedView
+     * @param holder holder
+     */
     public void surfaceDestroyedView(SurfaceHolder holder) {
 //        holder.removeCallback(this);
         mCamera.stopPreview();
@@ -80,6 +120,8 @@ public final class SurfaceViewCallback implements SurfaceHolder.Callback, Camera
                     return;
                 case PENDING:
                     mFaceTask.cancel(false);
+                    break;
+                default:
                     break;
             }
 

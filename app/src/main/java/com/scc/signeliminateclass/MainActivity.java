@@ -15,12 +15,23 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
+/**
+ * MainActivity
+ */
 public class MainActivity extends BaseMvpActivity<MainPresenterImpl> implements MainUiInterface {
-
+    /**
+     * relaySignIn
+     */
     @BindView(R.id.relay_sign_in)
     RelativeLayout relaySignIn;
+    /**
+     * relaySignOut
+     */
     @BindView(R.id.relay_sign_out)
     RelativeLayout relaySignOut;
+    /**
+     * 注解P层
+     */
     @Inject
     MainPresenterImpl impl;
 

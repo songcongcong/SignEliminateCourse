@@ -12,37 +12,68 @@ import android.view.Surface;
  * 相机类，相机的调用
  */
 public class FrontCamera {
+    /**
+     * TAG
+     */
     static final String TAG = "Camera";
+    /**
+     * mCamera
+     */
     Camera mCamera;
+    /**
+     * mCurrentCamIndex
+     */
     int mCurrentCamIndex = 0;
+    /**
+     * previewing
+     */
     boolean previewing;
 
+    /**
+     * setCamera
+     * @param camera camera
+     */
     public void setCamera(Camera camera) {
         this.mCamera = camera;
     }
 
+    /**
+     * getCurrentCamIndex
+     * @return int
+     */
     public int getCurrentCamIndex() {
         return this.mCurrentCamIndex;
     }
 
+    /**
+     * getPreviewing
+     * @return boolean
+     */
     public boolean getPreviewing() {
         return this.previewing;
     }
 
+    /**
+     * shutterCallback
+     */
     Camera.ShutterCallback shutterCallback = new Camera.ShutterCallback() {
         @Override
         public void onShutter() {
 
         }
     };
-
+    /**
+     * rawPictureCallback
+     */
     Camera.PictureCallback rawPictureCallback = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
 
         }
     };
-
+    /**
+     * jpegPictureCallback
+     */
     Camera.PictureCallback jpegPictureCallback = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
@@ -74,14 +105,17 @@ public class FrontCamera {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            mCamera.startPreview();//重新开启预览 ，不然不能继续拍照
+            mCamera.startPreview(); //重新开启预览 ，不然不能继续拍照
             previewing = true;
         }
 
 
     };
 
-    //初始化相机
+    /**
+     * 初始化相机
+     * @return Camera
+     */
     public Camera initCamera() {
         int cameraCount = 0;
         Camera cam = null;
@@ -92,7 +126,8 @@ public class FrontCamera {
 
         for (int camIdx = 0; camIdx < cameraCount; camIdx++) {
             Camera.getCameraInfo(camIdx, cameraInfo);
-            //在这里打开的是前置摄像头,可修改打开后置OR前置   Camera.CameraInfo.CAMERA_FACING_FRONT  前置，Camera.CameraInfo.CAMERA_FACING_BACK  后置
+            //在这里打开的是前置摄像头,可修改打开后置OR前置   Camera.CameraInfo.CAMERA_FACING_FRONT  前置，
+            // Camera.CameraInfo.CAMERA_FACING_BACK  后置
             if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
                 try {
                     cam = Camera.open(camIdx);
@@ -150,6 +185,8 @@ public class FrontCamera {
                 break;
             case Surface.ROTATION_270:
                 degrees = 270;
+                break;
+            default:
                 break;
         }
         int result;

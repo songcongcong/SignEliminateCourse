@@ -22,7 +22,9 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  */
 @SuppressWarnings("unused")
 public class BaseActivity extends RxAppCompatActivity implements ISupportActivity {
-
+    /**
+     * mDelegate
+     */
     final protected SupportActivityDelegate mDelegate = new SupportActivityDelegate(this);
 
     @Override
@@ -120,18 +122,29 @@ public class BaseActivity extends RxAppCompatActivity implements ISupportActivit
 
     }
 
-    /****************************************以下为可选方法(Optional methods)******************************************************/
+    /****************************************以下为可选方法(Optional methods)
+     * ******************************************************/
 
-    // 选择性拓展其他方法
+    /**
+     * 选择性拓展其他方法
+     * @param containerId containerId
+     * @param toFragment toFragment
+     */
     public void loadRootFragment(int containerId, @NonNull ISupportFragment toFragment) {
         mDelegate.loadRootFragment(containerId, toFragment);
     }
 
+    /**
+     * start
+     * @param toFragment toFragment
+     */
     public void start(ISupportFragment toFragment) {
         mDelegate.start(toFragment);
     }
 
     /**
+     * start
+     * @param toFragment toFragment
      * @param launchMode Same as Activity's LaunchMode.
      */
     public void start(ISupportFragment toFragment, @ISupportFragment.LaunchMode int launchMode) {
@@ -148,6 +161,8 @@ public class BaseActivity extends RxAppCompatActivity implements ISupportActivit
     /**
      * Pop the last fragment transition from the manager's fragment
      * back stack.
+     * @param targetFragmentClass targetFragmentClass
+     * @param includeTargetFragment includeTargetFragment
      */
     public void popTo(Class<?> targetFragmentClass, boolean includeTargetFragment) {
         mDelegate.popTo(targetFragmentClass, includeTargetFragment);
@@ -156,17 +171,30 @@ public class BaseActivity extends RxAppCompatActivity implements ISupportActivit
     /**
      * If you want to begin another FragmentTransaction immediately after popTo(), use this method.
      * 如果你想在出栈后, 立刻进行FragmentTransaction操作，请使用该方法
+     * @param targetFragmentClass targetFragmentClass
+     * @param includeTargetFragment includeTargetFragment
+     * @param afterPopTransactionRunnable afterPopTransactionRunnable
      */
-    public void popTo(Class<?> targetFragmentClass, boolean includeTargetFragment, Runnable afterPopTransactionRunnable) {
+    public void popTo(Class<?> targetFragmentClass, boolean includeTargetFragment,
+                      Runnable afterPopTransactionRunnable) {
         mDelegate.popTo(targetFragmentClass, includeTargetFragment, afterPopTransactionRunnable);
     }
 
-    public void popTo(Class<?> targetFragmentClass, boolean includeTargetFragment, Runnable afterPopTransactionRunnable, int popAnim) {
+    /**
+     * popTo
+     * @param targetFragmentClass targetFragmentClass
+     * @param includeTargetFragment includeTargetFragment
+     * @param afterPopTransactionRunnable afterPopTransactionRunnable
+     * @param popAnim popAnim
+     */
+    public void popTo(Class<?> targetFragmentClass, boolean includeTargetFragment,
+                      Runnable afterPopTransactionRunnable, int popAnim) {
         mDelegate.popTo(targetFragmentClass, includeTargetFragment, afterPopTransactionRunnable, popAnim);
     }
 
     /**
      * 得到位于栈顶Fragment
+     * @return ISupportFragment
      */
     public ISupportFragment getTopFragment() {
         return SupportHelper.getTopFragment(getSupportFragmentManager());
@@ -174,6 +202,9 @@ public class BaseActivity extends RxAppCompatActivity implements ISupportActivit
 
     /**
      * 获取栈内的fragment对象
+     * @param fragmentClass fragmentClass
+     * @param <T> T
+     * @return ISupportFragment
      */
     public <T extends ISupportFragment> T findFragment(Class<T> fragmentClass) {
         return SupportHelper.findFragment(getSupportFragmentManager(), fragmentClass);

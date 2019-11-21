@@ -9,6 +9,9 @@ import android.widget.Toast;
  * toast工具类封装
  */
 public class ToastUtils {
+    /**
+     * mToast
+     */
     private static Toast mToast = null;
 
     /**

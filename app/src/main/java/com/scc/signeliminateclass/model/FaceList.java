@@ -24,24 +24,49 @@ package com.scc.signeliminateclass.model;
 * 2019年7月5日     cmj           v1.0.0               修改原因
 */
 public class FaceList {
-	
+	/**
+	 * beauty
+	 */
 	private String beauty;
+	/**
+	 * face_token
+	 */
 	private String face_token;
+	/**
+	 * face_probability
+	 */
 	private String face_probability;
+	/**
+	 * age
+	 */
 	private String age;
-	
+	/**
+	 * glasses
+	 */
 	private Glasses glasses;
-	
+	/**
+	 * expression
+	 */
 	private Expression expression;
-	
+	/**
+	 * face_shape
+	 */
 	private FaceShape face_shape;
-	
+	/**
+	 * gender
+	 */
 	private Gender gender;
-	
+	/**
+	 * race
+	 */
 	private Race race;
-	
+	/**
+	 * angle
+	 */
 	private Angle angle;
-	
+	/**
+	 * location
+	 */
 	private Location location;
 
 	/**

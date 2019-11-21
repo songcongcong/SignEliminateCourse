@@ -7,26 +7,32 @@ import com.example.retrofitmvplibrary.retrofit.RetrofitSource;
 import com.example.retrofitmvplibrary.retrofit.RxHelper;
 import com.scc.signeliminateclass.api.RetrofitApi;
 import com.scc.signeliminateclass.bean.MainCheckMessage;
-import com.scc.signeliminateclass.bean.PictureInfo;
-import com.scc.signeliminateclass.bean.SaveMessageInfo;
-import com.scc.signeliminateclass.bean.TestFacePassInfo;
-import com.scc.signeliminateclass.bean.TestUserFacePassInfo;
+
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import okhttp3.MultipartBody;
+
 
 /**
  * 作者：宋聪聪 on 2019/9/2.
  */
 
 public class MainBiz {
+    /**
+     * 构造器
+     */
     @Inject
     public MainBiz() {
     }
 
-    // 查询是否有私教
+    /**
+     * 查询是否有私教
+     * @param context context
+     * @param orgId orgId
+     * @param storeId storeId
+     * @return MainCheckMessage
+     */
     public Observable<MainCheckMessage> checkIsMessage(Context context, String orgId, String storeId) {
         return RetrofitSource.createApi(RetrofitApi.class, context)
                 .checkIsMessage(orgId, storeId)

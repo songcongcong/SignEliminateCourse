@@ -6,18 +6,12 @@ import android.util.Log;
 
 import com.scc.signeliminateclass.base.BasePresenterImpl;
 import com.scc.signeliminateclass.bean.PictureInfo;
-import com.scc.signeliminateclass.bean.UserOutFaceErrorListInfo;
-import com.scc.signeliminateclass.bean.UserOutListInfo;
 import com.scc.signeliminateclass.bean.UserPhoneListInfo;
-import com.scc.signeliminateclass.mvp.model.TestErrorBiz;
 import com.scc.signeliminateclass.mvp.model.UserErrorBiz;
-import com.scc.signeliminateclass.mvp.presenter.TestErrorPresenter;
 import com.scc.signeliminateclass.mvp.presenter.UserErrorPresenter;
-import com.scc.signeliminateclass.mvp.uiinterface.TestErrorUiInterface;
 import com.scc.signeliminateclass.mvp.uiinterface.UserUiInterface;
 
 import java.io.File;
-import java.nio.file.attribute.UserPrincipal;
 
 import javax.inject.Inject;
 
@@ -32,21 +26,35 @@ import okhttp3.RequestBody;
  * @data 2019/9/22
  */
 public class UserErrorPresenterImpl extends BasePresenterImpl<UserUiInterface> implements UserErrorPresenter {
+    /**
+     * 注解构造器
+     */
     @Inject
     public UserErrorPresenterImpl() {
     }
 
-    //注解M层
+    /**
+     * 注解M层
+     */
     @Inject
     UserErrorBiz biz;
 
-    //初始化 UI层
+    /**
+     * 初始化 UI层
+     */
     UserUiInterface uiInterface;
 
+    /**
+     * 设置UI层
+     * @param uiInterface uiInterface
+     */
     public void setUiInterface(UserUiInterface uiInterface) {
         this.uiInterface = uiInterface;
     }
 
+    /**
+     * mDisposable
+     */
     private Disposable mDisposable;
 
     @Override
@@ -98,7 +106,7 @@ public class UserErrorPresenterImpl extends BasePresenterImpl<UserUiInterface> i
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("song","会员上传失败："+e.toString());
+                        Log.d("song", "会员上传失败：" + e .toString());
                     }
 
                     @Override

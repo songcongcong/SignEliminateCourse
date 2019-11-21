@@ -224,11 +224,17 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
      * mOutClassId
      */
     private int mOutClassId;
-
+    /**
+     * mList
+     */
     private List<UserOutListInfo.MessageBean> mList;
-
+    /**
+     * isChecked
+     */
     private boolean isChecked;
-
+    /**
+     * mPosition
+     */
     private int mPosition;
     @Override
     protected TestErrorPresenterImpl initInjector() {
@@ -302,9 +308,9 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
                         Log.e(TAG, "===========权限回调---用户同意了");
                         startCamera();
                     }
-                    break;
                 }
-                default:
+                break;
+            default:
                     break;
         }
     }
@@ -376,9 +382,9 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
     }
 
 
-    /* * 保存裁剪之后的图片数据
-     *
-     * @param
+    /**
+     * 保存裁剪之后的图片数据
+     * @param data data
      */
     protected void setImageToView(Intent data) {
         Bundle extras = data.getExtras();
@@ -392,9 +398,9 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
         }
     }
 
-    /* * 相机回调图片为空
-     *
-     * @param
+    /**
+     * 相机回调图片为空
+     * @param mbitmap mbitmap
      */
     protected void setImageNllToView(Bitmap mbitmap) {
             if (mNickName != null) {
@@ -402,7 +408,12 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
                 impl.upLoadPicture(this, file.toString()); // 上传图片
             }
     }
-    // 将bitmap转化为string
+
+    /**
+     * 将bitmap转化为string
+     * @param bitmap bitmap
+     * @return string
+     */
     public String bitmapToString(Bitmap bitmap) {
         //将Bitmap转换成字符串
         String string = null;
@@ -413,9 +424,8 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
         return string;
     }
 
-    /* * 保存裁剪之后的图片数据----适配小米
-     *
-     * @param
+    /**
+     * 保存裁剪之后的图片数据----适配小米
      */
     protected void setImageMiuiToView() {
         //将Uri图片转换为Bitmap
@@ -432,7 +442,10 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
     }
 
 
-    //写入内存
+    /**
+     * 写入内存
+     * @param photo photo
+     */
     private void setFile(Bitmap photo) {
 //        photoPath = Environment.getExternalStorageDirectory() + "/image2.jpg";
 //        System.out.println("============pothphone" + photoPath);
@@ -446,14 +459,22 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
         }
     }
 
-    // activity跳转----签课跳转
+    /**
+     * activity跳转----签课跳转
+     * @param activity activity
+     * @param code code
+     * @param flag flag
+     */
     public static void startActivity(Activity activity, int code, int flag) {
         Intent intent = new Intent(activity, TestErrorActivity.class);
         intent.putExtra("flag", flag);
         activity.startActivityForResult(intent, code);
     }
 
-    // 私教失败列表请求成功
+    /**
+     * 私教失败列表请求成功
+     * @param info info
+     */
     @Override
     public void setPrivateList(PrivateErrorListInfo info) {
         errorRecycleOut.setVisibility(View.GONE);
@@ -483,7 +504,8 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
 
                 if (flag == 1) { //签课---就去点击拍照
                     subscribeClick(tvPicture, o -> {
-                        if (ContensUtils.checkAndApplyfPermissionActivity(TestErrorActivity.this, new String[]{Manifest.permission.CAMERA,
+                        if (ContensUtils.checkAndApplyfPermissionActivity(TestErrorActivity.this,
+                                new String[]{Manifest.permission.CAMERA,
                                         Manifest.permission.READ_EXTERNAL_STORAGE,
                                         Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                 RC_CHOOSE_CAMERA)) {
@@ -491,9 +513,10 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
                         }
                     });
                 } else {
-                    Log.d("song","点击课程");
+                    Log.d("song", "点击课程");
                     // 消课--检查是否有课程--根据课程id
-                    impl.getPrivateCourse(TestErrorActivity.this, AppUtils.ORG_ID, AppUtils.STORE_ID, String.valueOf(id));
+                    impl.getPrivateCourse(TestErrorActivity.this, AppUtils.ORG_ID,
+                            AppUtils.STORE_ID, String.valueOf(id));
                 }
             }
         });
@@ -501,7 +524,8 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
 
     @Override
     public void setUpLoadPicture(PictureInfo pictureInfo) {
-        Log.d("song", "testErrorActivity：" + ",:" + pictureInfo.getImage() + ",私教id：" + mId+",:"+mPosition+",:"+isChecked);
+        Log.d("song", "testErrorActivity：" + ",:" + pictureInfo.getImage()
+                + ",私教id：" + mId + ",:" + mPosition + ",:" + isChecked);
         // 拍照成功跳转到签课页面
         Intent intent = new Intent();
         intent.putExtra("primgUrl", pictureInfo.getImage());
@@ -518,7 +542,7 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
         errorRecycle.setVisibility(View.GONE);
         errorRecycleOut.setVisibility(View.VISIBLE);
         List<UserOutListInfo.MessageBean> message = outListInfo.getMessage();
-        Log.d("song","暂无可消课程:"+message.size());
+        Log.d("song", "暂无可消课程:" + message.size());
         if (message.size() <= 0) {
             Toast.makeText(this, "暂无可消课程！", Toast.LENGTH_LONG).show();
             startActivity(new Intent(this, MainActivity.class));
@@ -538,7 +562,8 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
             });
 
             subscribeClick(tvPicture, o -> {
-                if (ContensUtils.checkAndApplyfPermissionActivity(TestErrorActivity.this, new String[]{Manifest.permission.CAMERA,
+                if (ContensUtils.checkAndApplyfPermissionActivity(TestErrorActivity.this,
+                        new String[]{Manifest.permission.CAMERA,
                                 Manifest.permission.READ_EXTERNAL_STORAGE,
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         RC_CHOOSE_CAMERA)) {

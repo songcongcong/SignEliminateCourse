@@ -10,9 +10,22 @@ import com.scc.signeliminateclass.bean.UserOutListInfo;
  * @data 2019/9/22
  */
 public interface TestErrorUiInterface extends BaseUiInterface {
-    // UI展示
+    /**
+     * UI展示
+     * @param info info
+     */
     void setPrivateList(PrivateErrorListInfo info);
+
+    /**
+     * setUpLoadPicture
+     * @param pictureInfo pictureInfo
+     */
     void setUpLoadPicture(PictureInfo pictureInfo);
+
+    /**
+     * getPrivateCourse
+     * @param outListInfo outListInfo
+     */
     void getPrivateCourse(UserOutListInfo outListInfo);
 
 }

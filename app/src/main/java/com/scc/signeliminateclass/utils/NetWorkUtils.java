@@ -10,10 +10,15 @@ import android.net.NetworkInfo;
  */
 public class NetWorkUtils {
 
-    // 判断当前网络是否连接
+    /**
+     * 判断当前网络是否连接
+     * @param context context
+     * @return boolean
+     */
     public static boolean isNetWorkAvalible(Context context) {
         // 获取网络状态管理器
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (connectivityManager == null) {
             return false;

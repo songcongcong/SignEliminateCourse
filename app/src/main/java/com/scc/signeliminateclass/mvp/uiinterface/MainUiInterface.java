@@ -12,6 +12,9 @@ import com.scc.signeliminateclass.bean.TestUserFacePassInfo;
  * @data 2019/9/22
  */
 public interface MainUiInterface extends BaseUiInterface {
-    // UI展示
+    /**
+     * UI展示
+     * @param message message
+     */
     void setExitMessage(MainCheckMessage message);
 }

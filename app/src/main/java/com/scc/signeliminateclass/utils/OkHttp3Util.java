@@ -46,10 +46,17 @@ public class OkHttp3Util {
      */
     private static OkHttpClient okHttpClient = null;
 
-
+    /**
+     * OkHttp3Util
+     */
     private OkHttp3Util() {
     }
 
+    /**
+     * getInstance
+     * @param context context
+     * @return OkHttpClient
+     */
     public static OkHttpClient getInstance(Context context) {
 
         if (okHttpClient == null) {
@@ -81,10 +88,10 @@ public class OkHttp3Util {
 
     /**
      * get请求
-     * 参数1 url
-     * 参数2 回调Callback
+     * @param oldUrl  url
+     * @param callback 回调Callback
+     * @param context context
      */
-
     public static void doGet(String oldUrl, Callback callback, Context context) {
 
         //创建OkHttpClient请求对象
@@ -95,18 +102,15 @@ public class OkHttp3Util {
         Call call = okHttpClient.newCall(request);
         //执行异步请求
         call.enqueue(callback);
-
-
     }
 
     /**
      * post请求
-     * 参数1 url
-     * 参数2 Map<String, String> params post请求的时候给服务器传的数据
-     * add..("","")
-     * add()
+     * @param url url
+     * @param params Map<String, String> params post请求的时候给服务器传的数据
+     * @param callback callback
+     * @param  context context
      */
-
     public static void doPost(String url, Map<String, String> params, Callback callback, Context context) {
         //创建OkHttpClient请求对象
         OkHttpClient okHttpClient = getInstance(context);
@@ -130,10 +134,12 @@ public class OkHttp3Util {
 
     /**
      * post请求上传文件....包括图片....流的形式传任意文件...
-     * 参数1 url
-     * file表示上传的文件
-     * fileName....文件的名字,,例如aaa.jpg
-     * params ....传递除了file文件 其他的参数放到map集合
+     * @param url url
+     * @param file 表示上传的文件
+     * @param fileName 文件的名字,,例如aaa.jpg
+     * @param params 传递除了file文件 其他的参数放到map集合
+     * @param callback callback
+     * @param context context
      */
     public static void uploadFile(String url, File file, String fileName, Map<String, String>
 
@@ -156,9 +162,8 @@ public class OkHttp3Util {
         //文件...参数name指的是请求路径中所接受的参数...如果路径接收参数键值是fileeeee,
 
         //此处应该改变
-        builder.addFormDataPart("file", fileName, RequestBody.create
-
-                (MediaType.parse("application/octet-stream"), file));
+        builder.addFormDataPart("file", fileName,
+                RequestBody.create(MediaType.parse("application/octet-stream"), file));
 
         //构建
         MultipartBody multipartBody = builder.build();
@@ -174,15 +179,15 @@ public class OkHttp3Util {
     }
 
     /**
-     * Post请求发送JSON数据....{"name":"zhangsan","pwd":"123456"}
-     * 参数一：请求Url
-     * 参数二：请求的JSON
-     * 参数三：请求回调
+     * ost请求发送JSON数据....{"name":"zhangsan","pwd":"123456"}
+     * @param url url
+     * @param jsonParams 请求的JSON
+     * @param callback 请求回调
+     * @param context context
      */
     public static void doPostJson(String url, String jsonParams, Callback callback, Context context) {
-        RequestBody requestBody = RequestBody.create(MediaType.parse
-
-                ("application/json; charset=utf-8"), jsonParams);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                jsonParams);
         Request request = new Request.Builder().url(url).post(requestBody).build();
         Call call = getInstance(context).newCall(request);
         call.enqueue(callback);
@@ -191,8 +196,9 @@ public class OkHttp3Util {
 
     /**
      * 下载文件 以流的形式把apk写入的指定文件 得到file后进行安装
-     * 参数er：请求Url
-     * 参数san：保存文件的文件夹....download
+     * @param context context
+     * @param url 请求Url
+     * @param saveDir 保存文件的文件夹....download
      */
     public static void download(final Activity context, final String url,
 
@@ -215,7 +221,7 @@ public class OkHttp3Util {
                 int len = 0;
                 FileOutputStream fos = null;
                 try {
-                    is = response.body().byteStream();//以字节流的形式拿回响应实体内容
+                    is = response.body().byteStream(); //以字节流的形式拿回响应实体内容
                     //apk保存路径
                     final String fileDir = isExistDir(saveDir);
                     //文件
@@ -231,7 +237,8 @@ public class OkHttp3Util {
                     context.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(context, "下载成功:" + fileDir + ", " + getNameFromUrl(url), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "下载成功:" + fileDir + ", "
+                                    + getNameFromUrl(url), Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -246,8 +253,12 @@ public class OkHttp3Util {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
-                    if (is != null) is.close();
-                    if (fos != null) fos.close();
+                    if (is != null) {
+                        is.close();
+                    }
+                    if (fos != null) {
+                        fos.close();
+                    }
 
 
                 }
@@ -259,9 +270,9 @@ public class OkHttp3Util {
     /**
      * 判断下载目录是否存在......并返回绝对路径
      *
-     * @param saveDir
-     * @return
-     * @throws IOException
+     * @param saveDir saveDir
+     * @return String
+     * @throws IOException IOException
      */
     public static String isExistDir(String saveDir) throws IOException {
         // 下载位置
@@ -279,7 +290,7 @@ public class OkHttp3Util {
     }
 
     /**
-     * @param url
+     * @param url url
      * @return 从下载连接中解析出文件名
      */
     private static String getNameFromUrl(String url) {

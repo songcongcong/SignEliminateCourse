@@ -19,6 +19,9 @@ import org.greenrobot.eventbus.EventBus;
  */
 public class NetWorkBroadReceiver extends BroadcastReceiver {
 
+    /**
+     * evevt
+     */
     public NetWorkState evevt = BaseMvpActivity.evevt;
     // 检查手机网络状态是否切换的广播
     @Override
@@ -31,12 +34,18 @@ public class NetWorkBroadReceiver extends BroadcastReceiver {
             // 接口回调传过去状态的类型
             evevt.onNetWorkChange(netWorkState);
             EventBus.getDefault().post(new NetWorkStateEventbus(netWorkState));
-            Log.d("song","通知网络变化："+intent.getAction());
+            Log.d("song", "通知网络变化：" + intent.getAction());
         }
     }
 
-    // 定义接口，实现传值
-    public interface NetWorkState{
+    /**
+     * 定义接口，实现传值
+     */
+    public interface NetWorkState {
+        /**
+         * 联网回调
+         * @param state state
+         */
         void onNetWorkChange(int state);
     }
 

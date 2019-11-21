@@ -15,11 +15,12 @@ public class ImageUtil {
     /**
      * 设置水印图片在左上角
      *
-     * @param src
-     * @param watermark
-     * @param paddingLeft
-     * @param paddingTop
-     * @return
+     * @param src src
+     * @param watermark watermark
+     * @param paddingLeft paddingLeft
+     * @param paddingTop paddingTop
+     * @param context  context
+     * @return Bitmap
      */
     public static Bitmap createWaterMaskLeftTop(
             Context context, Bitmap src, Bitmap watermark,
@@ -28,6 +29,14 @@ public class ImageUtil {
                 dp2px(context, paddingLeft), dp2px(context, paddingTop));
     }
 
+    /**
+     * createWaterMaskBitmap
+     * @param src src
+     * @param watermark watermark
+     * @param paddingLeft paddingLeft
+     * @param paddingTop paddingTop
+     * @return Bitmap
+     */
     private static Bitmap createWaterMaskBitmap(Bitmap src, Bitmap watermark,
                                                 int paddingLeft, int paddingTop) {
         if (src == null) {
@@ -36,7 +45,7 @@ public class ImageUtil {
         int width = src.getWidth();
         int height = src.getHeight();
         //创建一个bitmap
-        Bitmap newb = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);// 创建一个新的和SRC长度宽度一样的位图
+        Bitmap newb = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888); // 创建一个新的和SRC长度宽度一样的位图
         //将该图片作为画布
         Canvas canvas = new Canvas(newb);
         //在画布 0，0坐标上开始绘制原始图片
@@ -53,11 +62,12 @@ public class ImageUtil {
     /**
      * 设置水印图片在右下角
      *
-     * @param src
-     * @param watermark
-     * @param paddingRight
-     * @param paddingBottom
-     * @return
+     * @param src src
+     * @param watermark watermark
+     * @param paddingRight paddingRight
+     * @param paddingBottom paddingBottom
+     * @param context  context
+     * @return Bitmap
      */
     public static Bitmap createWaterMaskRightBottom(
             Context context, Bitmap src, Bitmap watermark,
@@ -70,11 +80,12 @@ public class ImageUtil {
     /**
      * 设置水印图片到右上角
      *
-     * @param src
-     * @param watermark
-     * @param paddingRight
-     * @param paddingTop
-     * @return
+     * @param src src
+     * @param watermark watermark
+     * @param paddingRight paddingRight
+     * @param paddingTop paddingTop
+     * @param context  context
+     * @return Bitmap
      */
     public static Bitmap createWaterMaskRightTop(
             Context context, Bitmap src, Bitmap watermark,
@@ -87,11 +98,12 @@ public class ImageUtil {
     /**
      * 设置水印图片到左下角
      *
-     * @param src
-     * @param watermark
-     * @param paddingLeft
-     * @param paddingBottom
-     * @return
+     * @param src src
+     * @param watermark watermark
+     * @param paddingLeft paddingLeft
+     * @param paddingBottom paddingBottom
+     * @param context  context
+     * @return Bitmap
      */
     public static Bitmap createWaterMaskLeftBottom(
             Context context, Bitmap src, Bitmap watermark,
@@ -103,9 +115,9 @@ public class ImageUtil {
     /**
      * 设置水印图片到中间
      *
-     * @param src
-     * @param watermark
-     * @return
+     * @param src src
+     * @param watermark watermark
+     * @return Bitmap
      */
     public static Bitmap createWaterMaskCenter(Bitmap src, Bitmap watermark) {
         return createWaterMaskBitmap(src, watermark,
@@ -115,11 +127,14 @@ public class ImageUtil {
 
     /**
      * 给图片添加文字到左上角
-     *
-     * @param context
-     * @param bitmap
-     * @param text
-     * @return
+     * @param context context
+     * @param bitmap bitmap
+     * @param text text
+     * @param size size
+     * @param color color
+     * @param paddingLeft paddingLeft
+     * @param paddingTop paddingTop
+     * @return Bitmap
      */
     public static Bitmap drawTextToLeftTop(Context context, Bitmap bitmap, String text,
                                            int size, int color, int paddingLeft, int paddingTop) {
@@ -136,12 +151,14 @@ public class ImageUtil {
     /**
      * 绘制文字到右下角
      *
-     * @param context
-     * @param bitmap
-     * @param text
-     * @param size
-     * @param color
-     * @return
+     * @param context context
+     * @param bitmap bitmap
+     * @param text text
+     * @param size size
+     * @param color color
+     * @param paddingRight  paddingRight
+     * @param paddingBottom  paddingBottom
+     * @return Bitmap
      */
     public static Bitmap drawTextToRightBottom(Context context, Bitmap bitmap, String text,
                                                int size, int color, int paddingRight, int paddingBottom) {
@@ -158,14 +175,14 @@ public class ImageUtil {
     /**
      * 绘制文字到右上方
      *
-     * @param context
-     * @param bitmap
-     * @param text
-     * @param size
-     * @param color
-     * @param paddingRight
-     * @param paddingTop
-     * @return
+     * @param context context
+     * @param bitmap bitmap
+     * @param text text
+     * @param size size
+     * @param color color
+     * @param paddingRight paddingRight
+     * @param paddingTop paddingTop
+     * @return Bitmap
      */
     public static Bitmap drawTextToRightTop(Context context, Bitmap bitmap, String text,
                                             int size, int color, int paddingRight, int paddingTop) {
@@ -182,14 +199,14 @@ public class ImageUtil {
     /**
      * 绘制文字到左下方
      *
-     * @param context
-     * @param bitmap
-     * @param text
-     * @param size
-     * @param color
-     * @param paddingLeft
-     * @param paddingBottom
-     * @return
+     * @param context context
+     * @param bitmap bitmap
+     * @param text text
+     * @param size size
+     * @param color color
+     * @param paddingLeft paddingLeft
+     * @param paddingBottom paddingBottom
+     * @return Bitmap
      */
     public static Bitmap drawTextToLeftBottom(Context context, Bitmap bitmap, String text,
                                               int size, int color, int paddingLeft, int paddingBottom) {
@@ -206,12 +223,12 @@ public class ImageUtil {
     /**
      * 绘制文字到中间
      *
-     * @param context
-     * @param bitmap
-     * @param text
-     * @param size
-     * @param color
-     * @return
+     * @param context context
+     * @param bitmap  bitmap
+     * @param text text
+     * @param size size
+     * @param color color
+     * @return Bitmap
      */
     public static Bitmap drawTextToCenter(Context context, Bitmap bitmap, String text,
                                           int size, int color) {
@@ -225,13 +242,23 @@ public class ImageUtil {
                 (bitmap.getHeight() + bounds.height()) / 2);
     }
 
-    //图片上绘制文字
+    /**
+     * 图片上绘制文字
+     * @param context context
+     * @param bitmap bitmap
+     * @param text text
+     * @param paint paint
+     * @param bounds bounds
+     * @param paddingLeft paddingLeft
+     * @param paddingTop paddingTop
+     * @return Bitmap
+     */
     private static Bitmap drawTextToBitmap(Context context, Bitmap bitmap, String text,
                                            Paint paint, Rect bounds, int paddingLeft, int paddingTop) {
         Bitmap.Config bitmapConfig = bitmap.getConfig();
 
         paint.setDither(true); // 获取跟清晰的图像采样
-        paint.setFilterBitmap(true);// 过滤一些
+        paint.setFilterBitmap(true); // 过滤一些
         if (bitmapConfig == null) {
             bitmapConfig = Bitmap.Config.ARGB_8888;
         }
@@ -245,10 +272,10 @@ public class ImageUtil {
     /**
      * 缩放图片
      *
-     * @param src
-     * @param w
-     * @param h
-     * @return
+     * @param src src
+     * @param w w
+     * @param h h
+     * @return Bitmap
      */
     public static Bitmap scaleWithWH(Bitmap src, double w, double h) {
         if (w == 0 || h == 0 || src == null) {
@@ -272,9 +299,9 @@ public class ImageUtil {
     /**
      * dip转pix
      *
-     * @param context
-     * @param dp
-     * @return
+     * @param context context
+     * @param dp dp
+     * @return int
      */
     public static int dp2px(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;

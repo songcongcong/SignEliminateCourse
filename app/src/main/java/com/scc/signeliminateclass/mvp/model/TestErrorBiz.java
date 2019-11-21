@@ -20,11 +20,20 @@ import okhttp3.MultipartBody;
  */
 
 public class TestErrorBiz {
+    /**
+     * 构造器
+     */
     @Inject
     public TestErrorBiz() {
     }
 
-    // 网络请求
+    /**
+     * 网络请求
+     * @param context context
+     * @param orgid orgid
+     * @param storeid storeid
+     * @return PrivateErrorListInfo
+     */
 
     public Observable<PrivateErrorListInfo> getPrivateEmployee(Context context, String orgid, String storeid) {
         return RetrofitSource.createApi(RetrofitApi.class, context)
@@ -32,14 +41,26 @@ public class TestErrorBiz {
                 .compose(RxHelper.rxSchedulerHelper());
     }
 
-    // 上传图片
+    /**
+     * 上传图片
+     * @param context context
+     * @param file file
+     * @return PictureInfo
+     */
     public Observable<PictureInfo> upLoadPicture(Context context, MultipartBody.Part file) {
         return RetrofitSource.createApi(RetrofitApi.class, context)
                 .uploadImg(file)
                 .compose(RxHelper.rxSchedulerHelper());
     }
 
-    // 消课----获取已签课的列表
+    /**
+     * 消课----获取已签课的列表
+     * @param context context
+     * @param orgId orgId
+     * @param store store
+     * @param employee_id employee_id
+     * @return UserOutListInfo
+     */
     public Observable<UserOutListInfo> getPrivateCourse(Context context, String orgId, String store,
                                                         String employee_id) {
         return RetrofitSource.createApi(RetrofitApi.class, context)

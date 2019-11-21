@@ -5,9 +5,13 @@ import com.example.retrofitmvplibrary.base.BaseUiInterface;
 
 /**
  * 作者：宋聪聪 on 2019/6/18.
+ * @param <UiType> UiType
  */
 
 public class BasePresenterImpl<UiType extends BaseUiInterface> implements BasePresenter<UiType> {
+    /**
+     * uiType
+     */
     private UiType uiType;
 
     @Override

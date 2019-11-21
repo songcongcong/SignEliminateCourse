@@ -51,47 +51,98 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
+/**
+ * UserErrorActivity
+ */
 public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> implements UserUiInterface {
-
+    /**
+     * TAG
+     */
     private static final String TAG = "UserErrorActivity";
+    /**
+     * 连接P层
+     */
     @Inject
     UserErrorPresenterImpl impl;
+    /**
+     * userErrorSurface
+     */
     @BindView(R.id.user_error_surface)
     ImageView userErrorSurface;
+    /**
+     * imgTips
+     */
     @BindView(R.id.img_tips)
     ImageView imgTips;
+    /**
+     * tvTvErrorName
+     */
     @BindView(R.id.tv_error_name)
     TextView tvTvErrorName;
+    /**
+     * liearErrorUser
+     */
     @BindView(R.id.liear_error_user)
     LinearLayout liearErrorUser;
+    /**
+     * edUserPhone
+     */
     @BindView(R.id.ed_user_phone)
     EditText edUserPhone;
+    /**
+     * userErrorRecycleview
+     */
     @BindView(R.id.user_error_recycleview)
     RecyclerView userErrorRecycleview;
+    /**
+     * checkboxIn
+     */
     @BindView(R.id.checkbox_in)
     CheckBox checkboxIn;
+    /**
+     * tvPrivateName
+     */
     @BindView(R.id.tv_private_name)
     TextView tvPrivateName;
+    /**
+     * tvPrivateTime
+     */
     @BindView(R.id.tv_private_time)
     TextView tvPrivateTime;
+    /**
+     * liearIn
+     */
     @BindView(R.id.liear_in)
     LinearLayout liearIn;
+    /**
+     * checkboxOut
+     */
     @BindView(R.id.checkbox_out)
     CheckBox checkboxOut;
+    /**
+     * tvUserName
+     */
     @BindView(R.id.tv_user_name)
     TextView tvUserName;
+    /**
+     * tvUserTime
+     */
     @BindView(R.id.tv_user_time)
     TextView tvUserTime;
+    /**
+     * learOut
+     */
     @BindView(R.id.lear_out)
     LinearLayout learOut;
+    /**
+     * viewSelector
+     */
     @BindView(R.id.view_selector)
     CheckBox viewSelector;
 
@@ -104,12 +155,24 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
      * activity结果码
      */
     public static final int USER_RESULTCODE = 6;
+    /**
+     * tvPhone
+     */
     @BindView(R.id.tv_phone)
     TextView tvPhone;
+    /**
+     * imgErrorUser
+     */
     @BindView(R.id.img_error_user)
     ImageView imgErrorUser;
+    /**
+     * relatUserItem
+     */
     @BindView(R.id.relat_user_item)
     RelativeLayout relatUserItem;
+    /**
+     * tvPicture
+     */
     @BindView(R.id.tv_picture)
     TextView tvPicture;
 
@@ -118,16 +181,34 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
      * 选择相机
      */
     private static final int RC_CHOOSE_CAMERA = 101;
+    /**
+     * imgBack
+     */
     @BindView(R.id.img_back)
     ImageView imgBack;
+    /**
+     * rbBtn
+     */
     @BindView(R.id.rb_btn)
     CheckBox rbBtn;
+    /**
+     * tvSignTime
+     */
     @BindView(R.id.tv_sign_time)
     TextView tvSignTime;
+    /**
+     * ivPrivatePic
+     */
     @BindView(R.id.iv_private_pic)
     ImageView ivPrivatePic;
+    /**
+     * ivUserPic
+     */
     @BindView(R.id.iv_user_pic)
     ImageView ivUserPic;
+    /**
+     * signRecycleItem
+     */
     @BindView(R.id.sign_recycle_item)
     RelativeLayout signRecycleItem;
     /**
@@ -142,11 +223,11 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
     /**
      * 裁剪回调
      */
-    private static final int CROP_SMALL_PICTURE = 102;//裁剪
+    private static final int CROP_SMALL_PICTURE = 102; //裁剪
     /**
      * 小米裁剪回调
      */
-    private static final int CROP_SMALL_PICTURE_MIUI = 103;//小米裁剪
+    private static final int CROP_SMALL_PICTURE_MIUI = 103; //小米裁剪
     /**
      * uritempFile
      */
@@ -156,11 +237,22 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
      */
     private static final int RC_CHOOSE_PHOTO = 104;
 
-    //权限
+    /**
+     * 权限
+     */
     public static final String CAMERA_PERMISSION = Manifest.permission.CAMERA;
+    /**
+     * wifi权限
+     */
     public static final String NETWORK_PERMISSION = Manifest.permission.ACCESS_NETWORK_STATE;
-
-    private List<UserOutFaceErrorListInfo.MessageBean> mList = new ArrayList();
+    /**
+     * mUserId
+     */
+    private int mUserId;
+    /**
+     * mName
+     */
+    private String mName;
 
     @Override
     protected UserErrorPresenterImpl initInjector() {
@@ -197,7 +289,7 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
 
         int privated = (int) SPUtils.get(this, "orgId", 0);
         Log.d("song", "用户activity：" + privated);
-        int outClassId = (int) SPUtils.get(this, "outUserId", 0);//已签课的课程id存入sp
+        int outClassId = (int) SPUtils.get(this, "outUserId", 0); //已签课的课程id存入sp
 //        impl.getMemberByCourse(this, AppUtils.ORG_ID, AppUtils.STORE_ID, String.valueOf(outClassId));
         String nickName = (String) SPUtils.get(this, "nickName", "");
         mName = nickName;
@@ -223,7 +315,8 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
                 @Override
                 public void afterTextChanged(Editable editable) {
                     if (!TextUtils.isEmpty(edUserPhone.getText().toString().trim())) {
-                        impl.getUserPhoneList(UserErrorActivity.this, AppUtils.ORG_ID, AppUtils.STORE_ID, edUserPhone.getText().toString().trim());
+                        impl.getUserPhoneList(UserErrorActivity.this, AppUtils.ORG_ID,
+                                AppUtils.STORE_ID, edUserPhone.getText().toString().trim());
                     }
                 }
             });
@@ -238,7 +331,7 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
                 tvPicture.setVisibility(View.VISIBLE);
                 signRecycleItem.setVisibility(View.VISIBLE);
                 rbBtn.setChecked(true);
-                if (!TextUtils.isEmpty(mTime) && !TextUtils.isEmpty(prurl) &&!TextUtils.isEmpty(userUrl)) {
+                if (!TextUtils.isEmpty(mTime) && !TextUtils.isEmpty(prurl) && !TextUtils.isEmpty(userUrl)) {
                     tvSignTime.setText(mTime);
                     // 私教图片
                     Glide.with(this).load(prurl).transform(new GlideCircleTransform(this))
@@ -248,7 +341,8 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
                             .into(ivUserPic);
                 }
                 subscribeClick(tvPicture, o -> {
-                    if (ContensUtils.checkAndApplyfPermissionActivity(UserErrorActivity.this, new String[]{Manifest.permission.CAMERA,
+                    if (ContensUtils.checkAndApplyfPermissionActivity(UserErrorActivity.this,
+                            new String[]{Manifest.permission.CAMERA,
                                     Manifest.permission.READ_EXTERNAL_STORAGE,
                                     Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             RC_CHOOSE_CAMERA)) {
@@ -264,7 +358,9 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
         });
     }
 
-    // 改变签课签到,
+    /**
+     * 改变签课签到,
+     */
     private void setPrivateUi() {
         checkboxIn.setSelected(true);
         tvPrivateName.setSelected(true);
@@ -274,8 +370,17 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
     }
 
 
-    // activity跳转----签课跳转
-    public static void startActivity(Activity activity, int code, int flag, String prurl, String userurl, String mTime) {
+    /**
+     * activity跳转----签课跳转
+     * @param activity activity
+     * @param code code
+     * @param flag flag
+     * @param prurl prurl
+     * @param userurl userurl
+     * @param mTime mTime
+     */
+    public static void startActivity(Activity activity, int code, int flag, String prurl,
+                                     String userurl, String mTime) {
         Intent intent = new Intent(activity, UserErrorActivity.class);
         intent.putExtra("flag", flag);
         intent.putExtra("prurl", prurl);
@@ -297,7 +402,7 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
             intent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);
         } else {
             tempUri = Uri.fromFile(cameraSavePath); // 传递路径
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);// 更改系统默认存储路径
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri); // 更改系统默认存储路径
         }
         try {
             startActivityForResult(intent, RC_CHOOSE_CAMERA);
@@ -319,6 +424,8 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
                     }
                     break;
                 }
+            default:
+                break;
         }
     }
 
@@ -343,13 +450,15 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
             case CROP_SMALL_PICTURE_MIUI:  // 小米适配----裁剪之后intent系统获取不到，只能显示裁剪之后的图片，而不是从intent中获取
                 setImageMiuiToView();
                 break;
+            default:
+                break;
         }
     }
 
     /**
      * 裁剪图片方法实现
      *
-     * @param uri
+     * @param uri uri
      */
     private void photoClip(Uri uri) {
         // 调用系统中自带的图片剪裁
@@ -369,7 +478,8 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
         intent.putExtra("outputY", 150);
         intent.putExtra("return-data", true);
         if (Build.MODEL.contains("MI") || Build.MODEL.contains("Redmi 6A")) {
-            uritempFile = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/test/" + System.currentTimeMillis() + ".jpg");
+            uritempFile = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath()
+                    + "/test/" + System.currentTimeMillis() + ".jpg");
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uritempFile);
             intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
             intent.putExtra("noFaceDetection", true);
@@ -385,9 +495,9 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
     }
 
 
-    /* * 保存裁剪之后的图片数据
-     *
-     * @param
+    /**
+     * 保存裁剪之后的图片数据
+     * @param data data
      */
     protected void setImageToView(Intent data) {
         Bundle extras = data.getExtras();
@@ -401,9 +511,9 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
         }
     }
 
-    /* * 相机回调图片为空
-     *
-     * @param
+    /**
+     * 相机回调图片为空
+     * @param mbitmap mbitmap
      */
     protected void setImageNllToView(Bitmap mbitmap) {
         if (mName != null) {
@@ -412,7 +522,11 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
         }
     }
 
-    // 将bitmap转化为string
+    /**
+     * 将bitmap转化为string
+     * @param bitmap bitmap
+     * @return string
+     */
     public String bitmapToString(Bitmap bitmap) {
         //将Bitmap转换成字符串
         String string = null;
@@ -423,9 +537,8 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
         return string;
     }
 
-    /* * 保存裁剪之后的图片数据----适配小米
-     *
-     * @param
+    /**
+     * 保存裁剪之后的图片数据----适配小米
      */
     protected void setImageMiuiToView() {
         //将Uri图片转换为Bitmap
@@ -442,7 +555,10 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
     }
 
 
-    //写入内存
+    /**
+     * 写入内存
+     * @param photo photo
+     */
     private void setFile(Bitmap photo) {
 //        photoPath = Environment.getExternalStorageDirectory() + "/image2.jpg";
 //        System.out.println("============pothphone" + photoPath);
@@ -456,10 +572,11 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
         }
     }
 
-    private int mUserId;
-    private String mName;
 
-    // 根据手机号查询，查询成功结果
+    /**
+     * 根据手机号查询，查询成功结果
+     * @param phoneList phoneList
+     */
     @Override
     public void setUserPhoneList(UserPhoneListInfo phoneList) {
 
@@ -486,7 +603,8 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
                 tvTvErrorName.setText(name);
 
                 subscribeClick(tvPicture, o -> {
-                    if (ContensUtils.checkAndApplyfPermissionActivity(UserErrorActivity.this, new String[]{Manifest.permission.CAMERA,
+                    if (ContensUtils.checkAndApplyfPermissionActivity(UserErrorActivity.this,
+                            new String[]{Manifest.permission.CAMERA,
                                     Manifest.permission.READ_EXTERNAL_STORAGE,
                                     Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             RC_CHOOSE_CAMERA)) {
@@ -533,7 +651,8 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
 //                    tvTvErrorName.setText(name);
 //
 //                    subscribeClick(tvPicture, o -> {
-//                        if (ContensUtils.checkAndApplyfPermissionActivity(UserErrorActivity.this, new String[]{Manifest.permission.CAMERA,
+//                        if (ContensUtils.checkAndApplyfPermissionActivity(UserErrorActivity.this,
+//                        new String[]{Manifest.permission.CAMERA,
 //                                        Manifest.permission.READ_EXTERNAL_STORAGE,
 //                                        Manifest.permission.WRITE_EXTERNAL_STORAGE},
 //                                RC_CHOOSE_CAMERA)) {

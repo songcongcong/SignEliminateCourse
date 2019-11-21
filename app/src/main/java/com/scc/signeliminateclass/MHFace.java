@@ -51,17 +51,32 @@ public class MHFace {
 //    public static final String API_KEY = "34fjYKE8WX6IsGeW8vtHoDU2";
 //    public static final String SECRET_KEY = "dq0lzmC6FcjUyiEL2NYZGORPGAH6yF4v";
 
+    /**
+     * imageType
+     */
     public static final String imageType = "BASE64";
-
+    /**
+     * isUserAdd
+     */
     public static boolean isUserAdd = false;
 
 
-    //设置APPID/AK/SK
+    /**
+     * 设置APPID/AK/SK
+     */
     private final static String APP_ID = "17023169";
+    /**
+     * API_KEY
+     */
     private final static String API_KEY = "RLMflwnbOY0F0ihYdXgnGKSe";
+    /**
+     * SECRET_KEY
+     */
     private final static String SECRET_KEY = "0XCoRQcfSvawEaNi3OCrOlm1FNEeZHk0";
 
-
+    /**
+     * client
+     */
     static AipFace client = null;
 
     static {
@@ -72,6 +87,9 @@ public class MHFace {
 
     }
 
+    /**
+     * search
+     */
     private static JSONObject search;
 
     //	public static void main(String[] args) throws IOException {
@@ -87,14 +105,9 @@ public class MHFace {
 //	}
 
     /**
-     * @Title: face2Bytesa
-     * @Description: TODO(作用 ：)
-     * @param: @param file
-     * @param: @return
-     * @param: @throws IOException
-     * @return: byte []
-     * @Auther: cmj
-     * @throws
+     * face2Bytes
+     * @param file file
+     * @return byte
      */
     public static byte[] face2Bytes(ByteArrayOutputStream file) {
         try {
@@ -118,9 +131,10 @@ public class MHFace {
 
     /**
      * 人脸检测
-     *
-     * @return
-     * @throws IOException
+     * @param file file
+     * @param max_face_num  max_face_num
+     * @return String
+     * @throws IOException IOException
      */
     public static String detectFace(File file, String max_face_num) {
         try {
@@ -134,9 +148,9 @@ public class MHFace {
 
     /**
      * 人脸检测
-     *
-     * @return
-     * @throws IOException
+     * @param arg0 arg0
+     * @param max_face_num max_face_num
+     * @return String
      */
     public static String detectFace(byte[] arg0, String max_face_num) {
         try {
@@ -160,9 +174,9 @@ public class MHFace {
 
     /**
      * 人脸比对
-     * @param file1
-     * @param file2
-     * @return
+     * @param file1 file1
+     * @param file2 file2
+     * @return String
      */
     public static String matchFace(File file1, File file2) {
         try {
@@ -175,16 +189,14 @@ public class MHFace {
     }
 
     /**
-     *
-     * @Title: detectUserIdByFace
-     * @Description: TODO(作用 ： 根据人脸查询用户Id)
-     * @param: @return
-     * @return: String
-     * @Auther: cmj
-     * @throws
+     * TODO(作用 ： 根据人脸查询用户Id)
+     * @param image image
+     * @param groupIdList groupIdList
+     * @return JSONObject
+     * @throws Exception Exception
      */
     public static JSONObject detectUserIdByFace(ByteArrayOutputStream image, String groupIdList) throws Exception {
-        Log.d("SignInActivity","detectUserIdByFace：");
+        Log.d("SignInActivity", "detectUserIdByFace：");
 
         HashMap<String, String> options = new HashMap<String, String>();
         options.put("max_face_num", "1");
@@ -195,10 +207,10 @@ public class MHFace {
         byte[] face2Bytes = face2Bytes(image);
         try {
             search = client.search(Base64Util.encode(face2Bytes), imageType, groupIdList, options);
-            Log.d("SignInActivity","识别证常：");
+            Log.d("SignInActivity", "识别证常：");
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d("SignInActivity","识别异常："+e.toString());
+            Log.d("SignInActivity", "识别异常：" + e.toString());
         }
         return search;
     }
@@ -210,7 +222,7 @@ public class MHFace {
      *            人脸1
      * @param arg1
      *            人脸2
-     * @return
+     * @return String
      */
     public static String matchFace(byte[] arg0, byte[] arg1) {
         String imgStr1 = Base64Util.encode(arg0);
@@ -226,10 +238,10 @@ public class MHFace {
 
     /**
      * 人脸搜索
-     * @param file
-     * @param groupIdList
-     * @param userId
-     * @return
+     * @param file file
+     * @param groupIdList groupIdList
+     * @param userId userId
+     * @return String
      */
     public static String searchFace(File file, String groupIdList, String userId) {
         try {
@@ -244,9 +256,10 @@ public class MHFace {
     /**
      * 人脸搜索
      *
-     * @param arg0
-     * @param groupIdList
-     * @return
+     * @param arg0 arg0
+     * @param groupIdList groupIdList
+     * @param userId  userId
+     * @return String
      */
     public static String searchFace(byte[] arg0, String groupIdList, String userId) {
         String imgStr = Base64Util.encode(arg0);
@@ -269,11 +282,11 @@ public class MHFace {
 
     /**
      * 增加用户
-     * @param file
-     * @param userInfo
-     * @param userId
-     * @param groupId
-     * @return
+     * @param file file
+     * @param userInfo  userInfo
+     * @param userId userId
+     * @param groupId groupId
+     * @return String
      */
     public static String addUser(File file, String userInfo, String userId, String groupId) {
         try {
@@ -288,11 +301,11 @@ public class MHFace {
     /**
      * 增加用户
      *
-     * @param arg0
-     * @param userInfo
-     * @param userId
-     * @param groupId
-     * @return
+     * @param arg0 arg0
+     * @param userInfo userInfo
+     * @param userId userId
+     * @param groupId groupId
+     * @return String
      */
     public static String addUser(byte[] arg0, String userInfo, String userId, String groupId) {
         String imgStr = Base64Util.encode(arg0);
@@ -315,14 +328,16 @@ public class MHFace {
     /**
      * 增加用户
      *
-     * @param file
-     * @param userInfo
-     * @param userId
-     * @param groupId
-     * @return
+     * @param file file
+     * @param userInfo userInfo
+     * @param userId userId
+     * @param groupId groupId
+     * @param context context
+     * @return String
      */
-    public static String addUser(ByteArrayOutputStream file, String userInfo, String userId, String groupId, Context context) {
-        Log.d("song","444444444添加：");
+    public static String addUser(ByteArrayOutputStream file, String userInfo, String userId,
+                                 String groupId, Context context) {
+        Log.d("song", "444444444添加：");
         byte[] bytes = MHFace.face2Bytes(file);
         String imgStr = Base64Util.encode(bytes);
         String imageType = "BASE64";
@@ -336,7 +351,7 @@ public class MHFace {
             return res.toString(2);
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.d("song","555添加："+e.toString());
+            Log.d("song", "555添加：" + e.toString());
         }
         return "";
     }
@@ -344,13 +359,12 @@ public class MHFace {
     /**
      * 增加用户: 自动生成userid
      *
-     * @param file
-     * @param userInfo
-     * @param groupId
-     * @return
+     * @param file file
+     * @param userInfo userInfo
+     * @param groupId groupId
+     * @return String
      */
     public static String addUser(ByteArrayOutputStream file, String userInfo, String groupId) {
-        Log.d("song","1111111添加：");
         byte[] bytes = MHFace.face2Bytes(file);
         String imgStr = Base64Util.encode(bytes);
         String imageType = "BASE64";
@@ -361,16 +375,21 @@ public class MHFace {
         String userId = getUniqueSeq();
         JSONObject res = client.addUser(imgStr, imageType, groupId, userId, options);
         try {
-            Log.d("song","添加："+res.toString());
             return res.toString(2);
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.d("song","添加：异常"+e.toString());
         }
         return "";
     }
 
-
+    /**
+     * updateUser
+     * @param file file
+     * @param userInfo userInfo
+     * @param userId userId
+     * @param groupId groupId
+     * @return String
+     */
     public static String updateUser(File file, String userInfo, String userId, String groupId) {
         try {
             return updateUser(FileToByte(file), userInfo, userId, groupId);
@@ -384,11 +403,11 @@ public class MHFace {
     /**
      * 更新用户
      *
-     * @param arg0
-     * @param userInfo
-     * @param userId
-     * @param groupId
-     * @return
+     * @param arg0 arg0
+     * @param userInfo userInfo
+     * @param userId userId
+     * @param groupId groupId
+     * @return String
      */
     public static String updateUser(byte[] arg0, String userInfo, String userId, String groupId) {
         String imgStr = Base64Util.encode(arg0);
@@ -411,10 +430,10 @@ public class MHFace {
 
     /**
      * 删除用户人脸信息
-     * @param userId
-     * @param groupId
-     * @param faceToken
-     * @return
+     * @param userId userId
+     * @param groupId groupId
+     * @param faceToken faceToken
+     * @return String
      */
     public static String deleteUserFace(String userId, String groupId, String faceToken) {
         HashMap<String, String> options = new HashMap<String, String>();
@@ -425,9 +444,9 @@ public class MHFace {
 
     /**
      * 查询用户信息
-     * @param userId
-     * @param groupId
-     * @return
+     * @param userId userId
+     * @param groupId groupId
+     * @return String
      */
     public static String searchUserInfo(String userId, String groupId) {
         HashMap<String, String> options = new HashMap<String, String>();
@@ -443,9 +462,9 @@ public class MHFace {
 
     /**
      * 获取用户人脸列表
-     * @param userId
-     * @param groupId
-     * @return
+     * @param userId userId
+     * @param groupId groupId
+     * @return String
      */
     public static String getUserFaceList(String userId, String groupId) {
         HashMap<String, String> options = new HashMap<String, String>();
@@ -461,9 +480,9 @@ public class MHFace {
 
     /**
      * 获取一组用户
-     * @param groupId
-     * @param returnNum
-     * @return
+     * @param groupId groupId
+     * @param returnNum returnNum
+     * @return String
      */
     public static String getGroupUsers(String groupId, String returnNum) {
         HashMap<String, String> options = new HashMap<String, String>();
@@ -483,10 +502,10 @@ public class MHFace {
 
     /**
      * 组用户复制
-     * @param userId
-     * @param srcGroupId
-     * @param dstGroupId
-     * @return
+     * @param userId userId
+     * @param srcGroupId srcGroupId
+     * @param dstGroupId dstGroupId
+     * @return String
      */
     public static String userCopy(String userId, String srcGroupId, String dstGroupId) {
         HashMap<String, String> options = new HashMap<String, String>();
@@ -504,9 +523,9 @@ public class MHFace {
 
     /**
      * 删除用户
-     * @param userId
-     * @param groupId
-     * @return
+     * @param userId userId
+     * @param groupId groupId
+     * @return String
      */
     public static String deleteUser(String userId, String groupId) {
         HashMap<String, String> options = new HashMap<String, String>();
@@ -517,8 +536,8 @@ public class MHFace {
 
     /**
      * 增加组信息
-     * @param groupId
-     * @return
+     * @param groupId groupId
+     * @return String
      */
     public static String addGroup(String groupId) {
         HashMap<String, String> options = new HashMap<String, String>();
@@ -529,8 +548,8 @@ public class MHFace {
 
     /**
      * 删除
-     * @param groupId
-     * @return
+     * @param groupId groupId
+     * @return String
      */
     public static String deleteGroup(String groupId) {
         HashMap<String, String> options = new HashMap<String, String>();
@@ -541,8 +560,8 @@ public class MHFace {
 
     /**
      * 获取组列表
-     * @param length
-     * @return
+     * @param length length
+     * @return String
      */
     public static String getGroupList(String length) {
         HashMap<String, String> options = new HashMap<String, String>();
@@ -555,8 +574,8 @@ public class MHFace {
 
     /**
      * 活体检测
-     * @param arg0
-     * @return
+     * @param arg0 arg0
+     * @return String
      */
     public static String faceverify(byte[] arg0) {
         String imgStr = Base64Util.encode(arg0);
@@ -570,7 +589,7 @@ public class MHFace {
 
     /**
      * 检查活动分数
-     * @param file
+     * @param file file
      * @return 直接返回活体检测分数
      */
     public static double faceverifyDouble(ByteArrayOutputStream file) {
@@ -591,6 +610,12 @@ public class MHFace {
         return 0.00;
     }
 
+    /**
+     * FileToByte
+     * @param file file
+     * @return byte
+     * @throws IOException IOException
+     */
     private static byte[] FileToByte(File file) throws IOException {
         // 将数据转为流
         InputStream content = new FileInputStream(file);
@@ -606,7 +631,7 @@ public class MHFace {
 
     /**
      * 获取唯一序列
-     * @return
+     * @return String
      */
     public static String getUniqueSeq() {
         long nanoTimeStart = System.nanoTime();

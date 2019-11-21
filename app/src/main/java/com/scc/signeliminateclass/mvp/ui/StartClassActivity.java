@@ -12,35 +12,72 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.scc.signeliminateclass.MainActivity;
 import com.scc.signeliminateclass.R;
 import com.scc.signeliminateclass.utils.SPUtils;
-import com.scc.signeliminateclass.utils.TimeUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * StartClassActivity
+ */
 public class StartClassActivity extends AppCompatActivity {
-
+    /**
+     * classSuccess
+     */
     @BindView(R.id.class_success)
     TextView classSuccess;
+    /**
+     * liearSuccess
+     */
     @BindView(R.id.liear_success)
     LinearLayout liearSuccess;
+    /**
+     * tvStartClass
+     */
     @BindView(R.id.tv_start_class)
     TextView tvStartClass;
+    /**
+     * checkboxIn
+     */
     @BindView(R.id.checkbox_in)
     CheckBox checkboxIn;
+    /**
+     * tvPrivateName
+     */
     @BindView(R.id.tv_private_name)
     TextView tvPrivateName;
+    /**
+     * tvPrivateTime
+     */
     @BindView(R.id.tv_private_time)
     TextView tvPrivateTime;
+    /**
+     * liearIn
+     */
     @BindView(R.id.liear_in)
     LinearLayout liearIn;
+    /**
+     * checkboxOut
+     */
     @BindView(R.id.checkbox_out)
     CheckBox checkboxOut;
+    /**
+     * tvUserName
+     */
     @BindView(R.id.tv_user_name)
     TextView tvUserName;
+    /**
+     * tvUserTime
+     */
     @BindView(R.id.tv_user_time)
     TextView tvUserTime;
+    /**
+     * learOut
+     */
     @BindView(R.id.lear_out)
     LinearLayout learOut;
+    /**
+     * viewSelector
+     */
     @BindView(R.id.view_selector)
     CheckBox viewSelector;
 
@@ -73,7 +110,9 @@ public class StartClassActivity extends AppCompatActivity {
     }
 
 
-    // 改变签课签到,
+    /**
+     * 改变签课签到,
+     */
     private void setPrivateUi() {
         checkboxIn.setSelected(true);
         tvPrivateName.setSelected(true);
@@ -83,7 +122,9 @@ public class StartClassActivity extends AppCompatActivity {
 
     }
 
-    // 改变签课签到,
+    /**
+     * 改变签课签到,
+     */
     private void setUserUi() {
         checkboxOut.setSelected(true);
         tvUserName.setSelected(true);

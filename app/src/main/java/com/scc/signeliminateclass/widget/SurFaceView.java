@@ -16,18 +16,40 @@ import androidx.annotation.RequiresApi;
  * @data 2019/11/8
  */
 public class SurFaceView extends SurfaceView {
+    /**
+     * SurFaceView
+     * @param context context
+     */
     public SurFaceView(Context context) {
         super(context);
     }
 
+    /**
+     * SurFaceView
+     * @param context context
+     * @param attrs attrs
+     */
     public SurFaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
+    /**
+     * SurFaceView
+     * @param context  context
+     * @param attrs attrs
+     * @param defStyleAttr defStyleAttr
+     */
     public SurFaceView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
+    /**
+     * SurFaceView
+     * @param context context
+     * @param attrs attrs
+     * @param defStyleAttr defStyleAttr
+     * @param defStyleRes defStyleRes
+     */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public SurFaceView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);

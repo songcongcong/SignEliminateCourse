@@ -23,11 +23,22 @@ package com.scc.signeliminateclass.model;
 *---------------------------------------------------------*
 * 2019年7月5日     cmj           v1.0.0               修改原因
 */
-public class UserList extends BaseFace{
-
-	private String score; //用户的匹配得分
-	private String group_id;//组iD
-	private String user_id; //用户Id
+public class UserList extends BaseFace {
+	/**
+	 * 用户的匹配得分
+	 */
+	private String score;
+	/**
+	 * 组iD
+	 */
+	private String group_id;
+	/**
+	 * 用户Id
+	 */
+	private String user_id;
+	/**
+	 * user_info
+	 */
 	private String user_info;
 	/**
 	 * @return the score

@@ -9,16 +9,40 @@ import android.graphics.Paint;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 
+/**
+ * GlideCircleTransform
+ */
 public class GlideCircleTransform extends BitmapTransformation {
+  /**
+   * GlideCircleTransform
+   * @param context context
+   */
   public GlideCircleTransform(Context context) {
     super(context);
   }
-//    [url=home.php?mod=space&uid=389554]@Override[/url]
+
+  /**
+   * transform
+   * @param pool pool
+   * @param toTransform toTransform
+   * @param outWidth outWidth
+   * @param outHeight outHeight
+   * @return Bitmap
+   */
   protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
     return circleCrop(pool, toTransform);
   }
+
+  /**
+   * circleCrop
+   * @param pool pool
+   * @param source source
+   * @return Bitmap
+   */
   private static Bitmap circleCrop(BitmapPool pool, Bitmap source) {
-    if (source == null) return null;
+    if (source == null) {
+      return null;
+    }
     int size = Math.min(source.getWidth(), source.getHeight());
     int x = (source.getWidth() - size) / 2;
     int y = (source.getHeight() - size) / 2;

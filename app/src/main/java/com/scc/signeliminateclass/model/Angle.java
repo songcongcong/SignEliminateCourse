@@ -25,9 +25,17 @@ package com.scc.signeliminateclass.model;
 */
 public class Angle extends BaseFace {
 
-	
+	/**
+	 * roll
+	 */
      private String roll;
-     private String pitch;
+	/**
+	 * pitch
+	 */
+	private String pitch;
+	/**
+	 * yaw
+	 */
      private String yaw;
 	/**
 	 * @return the roll

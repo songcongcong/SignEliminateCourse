@@ -12,13 +12,15 @@ import java.util.Locale;
  * @author cj 2016-5-26
  */
 public class TimeUtil {
-
+    /**
+     * sf
+     */
     private SimpleDateFormat sf = null;
 
     /**
      * 获取当前时间
      *
-     * @return
+     * @return String
      */
     public String getNowTime() {
         String timeString = null;
@@ -36,6 +38,12 @@ public class TimeUtil {
         return timeString;
     }
 
+    /**
+     * calculate
+     * @param year year
+     * @param month month
+     * @return int
+     */
     public int calculate(int year, int month) {
 
         boolean yearleap = judge(year);
@@ -52,17 +60,22 @@ public class TimeUtil {
         return day;
     }
 
+    /**
+     * judge
+     * @param year year
+     * @return boolean
+     */
     public boolean judge(int year) {
         boolean yearleap = (year % 400 == 0) || (year % 4 == 0)
-                && (year % 100 != 0);// 采用布尔数据计算判断是否能整除
+                && (year % 100 != 0); // 采用布尔数据计算判断是否能整除
         return yearleap;
     }
 
     /**
      * 十一下加零
      *
-     * @param str
-     * @return
+     * @param str str
+     * @return String
      */
     public String thanTen(int str) {
 
@@ -83,7 +96,6 @@ public class TimeUtil {
      *
      * @param starTime 开始时间
      * @param endTime  结束时间
-     * @param type     返回类型 ==1----天，时，分。 ==2----时
      * @return 返回时间差
      */
     public static String getTimeDifference(String starTime, String endTime) {
@@ -127,9 +139,9 @@ public class TimeUtil {
     /**
      * 计算相差的小时
      *
-     * @param starTime
-     * @param endTime
-     * @return
+     * @param starTime starTime
+     * @param endTime endTime
+     * @return String
      */
     public String getTimeDifferenceHour(String starTime, String endTime) {
         String timeString = "";
@@ -158,9 +170,9 @@ public class TimeUtil {
     /**
      * 获取时间中的某一个时间点
      *
-     * @param str
-     * @param type
-     * @return
+     * @param str str
+     * @param type type
+     * @return String
      */
     public String getJsonParseShiJian(String str, int type) {
         String shijanString = null;
@@ -186,6 +198,8 @@ public class TimeUtil {
             case 5:
                 shijanString = fen;
                 break;
+            default:
+                break;
 
         }
         return shijanString;
@@ -194,8 +208,8 @@ public class TimeUtil {
     /**
      * Sring变int
      *
-     * @param str
-     * @return
+     * @param str str
+     * @return int
      */
     public int strToInt(String str) {
         int value = 0;
@@ -235,8 +249,8 @@ public class TimeUtil {
     /**
      * 把时间戳变yyyy-MM-dd HH:mm格式时间
      *
-     * @param time
-     * @return
+     * @param time time
+     * @return String
      */
     public String getDateToString(long time) {
         Date d = new Date(time);
@@ -247,8 +261,8 @@ public class TimeUtil {
     /**
      * 返回时间戳
      *
-     * @param time
-     * @return
+     * @param time time
+     * @return long
      */
     public long dataOne(String time) {
         SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd HH:mm",
@@ -293,6 +307,12 @@ public class TimeUtil {
 
     }
 
+    /**
+     * compareTwoTime2
+     * @param starTime starTime
+     * @param  endString endString
+     * @return boolean
+     */
     public boolean compareTwoTime2(String starTime, String endString) {
         boolean isDayu = false;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -318,8 +338,8 @@ public class TimeUtil {
     /**
      * 获取年
      *
-     * @param time
-     * @return
+     * @param time time
+     * @return String
      */
     public String getTimeYear(String time) {
 
@@ -331,8 +351,8 @@ public class TimeUtil {
     /**
      * 换算小时，0.5小时-->0小时30分
      *
-     * @param hour
-     * @return
+     * @param hour hour
+     * @return String
      */
     private String convertTime(String hour) {
 
@@ -348,6 +368,10 @@ public class TimeUtil {
 
     }
 
+    /**
+     * getCurrentTime
+     * @return String
+     */
     @SuppressLint("SimpleDateFormat")
     public static String getCurrentTime() {
         // 获取当前时间
@@ -356,6 +380,10 @@ public class TimeUtil {
         return formatter.format(curDate);
     }
 
+    /**
+     * getPictureCurrentTime
+     * @return String
+     */
     @SuppressLint("SimpleDateFormat")
     public static String getPictureCurrentTime() {
         // 获取当前时间

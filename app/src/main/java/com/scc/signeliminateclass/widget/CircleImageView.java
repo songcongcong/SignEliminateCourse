@@ -16,23 +16,47 @@ import android.util.AttributeSet;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 
+/**
+ * CircleImageView
+ */
 public class CircleImageView extends AppCompatImageView {
 
-    //画笔
+    /**
+     * 画笔
+     */
     private Paint mPaint;
-    //圆形图片的半径
+    /**
+     * 圆形图片的半径
+     */
     private int mRadius;
-    //图片的宿放比例
+    /**
+     * 图片的宿放比例
+     */
     private float mScale;
 
+    /**
+     * CircleImageView
+     * @param context context
+     */
     public CircleImageView(Context context) {
         super(context);
     }
 
+    /**
+     * CircleImageView
+     * @param context context
+     * @param attrs attrs
+     */
     public CircleImageView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
+    /**
+     * CircleImageView
+     * @param context context
+     * @param attrs attrs
+     * @param defStyleAttr defStyleAttr
+     */
     public CircleImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }

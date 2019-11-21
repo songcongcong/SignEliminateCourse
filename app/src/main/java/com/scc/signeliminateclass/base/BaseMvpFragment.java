@@ -41,20 +41,43 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 
 /**
- * Description:
+ * * Description:
  * Created by RockPhoenixHIAPAD on 2017/12/22 on 17:32.
+ * @param <T> T
  */
 @SuppressLint("CheckResult")
 public abstract class BaseMvpFragment<T extends BasePresenterImpl> extends BaseFragment implements BaseUiInterface {
-
+    /**
+     * mDensity
+     */
     protected float mDensity;
+    /**
+     * mDensityDpi
+     */
     protected int mDensityDpi;
+    /**
+     * mWidth
+     */
     protected int mWidth;
+    /**
+     * barLayout
+     */
     protected ViewGroup barLayout = null;
+    /**
+     * unbinder
+     */
     private Unbinder unbinder;
+    /**
+     * mProgressDialog
+     */
     private ProgressDialog mProgressDialog;
-
+    /**
+     * impl
+     */
     protected T impl;
+    /**
+     * component
+     */
     private FragmentCompontent component;
 
     @Override
@@ -84,19 +107,32 @@ public abstract class BaseMvpFragment<T extends BasePresenterImpl> extends BaseF
         return view;
     }
 
+    /**
+     * injectPresenter
+     */
     private void injectPresenter() {
         impl = initInjector();
         impl.attachView(this);
     }
 
+    /**
+     * initActivityComponent
+     */
     private void initActivityComponent() {
         component = DaggerFragmentCompontent.builder()
                 .fragmentModule(new FragmentModule(this))
                 .build();
     }
 
+    /**
+     * initInjector
+     * @return T
+     */
     protected abstract T initInjector();
 
+    /**
+     * setStatusBarColor
+     */
     public void setStatusBarColor() {
         StatusBarCompat.compat(getActivity(), getResources().getColor(R.color.white));
     }
@@ -104,10 +140,15 @@ public abstract class BaseMvpFragment<T extends BasePresenterImpl> extends BaseF
 
     /**
      * Returns the view avtivity_group_details which should be inflated on creating view.
+     * @return int
      */
     @LayoutRes
     protected abstract int getLayoutId();
 
+    /**
+     * initViews
+     * @param view view
+     */
     protected abstract void initViews(View view);
 
     /**
@@ -123,13 +164,20 @@ public abstract class BaseMvpFragment<T extends BasePresenterImpl> extends BaseF
         return (T) (view.findViewById(id));
     }
 
-
+    /**
+     * toastShort
+     * @param msg msg
+     */
     protected void toastShort(@StringRes int msg) {
         if (getActivity() != null) {
             CustomToast.makeCustomText(getActivity(), msg, Toast.LENGTH_SHORT).show();
         }
     }
 
+    /**
+     * toastShort
+     * @param msg msg
+     */
     protected void toastShort(@NonNull String msg) {
         if (getActivity() != null) {
             CustomToast.makeCustomText(getActivity(), msg, Toast.LENGTH_SHORT).show();
@@ -145,6 +193,7 @@ public abstract class BaseMvpFragment<T extends BasePresenterImpl> extends BaseF
 
     /**
      * @see BaseMvpActivity#getTransitionEnterAnim()
+     * @return int
      */
     @AnimRes
     protected int getTransitionEnterAnim() {
@@ -152,7 +201,8 @@ public abstract class BaseMvpFragment<T extends BasePresenterImpl> extends BaseF
     }
 
     /**
-     * @see BaseMvpActivity#getTransitionOutAnim()
+     *  @see BaseMvpActivity#getTransitionOutAnim()
+     * @return int
      */
     @AnimRes
     protected int getTransitionOutAnim() {
@@ -171,6 +221,10 @@ public abstract class BaseMvpFragment<T extends BasePresenterImpl> extends BaseF
         getActivity().overridePendingTransition(getTransitionEnterAnim(), getTransitionOutAnim());
     }
 
+    /**
+     * subscribeFeatureStub
+     * @param view view
+     */
     protected void subscribeFeatureStub(@NonNull View view) {
         subscribeClick(view, new Consumer<Object>() {
             @Override
@@ -203,6 +257,11 @@ public abstract class BaseMvpFragment<T extends BasePresenterImpl> extends BaseF
                 .subscribe(consumer);
     }
 
+    /**
+     * getWidth
+     * @param context context
+     * @return int
+     */
     protected int getWidth(Context context) {
 
         WindowManager wm = (WindowManager) getContext()
@@ -210,6 +269,9 @@ public abstract class BaseMvpFragment<T extends BasePresenterImpl> extends BaseF
         return wm.getDefaultDisplay().getWidth();
     }
 
+    /**
+     * setListeners
+     */
     protected void setListeners() {
         //empty implementation
     }
@@ -234,6 +296,10 @@ public abstract class BaseMvpFragment<T extends BasePresenterImpl> extends BaseF
         //Empty implementation
     }
 
+    /**
+     * showLoadingDialog
+     * @return Dialog
+     */
     public Dialog showLoadingDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             Log.d(LOG_TAG, "Call show loading dialog while dialog is still showing, is there a bug?");
@@ -266,8 +332,9 @@ public abstract class BaseMvpFragment<T extends BasePresenterImpl> extends BaseF
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (unbinder != null)
+        if (unbinder != null) {
             unbinder.unbind();
+        }
     }
 
     @Override

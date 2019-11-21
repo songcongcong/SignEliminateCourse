@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.scc.signeliminateclass.R;
 import com.scc.signeliminateclass.bean.UserOutFaceErrorListInfo;
-import com.scc.signeliminateclass.bean.UserPhoneListInfo;
 
 import java.util.List;
 
@@ -33,7 +32,12 @@ public class UserEClassErrorAdapter extends RecyclerView.Adapter<UserEClassError
      */
     private List<UserOutFaceErrorListInfo.MessageBean> mList;
 
-    public UserEClassErrorAdapter(Context context,List<UserOutFaceErrorListInfo.MessageBean> mList) {
+    /**
+     * 构造器
+     * @param context context
+     * @param mList mList
+     */
+    public UserEClassErrorAdapter(Context context, List<UserOutFaceErrorListInfo.MessageBean> mList) {
         this.context = context;
         this.mList = mList;
     }
@@ -50,13 +54,15 @@ public class UserEClassErrorAdapter extends RecyclerView.Adapter<UserEClassError
         holder.mUserName.setText(mList.get(position).getName());
         Glide.with(context).load(mList.get(position).getEmployee_sign_image()).into(holder.mImg);
         if (onItemChilkListenre != null) {
-            onItemChilkListenre.OnItemChilkListener(mList.get(position).getName(), mList.get(position).getEmployee_sign_image());
+            onItemChilkListenre.OnItemChilkListener(mList.get(position).getName(),
+                    mList.get(position).getEmployee_sign_image());
         }
         holder.mRelayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (onItemChilkListenre != null) {
-                    onItemChilkListenre.OnItemChilkListener(mList.get(position).getName(), mList.get(position).getEmployee_sign_image());
+                    onItemChilkListenre.OnItemChilkListener(mList.get(position).getName(),
+                            mList.get(position).getEmployee_sign_image());
                 }
             }
         });
@@ -68,12 +74,27 @@ public class UserEClassErrorAdapter extends RecyclerView.Adapter<UserEClassError
         return mList.size();
     }
 
+    /**
+     * MyViewHolder
+     */
     public class MyViewHolder extends BaseViewHolder {
-
+        /**
+         * mRelayout
+         */
         private final RelativeLayout mRelayout;
+        /**
+         * mImg
+         */
         private final ImageView mImg;
+        /**
+         * mUserName
+         */
         private final TextView mUserName;
 
+        /**
+         * MyViewHolder
+         * @param view view
+         */
         public MyViewHolder(View view) {
             super(view);
             mRelayout = itemView.findViewById(R.id.relat_item);
@@ -82,14 +103,28 @@ public class UserEClassErrorAdapter extends RecyclerView.Adapter<UserEClassError
         }
     }
 
-    // 定义接口
+    /**
+     * 定义接口
+     */
     public onItemChilkListenre onItemChilkListenre;
 
+    /**
+     * setOnItemChilkListenre
+     * @param onItemChilkListenre onItemChilkListenre
+     */
     public void setOnItemChilkListenre(onItemChilkListenre onItemChilkListenre) {
         this.onItemChilkListenre = onItemChilkListenre;
     }
 
+    /**
+     * onItemChilkListenre
+     */
     public interface onItemChilkListenre {
+        /**
+         * OnItemChilkListener
+         * @param name name
+         * @param avatar  avatar
+         */
         void OnItemChilkListener(String name, String avatar);
     }
 }

@@ -24,11 +24,25 @@ package com.scc.signeliminateclass.model;
 * 2019年7月5日     cmj           v1.0.0               修改原因
 */
 public class Location {
-
+	/**
+	 * top
+	 */
 	private String top;
+	/**
+	 * left
+	 */
 	private String left;
+	/**
+	 * rotation
+	 */
 	private String rotation;
+	/**
+	 * width
+	 */
 	private String width;
+	/**
+	 * height
+	 */
 	private String height;
 	/**
 	 * @return the top

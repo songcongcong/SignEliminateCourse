@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -33,6 +32,11 @@ public class UserErrorAdapter extends RecyclerView.Adapter<UserErrorAdapter.MyVi
      */
     private List<UserPhoneListInfo.MessageBean> mList;
 
+    /**
+     * 构造器
+     * @param context context
+     * @param mList mList
+     */
     public UserErrorAdapter(Context context, List<UserPhoneListInfo.MessageBean> mList) {
         this.context = context;
         this.mList = mList;
@@ -53,7 +57,8 @@ public class UserErrorAdapter extends RecyclerView.Adapter<UserErrorAdapter.MyVi
             @Override
             public void onClick(View view) {
                 if (onItemChilkListenre != null) {
-                    onItemChilkListenre.OnItemChilkListener(mList.get(position).getName(), mList.get(position).getAvatar(),
+                    onItemChilkListenre.OnItemChilkListener(mList.get(position).getName(),
+                            mList.get(position).getAvatar(),
                             mList.get(position).getMembership_id());
                 }
             }
@@ -65,12 +70,27 @@ public class UserErrorAdapter extends RecyclerView.Adapter<UserErrorAdapter.MyVi
         return mList.size();
     }
 
+    /**
+     * MyViewHolder
+     */
     public class MyViewHolder extends BaseViewHolder {
-
+        /**
+         * mRelayout
+         */
         private final RelativeLayout mRelayout;
+        /**
+         * mImg
+         */
         private final ImageView mImg;
+        /**
+         * mUserName
+         */
         private final TextView mUserName;
 
+        /**
+         * MyViewHolder
+         * @param view view
+         */
         public MyViewHolder(View view) {
             super(view);
             mRelayout = itemView.findViewById(R.id.relat_item);
@@ -79,14 +99,29 @@ public class UserErrorAdapter extends RecyclerView.Adapter<UserErrorAdapter.MyVi
         }
     }
 
-    // 定义接口
+    /**
+     *  定义接口
+     */
     public onItemChilkListenre onItemChilkListenre;
 
+    /**
+     * setOnItemChilkListenre
+     * @param onItemChilkListenre onItemChilkListenre
+     */
     public void setOnItemChilkListenre(onItemChilkListenre onItemChilkListenre) {
         this.onItemChilkListenre = onItemChilkListenre;
     }
 
+    /**
+     * onItemChilkListenre
+     */
     public interface onItemChilkListenre {
+        /**
+         * OnItemChilkListener
+         * @param name name
+         * @param avatar avatar
+         * @param id id
+         */
         void OnItemChilkListener(String name, String avatar, int id);
     }
 }

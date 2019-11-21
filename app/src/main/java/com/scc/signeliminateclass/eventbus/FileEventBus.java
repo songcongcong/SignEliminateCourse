@@ -11,14 +11,26 @@ public class FileEventBus {
      */
     private ByteArrayOutputStream file;
 
+    /**
+     * FileEventBus
+     * @param file file
+     */
     public FileEventBus(ByteArrayOutputStream file) {
         this.file = file;
     }
 
+    /**
+     * getFile
+     * @return ByteArrayOutputStream
+     */
     public ByteArrayOutputStream getFile() {
         return file;
     }
 
+    /**
+     * setFile
+     * @param file file
+     */
     public void setFile(ByteArrayOutputStream file) {
         this.file = file;
     }

@@ -17,12 +17,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+/**
+ * FileUtil
+ */
 public class FileUtil {
     /**
      * 根据URI获取文件真实路径（兼容多张机型）
-     * @param context
-     * @param uri
-     * @return
+     * @param context context
+     * @param uri uri
+     * @return String
      */
     public static String getFilePathByUri(Context context, Uri uri) {
         if ("content".equalsIgnoreCase(uri.getScheme())) {
@@ -72,9 +75,10 @@ public class FileUtil {
 
                 filePath = getDataColumn(context, contentUri, selection, selectionArgs);
             } else if (isDownloadsDocument(uri)) { // DownloadsProvider
-                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(documentId));
+                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),
+                        Long.valueOf(documentId));
                 filePath = getDataColumn(context, contentUri, null, null);
-            }else if (isExternalStorageDocument(uri)) {
+            } else if (isExternalStorageDocument(uri)) {
                 // ExternalStorageProvider
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
@@ -82,7 +86,7 @@ public class FileUtil {
                 if ("primary".equalsIgnoreCase(type)) {
                     filePath = Environment.getExternalStorageDirectory() + "/" + split[1];
                 }
-            }else {
+            } else {
                 //Log.e("路径错误");
             }
         } else if ("content".equalsIgnoreCase(uri.getScheme())) {
@@ -108,8 +112,11 @@ public class FileUtil {
 
     /**
      * 获取数据库表中的 _data 列，即返回Uri对应的文件路径
-     *
-     * @return
+     * @param context context
+     * @param uri uri
+     * @param selection selection
+     * @param selectionArgs selectionArgs
+     * @return String
      */
     private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
         String path = null;
@@ -138,6 +145,11 @@ public class FileUtil {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
+    /**
+     * isExternalStorageDocument
+     * @param uri uri
+     * @return  boolean
+     */
     private static boolean isExternalStorageDocument(Uri uri) {
         return "com.android.externalstorage.documents".equals(uri.getAuthority());
     }
@@ -164,6 +176,11 @@ public class FileUtil {
 //        }
 //    }
 
+    /**
+     * getFile
+     * @param bitmap bitmap
+     * @return File
+     */
     public static File getFile(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);

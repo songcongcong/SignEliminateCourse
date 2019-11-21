@@ -14,9 +14,19 @@ import com.scc.signeliminateclass.di.module.ApplicationModule;
  * @data 2019/11/8
  */
 public class MyApplication extends MultiDexApplication {
+    /**
+     * instance
+     */
     private static MyApplication instance;
+    /**
+     * handler
+     */
     protected static Handler handler;
+    /**
+     * mainThreadId
+     */
     protected static int mainThreadId;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -27,6 +37,10 @@ public class MyApplication extends MultiDexApplication {
         //初始化dagger2
         initApplicationCompontent();
     }
+
+    /**
+     * 初始化initApplicationCompontent
+     */
     private void initApplicationCompontent() {
         DaggerApplicationCompontent.builder()
                 .applicationModule(new ApplicationModule(this))
@@ -50,7 +64,10 @@ public class MyApplication extends MultiDexApplication {
         return mainThreadId;
     }
 
-
+    /**
+     * MyApplication
+     * @return MyApplication
+     */
     public static MyApplication instance() {
         return instance;
     }
