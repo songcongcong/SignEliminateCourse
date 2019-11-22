@@ -7,6 +7,8 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import androidx.annotation.RequiresApi;
@@ -65,6 +67,27 @@ public class SurFaceView extends SurfaceView {
         //裁剪画布，并设置其填充方式
         canvas.clipPath(path, Region.Op.REPLACE);
         super.draw(canvas);
+    }
+
+    /**
+     * 清楚绘画
+     * @param holder holder
+     * @param color color
+     */
+    public void clearDraw(SurfaceHolder holder, int color) {
+        Log.w("tan", "clearDraw");
+        Canvas canvas = null;
+        try {
+            canvas = holder.lockCanvas(null);
+            canvas.drawColor(color);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        } finally {
+            if (canvas != null) {
+                holder.unlockCanvasAndPost(canvas);
+            }
+        }
     }
 
 }

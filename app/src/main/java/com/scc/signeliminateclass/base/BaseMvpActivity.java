@@ -245,6 +245,7 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
         if (unbinder != null) {
             unbinder.unbind();
         }
+        evevt = null;
         ActivityContainer.finishSingleActivity(this);
         super.onDestroy();
     }

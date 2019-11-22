@@ -14,7 +14,10 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Display;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,6 +52,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -236,6 +241,11 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
      * mPosition
      */
     private int mPosition;
+    /**
+     * inputStream
+     */
+    private InputStream inputStream;
+
     @Override
     protected TestErrorPresenterImpl initInjector() {
         component.inject(this);
@@ -311,7 +321,7 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
                 }
                 break;
             default:
-                    break;
+                break;
         }
     }
 
@@ -324,9 +334,9 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
                 if (data != null) {
                     setImageToView(data);
                 } else {
+//                    Bitmap bitmap = adjustImage(cameraSavePath.getAbsolutePath());
                     Bitmap bitmap = BitmapFactory.decodeFile(cameraSavePath.toString());
                     setImageNllToView(bitmap);
-                    Log.d("song", "相机回调data:" + cameraSavePath.toString());
                 }
                 break;
             case CROP_SMALL_PICTURE: // 普通手机裁剪回调
@@ -337,9 +347,50 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
             case CROP_SMALL_PICTURE_MIUI:  // 小米适配----裁剪之后intent系统获取不到，只能显示裁剪之后的图片，而不是从intent中获取
                 setImageMiuiToView();
                 break;
-                default:
-                    break;
+            default:
+                break;
         }
+    }
+
+    /**
+     * 压缩图片
+     *
+     * @param absolutePath 是图片绝对路径
+     * @return Bitmap
+     */
+    private Bitmap adjustImage(String absolutePath) {
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        // 这个isjustdecodebounds很重要
+        opt.inJustDecodeBounds = true;
+
+        // 获取到这个图片的原始宽度和高度
+        int picWidth = opt.outWidth;
+        int picHeight = opt.outHeight;
+
+        // 获取屏的宽度和高度
+        WindowManager windowManager = getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        int screenWidth = display.getWidth();
+        int screenHeight = display.getHeight();
+
+        // isSampleSize是表示对图片的缩放程度，比如值为2图片的宽度和高度都变为以前的1/2
+        opt.inSampleSize = 1;
+        // 根据屏的大小和图片大小计算出缩放比例
+        if (picWidth > picHeight) {
+            if (picWidth > screenWidth) {
+                opt.inSampleSize = picWidth / screenWidth;
+            }
+        } else {
+            if (picHeight > screenHeight) {
+
+                opt.inSampleSize = picHeight / screenHeight;
+            }
+        }
+
+        // 这次再真正地生成一个有像素的，经过缩放了的bitmap
+        opt.inJustDecodeBounds = false;
+        Bitmap bm = BitmapFactory.decodeFile(absolutePath, opt);
+        return bm;
     }
 
     /**
@@ -384,6 +435,7 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
 
     /**
      * 保存裁剪之后的图片数据
+     *
      * @param data data
      */
     protected void setImageToView(Intent data) {
@@ -400,17 +452,19 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
 
     /**
      * 相机回调图片为空
+     *
      * @param mbitmap mbitmap
      */
     protected void setImageNllToView(Bitmap mbitmap) {
-            if (mNickName != null) {
-                File file = AppUtils.drawTextPicture(this, mbitmap, mNickName);
-                impl.upLoadPicture(this, file.toString()); // 上传图片
-            }
+        if (mNickName != null) {
+            File file = AppUtils.drawTextPicture(this, mbitmap, mNickName);
+            impl.upLoadPicture(this, file.toString()); // 上传图片
+        }
     }
 
     /**
      * 将bitmap转化为string
+     *
      * @param bitmap bitmap
      * @return string
      */
@@ -431,19 +485,27 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
         //将Uri图片转换为Bitmap
         Bitmap bitmap = null;
         try {
-            bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uritempFile));
+            inputStream = getContentResolver().openInputStream(uritempFile);
+            bitmap = BitmapFactory.decodeStream(inputStream);
 //            img.setImageBitmap(mBitmap);
             File file = FileUtil.getFile(bitmap);
 //            impl.updateImg(this, file.toString());
             Log.d("song", "保存剪裁之后小米file：" + file.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
 
     /**
      * 写入内存
+     *
      * @param photo photo
      */
     private void setFile(Bitmap photo) {
@@ -461,9 +523,10 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
 
     /**
      * activity跳转----签课跳转
+     *
      * @param activity activity
-     * @param code code
-     * @param flag flag
+     * @param code     code
+     * @param flag     flag
      */
     public static void startActivity(Activity activity, int code, int flag) {
         Intent intent = new Intent(activity, TestErrorActivity.class);
@@ -473,6 +536,7 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
 
     /**
      * 私教失败列表请求成功
+     *
      * @param info info
      */
     @Override
@@ -481,45 +545,48 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
         errorRecycle.setVisibility(View.VISIBLE);
 
         List<PrivateErrorListInfo.MessageBean> message = info.getMessage();
-        ErrorRecycleAdapter errorRecycleAdapter = new ErrorRecycleAdapter(message, this);
-        errorRecycle.setLayoutManager(new GridLayoutManager(this, 3));
-        errorRecycle.setAdapter(errorRecycleAdapter);
+        if (message.size() > 0) {
+            ErrorRecycleAdapter errorRecycleAdapter = new ErrorRecycleAdapter(message, this);
+            errorRecycle.setLayoutManager(new GridLayoutManager(this, 3));
+            errorRecycle.setAdapter(errorRecycleAdapter);
 
-        // 点击条目跳转
-        errorRecycleAdapter.setOnItemChilkListenre(new ErrorRecycleAdapter.onItemChilkListenre() {
-            @Override
-            public void OnItemChilkListener(String nickName, String imgUrl, int id) {
-                mId = id;
-                mNickName = nickName;
-                Log.d("song", "点击私教：" + mNickName + ":" + mId);
-                SPUtils.put(TestErrorActivity.this, "nickName", nickName);
-                // 列表隐藏，展示拍照按钮
-                errorRecycle.setVisibility(View.GONE);
-                tvPicture.setVisibility(View.VISIBLE);
-                mRelayoutItem.setVisibility(View.VISIBLE);
+            // 点击条目跳转
+            errorRecycleAdapter.setOnItemChilkListenre(new ErrorRecycleAdapter.onItemChilkListenre() {
+                @Override
+                public void OnItemChilkListener(String nickName, String imgUrl, int id) {
+                    mId = id;
+                    mNickName = nickName;
+                    Log.d("song", "点击私教：" + mNickName + ":" + mId);
+                    SPUtils.put(TestErrorActivity.this, "nickName", nickName);
+                    // 列表隐藏，展示拍照按钮
+                    errorRecycle.setVisibility(View.GONE);
+                    tvPicture.setVisibility(View.VISIBLE);
+                    mRelayoutItem.setVisibility(View.VISIBLE);
 
-                // 显示某一个私教的图片和名称
-                Glide.with(TestErrorActivity.this).load(imgUrl).into(ivUser);
-                tvTestUserName.setText(nickName);
+                    // 显示某一个私教的图片和名称
+                    Glide.with(TestErrorActivity.this).load(imgUrl).into(ivUser);
+                    tvTestUserName.setText(nickName);
 
-                if (flag == 1) { //签课---就去点击拍照
-                    subscribeClick(tvPicture, o -> {
-                        if (ContensUtils.checkAndApplyfPermissionActivity(TestErrorActivity.this,
-                                new String[]{Manifest.permission.CAMERA,
-                                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                                        Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                RC_CHOOSE_CAMERA)) {
-                            startCamera();
-                        }
-                    });
-                } else {
-                    Log.d("song", "点击课程");
-                    // 消课--检查是否有课程--根据课程id
-                    impl.getPrivateCourse(TestErrorActivity.this, AppUtils.ORG_ID,
-                            AppUtils.STORE_ID, String.valueOf(id));
+                    if (flag == 1) { //签课---就去点击拍照
+                        subscribeClick(tvPicture, o -> {
+                            if (ContensUtils.checkAndApplyfPermissionActivity(TestErrorActivity.this,
+                                    new String[]{Manifest.permission.CAMERA,
+                                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                                            Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    RC_CHOOSE_CAMERA)) {
+                                startCamera();
+                            }
+                        });
+                    } else {
+                        Log.d("song", "点击课程");
+                        // 消课--检查是否有课程--根据课程id
+                        impl.getPrivateCourse(TestErrorActivity.this, AppUtils.ORG_ID,
+                                AppUtils.STORE_ID, String.valueOf(id));
+                    }
                 }
-            }
-        });
+            });
+        }
+
     }
 
     @Override
@@ -572,4 +639,16 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
             });
         }
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // 当按下返回键时所执行的命令
+        if ((keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)) {
+            // 此处写你按返回键之后要执行的事件的逻辑
+            AppUtils.exit(this);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

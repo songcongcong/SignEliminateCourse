@@ -2,6 +2,7 @@ package com.scc.signeliminateclass.mvp.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -11,7 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.scc.signeliminateclass.MainActivity;
 import com.scc.signeliminateclass.R;
+import com.scc.signeliminateclass.utils.AppUtils;
 import com.scc.signeliminateclass.utils.SPUtils;
+import com.scc.signeliminateclass.utils.TimeUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -117,8 +120,8 @@ public class StartClassActivity extends AppCompatActivity {
         checkboxIn.setSelected(true);
         tvPrivateName.setSelected(true);
         tvPrivateTime.setVisibility(View.VISIBLE);
-        String currentTime = (String) SPUtils.get(this, "currentTime", "");
-        tvPrivateTime.setText(currentTime);
+        String time1 = (String) SPUtils.get(this, SignInActivity.CURRENT_TIME, "");
+        tvPrivateTime.setText(time1);
 
     }
 
@@ -129,10 +132,20 @@ public class StartClassActivity extends AppCompatActivity {
         checkboxOut.setSelected(true);
         tvUserName.setSelected(true);
         tvUserTime.setVisibility(View.VISIBLE);
-        String userTime = (String) SPUtils.get(this, "userTime", "");
-        tvUserTime.setText(userTime);
+        tvUserTime.setText(TimeUtil.getCurrentTime());
 
         // 改变中间的连接线状态
         viewSelector.setSelected(true);
     }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // 当按下返回键时所执行的命令
+        if ((keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)) {
+            // 此处写你按返回键之后要执行的事件的逻辑
+            AppUtils.exit(this);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

@@ -147,16 +147,18 @@ public class FrontCamera {
     /**
      * 停止相机
      *
-     * @param mCamera 需要停止的相机对象
+     * @param camera 需要停止的相机对象
      */
-    public void StopCamera(Camera mCamera) {
-        if (mCamera != null) {
-            mCamera.setPreviewCallback(null);
-            mCamera.stopPreview();
-            mCamera.lock();
-            mCamera.release();
-            mCamera = null;
-            previewing = false;
+    public void StopCamera(Camera camera) {
+        if (camera != null) {
+            if (previewing) {
+                camera.setPreviewCallback(null);
+                camera.stopPreview();
+//                camera.lock();
+                camera.release();
+                camera = null;
+                previewing = false;
+            }
         }
     }
 

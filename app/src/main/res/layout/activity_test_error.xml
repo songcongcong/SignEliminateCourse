@@ -105,7 +105,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="550dp" />
+        android:layout_marginBottom="@dimen/y35" />
 
     <RelativeLayout
         android:id="@+id/test_relayout"

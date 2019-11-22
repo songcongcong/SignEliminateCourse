@@ -11,9 +11,9 @@
         android:id="@+id/liear_success"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="@dimen/y150">
 
         <ImageView
             android:layout_width="50dp"

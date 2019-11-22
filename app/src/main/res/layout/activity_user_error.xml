@@ -107,8 +107,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="550dp" />
+        android:layout_marginBottom="@dimen/y35" />
 
     <EditText
         android:id="@+id/ed_user_phone"

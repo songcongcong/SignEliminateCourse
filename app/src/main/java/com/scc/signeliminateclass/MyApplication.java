@@ -7,6 +7,7 @@ import androidx.multidex.MultiDexApplication;
 
 import com.scc.signeliminateclass.di.compontent.DaggerApplicationCompontent;
 import com.scc.signeliminateclass.di.module.ApplicationModule;
+import com.squareup.leakcanary.LeakCanary;
 
 
 /**
@@ -34,6 +35,7 @@ public class MyApplication extends MultiDexApplication {
         MultiDex.install(this);
         instance = this;
         handler = new Handler();
+        LeakCanary.install(this);
         //初始化dagger2
         initApplicationCompontent();
     }

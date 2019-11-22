@@ -35,10 +35,10 @@
 
             <TextView
                 android:id="@+id/tv_private_time"
-                android:layout_width="80dp"
+                android:layout_width="@dimen/x35"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/private_class_name"
+                android:text="2019-12-12 14:02:29"
                 android:textColor="@color/check_selector"
                 android:textSize="18sp"
                 android:visibility="gone" />
@@ -69,7 +69,7 @@
 
             <TextView
                 android:id="@+id/tv_user_time"
-                android:layout_width="80dp"
+                android:layout_width="@dimen/x35"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/user_class_name"

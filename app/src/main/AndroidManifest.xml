@@ -20,7 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".mvp.ui.StartClassActivity"></activity>
+        <activity android:name=".mvp.ui.StartClassActivity" />
         <activity android:name=".mvp.ui.UserErrorActivity" />
         <activity android:name=".mvp.ui.TestErrorActivity" />
         <activity android:name=".mvp.ui.SignInActivity" />
@@ -41,13 +41,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
-        <!--<receiver android:name=".NetWorkBroadReceiver" >-->
-        <!--<intent-filter>-->
-        <!--<action android:name="android.intent.action.BOOT_COMPLETED"/>-->
-        <!--<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />-->
-        <!--</intent-filter>-->
-        <!--</receiver>-->
     </application>
 
 </manifest>

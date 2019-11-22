@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SignEliminateClass</string>
+    <string name="app_name">易族签课</string>
 
     <string name="msg_network_error">网络错误,请重试</string>
     <string name="msg_unknown_error">未知错误,请重试</string>

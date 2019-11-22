@@ -17,6 +17,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -36,7 +37,6 @@ import com.scc.signeliminateclass.R;
 import com.scc.signeliminateclass.adapter.UserErrorAdapter;
 import com.scc.signeliminateclass.base.BaseMvpActivity;
 import com.scc.signeliminateclass.bean.PictureInfo;
-import com.scc.signeliminateclass.bean.UserOutFaceErrorListInfo;
 import com.scc.signeliminateclass.bean.UserPhoneListInfo;
 import com.scc.signeliminateclass.mvp.impl.UserErrorPresenterImpl;
 import com.scc.signeliminateclass.mvp.uiinterface.UserUiInterface;
@@ -51,6 +51,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -253,6 +255,10 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
      * mName
      */
     private String mName;
+    /**
+     * mMiuiInputStream
+     */
+    private InputStream mMiuiInputStream;
 
     @Override
     protected UserErrorPresenterImpl initInjector() {
@@ -365,7 +371,7 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
         checkboxIn.setSelected(true);
         tvPrivateName.setSelected(true);
         tvPrivateTime.setVisibility(View.VISIBLE);
-        String currentTime = (String) SPUtils.get(this, "currentTime", "");
+        String currentTime = (String) SPUtils.get(this, SignInActivity.CURRENT_TIME, "");
         tvPrivateTime.setText(currentTime);
     }
 
@@ -544,13 +550,20 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
         //将Uri图片转换为Bitmap
         Bitmap bitmap = null;
         try {
-            bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uritempFile));
+            mMiuiInputStream = getContentResolver().openInputStream(uritempFile);
+            bitmap = BitmapFactory.decodeStream(mMiuiInputStream);
 //            img.setImageBitmap(mBitmap);
             File file = FileUtil.getFile(bitmap);
 //            impl.updateImg(this, file.toString());
             Log.d("song", "保存剪裁之后小米file：" + file.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                mMiuiInputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -581,39 +594,40 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
     public void setUserPhoneList(UserPhoneListInfo phoneList) {
 
         List<UserPhoneListInfo.MessageBean> message = phoneList.getMessage();
-        // 网络请求成功，适配数据
-        UserErrorAdapter userErrorAdapter = new UserErrorAdapter(this, message);
-        userErrorRecycleview.setLayoutManager(new GridLayoutManager(this, 3));
-        userErrorRecycleview.setAdapter(userErrorAdapter);
+        if (message.size() > 0) {
+            // 网络请求成功，适配数据
+            UserErrorAdapter userErrorAdapter = new UserErrorAdapter(this, message);
+            userErrorRecycleview.setLayoutManager(new GridLayoutManager(this, 3));
+            userErrorRecycleview.setAdapter(userErrorAdapter);
 
-        // 点击条目跳转
-        userErrorAdapter.setOnItemChilkListenre(new UserErrorAdapter.onItemChilkListenre() {
-            @Override
-            public void OnItemChilkListener(String name, String avatar, int id) {
-                mUserId = id;
-                mName = name;
-                Log.d("song", "点击会员：" + mName + ",:" + id);
-                userErrorRecycleview.setVisibility(View.GONE);
-                edUserPhone.setVisibility(View.GONE);
-                tvPicture.setVisibility(View.VISIBLE);
-                relatUserItem.setVisibility(View.VISIBLE);
+            // 点击条目跳转
+            userErrorAdapter.setOnItemChilkListenre(new UserErrorAdapter.onItemChilkListenre() {
+                @Override
+                public void OnItemChilkListener(String name, String avatar, int id) {
+                    mUserId = id;
+                    mName = name;
+                    userErrorRecycleview.setVisibility(View.GONE);
+                    edUserPhone.setVisibility(View.GONE);
+                    tvPicture.setVisibility(View.VISIBLE);
+                    relatUserItem.setVisibility(View.VISIBLE);
 
-                // 点击显示某一个item
-                Glide.with(UserErrorActivity.this).load(avatar).into(imgErrorUser);
-                tvTvErrorName.setText(name);
+                    // 点击显示某一个item
+                    Glide.with(UserErrorActivity.this).load(avatar).into(imgErrorUser);
+                    tvTvErrorName.setText(name);
 
-                subscribeClick(tvPicture, o -> {
-                    if (ContensUtils.checkAndApplyfPermissionActivity(UserErrorActivity.this,
-                            new String[]{Manifest.permission.CAMERA,
-                                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            RC_CHOOSE_CAMERA)) {
-                        startCamera();
-                        Log.d("song", "点击条目监听");
-                    }
-                });
-            }
-        });
+                    subscribeClick(tvPicture, o -> {
+                        if (ContensUtils.checkAndApplyfPermissionActivity(UserErrorActivity.this,
+                                new String[]{Manifest.permission.CAMERA,
+                                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                RC_CHOOSE_CAMERA)) {
+                            startCamera();
+                        }
+                    });
+                }
+            });
+        }
+
 
     }
 
@@ -666,5 +680,16 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
 //        }
 //
 //    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // 当按下返回键时所执行的命令
+        if ((keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)) {
+            // 此处写你按返回键之后要执行的事件的逻辑
+            AppUtils.exit(this);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
 }

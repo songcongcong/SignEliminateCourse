@@ -1,6 +1,7 @@
 package com.scc.signeliminateclass.utils;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -266,5 +267,15 @@ public class AppUtils {
             return file;
         }
         return null;
+    }
+
+    /**
+     * 退出当前页面
+     * @param activity activity
+     */
+    public static void exit(Activity activity) {
+            //用户退出处理
+        activity.finish();
+        System.exit(0);
     }
 }

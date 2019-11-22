@@ -133,6 +133,10 @@ public class FileUtil {
             if (cursor != null) {
                 cursor.close();
             }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
         return path;
     }

@@ -1,60 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/iv_back"
-    android:gravity="center"
-    android:orientation="horizontal"
     tools:context=".MainActivity">
 
-    <RelativeLayout
-        android:id="@+id/relay_sign_in"
-        android:layout_width="300dp"
-        android:layout_height="350dp"
-        android:background="@drawable/shape_class_bg">
+    <com.youth.banner.Banner
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_centerInParent="true"
-            android:background="@mipmap/img_bg4" />
+    <LinearLayout
+        android:id="@+id/main_liean"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:visibility="visible">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="20dp"
-            android:text="@string/go_class"
-            android:textColor="#fff"
-            android:textSize="26sp" />
-    </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/relay_sign_in"
+            android:layout_width="300dp"
+            android:layout_height="350dp"
+            android:background="@drawable/shape_class_bg">
 
-    <RelativeLayout
-        android:id="@+id/relay_sign_out"
-        android:layout_width="300dp"
-        android:layout_height="350dp"
-        android:layout_marginLeft="180dp"
-        android:background="@drawable/shape_outclass_bg">
+            <ImageView
+                android:layout_width="@dimen/x50"
+                android:layout_height="@dimen/x50"
+                android:layout_centerInParent="true"
+                android:background="@mipmap/img_bg4" />
 
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_centerInParent="true"
-            android:background="@mipmap/img_bg4" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="20dp"
+                android:text="@string/go_class"
+                android:textColor="#fff"
+                android:textSize="26sp" />
+        </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="20dp"
-            android:text="@string/out_class"
-            android:textColor="#fff"
-            android:textSize="26sp" />
-    </RelativeLayout>
-</LinearLayout>
+        <RelativeLayout
+            android:id="@+id/relay_sign_out"
+            android:layout_width="300dp"
+            android:layout_height="350dp"
+            android:layout_marginLeft="180dp"
+            android:background="@drawable/shape_outclass_bg">
+
+            <ImageView
+                android:layout_width="@dimen/x50"
+                android:layout_height="@dimen/x50"
+                android:layout_centerInParent="true"
+                android:background="@mipmap/img_bg4" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="20dp"
+                android:text="@string/out_class"
+                android:textColor="#fff"
+                android:textSize="26sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

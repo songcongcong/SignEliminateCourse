@@ -102,14 +102,12 @@ public class SignInAdapter extends RecyclerView.Adapter<SignInAdapter.MyViewHold
                 .transform(new GlideCircleTransform(context))
                 .into(holder.mUrPic);
         if (isSelector && mPosition != -1 && mPosition == position) {
-            Log.d("song", "为true：" + mPosition);
             mList.get(mPosition).setSelector(isSelector);
             holder.mRadioButton.setChecked(isSelector);
         }
         if (position == 0 && !isCheck && !isSelector) {
             mList.get(position).setSelector(true);
             holder.mRadioButton.setChecked(true);
-            Log.d("song", "第一个：");
         }
         myViewHolderList.add(holder);
         holder.mRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -257,5 +255,13 @@ public class SignInAdapter extends RecyclerView.Adapter<SignInAdapter.MyViewHold
      */
     public List<UserOutListInfo.MessageBean> getmList() {
         return mList;
+    }
+
+    /**
+     * 获取集合
+     * @return List
+     */
+    public static List<MyViewHolder> getMyViewHolderList() {
+        return myViewHolderList;
     }
 }
