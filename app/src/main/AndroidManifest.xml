@@ -20,6 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".mvp.ui.SplashActivity"></activity>
         <activity android:name=".mvp.ui.StartClassActivity" />
         <activity android:name=".mvp.ui.UserErrorActivity" />
         <activity android:name=".mvp.ui.TestErrorActivity" />

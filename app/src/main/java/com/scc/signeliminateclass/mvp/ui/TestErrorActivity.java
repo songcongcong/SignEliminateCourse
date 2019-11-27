@@ -612,7 +612,9 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
         Log.d("song", "暂无可消课程:" + message.size());
         if (message.size() <= 0) {
             Toast.makeText(this, "暂无可消课程！", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(this, MainActivity.class));
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("startend", 1);
+            startActivity(intent);
             finish();
         } else {
             SignInAdapter signInAdapter = new SignInAdapter(this, message);

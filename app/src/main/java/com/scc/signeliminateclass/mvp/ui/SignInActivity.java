@@ -1106,7 +1106,9 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
             });
         } else {
             Toast.makeText(this, "暂无可消课程！", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(this, MainActivity.class));
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("startend", 1);
+            startActivity(intent);
             finish();
         }
     }

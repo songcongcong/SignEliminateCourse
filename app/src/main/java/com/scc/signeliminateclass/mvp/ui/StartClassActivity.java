@@ -94,7 +94,9 @@ public class StartClassActivity extends AppCompatActivity {
         tvStartClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(StartClassActivity.this, MainActivity.class));
+                Intent intent = new Intent(StartClassActivity.this, MainActivity.class);
+                intent.putExtra("startend", 1);
+                startActivity(intent);
                 finish();
             }
         });

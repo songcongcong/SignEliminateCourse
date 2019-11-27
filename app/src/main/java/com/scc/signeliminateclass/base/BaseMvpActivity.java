@@ -10,7 +10,9 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -33,6 +35,7 @@ import com.scc.signeliminateclass.R;
 import com.scc.signeliminateclass.di.compontent.ActivityCompontent;
 import com.scc.signeliminateclass.di.compontent.DaggerActivityCompontent;
 import com.scc.signeliminateclass.di.module.ActivityModule;
+import com.scc.signeliminateclass.mvp.ui.SplashActivity;
 import com.scc.signeliminateclass.utils.NetUtil;
 import com.scc.signeliminateclass.utils.ToastUtils;
 
@@ -106,6 +109,17 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
      */
     private int netType;
 
+    /**
+     * countDownTimer
+     */
+    private CountDownTimer countDownTimer;
+
+    /**
+     * advertisingTime
+     */
+    private long advertisingTime = 60 * 1000; //定时跳转轮播页（1分钟）
+
+
     @Override
     protected final void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG, "----- onCreate ----- Bundle=" + savedInstanceState);
@@ -125,10 +139,68 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
         setListeners();
         init();
         setStatusBar();
+        //初始化CountTimer，设置倒计时为2分钟。
+//        countTimerView = new CountTimer(3000, 1000, BaseMvpActivity.this, banner, mainLiean);
+        startAD();
     }
 
     /**
+     * 启动定时
+     */
+    public void startAD() {
+        if (countDownTimer == null) {
+            countDownTimer = new CountDownTimer(advertisingTime, 10000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    //定时完成后的操作
+                    //跳转到广告页面
+                    startActivity(new Intent(BaseMvpActivity.this, SplashActivity.class));
+                }
+            };
+            countDownTimer.start();
+        } else {
+            countDownTimer.start();
+        }
+    }
+
+    /**
+     * 结束定时
+     */
+    private void stopTime() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+    }
+
+
+    /**
+     * 主要的方法，重写dispatchTouchEvent
      *
+     * @param ev ev
+     * @return boolean
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            //获取触摸动作，如果ACTION_UP，计时开始。
+            case MotionEvent.ACTION_UP:
+                startAD();
+                break;
+            //否则其他动作计时取消
+            default:
+                stopTime();
+                break;
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    /**
+     *初始化dagger2
      */
     private void injectPresenter() {
         impl = initInjector();
@@ -226,6 +298,7 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
     protected void onResume() {
         Log.d(LOG_TAG, "----- onResume -----");
         isForeground = true;
+        startAD();
         super.onResume();
     }
 
@@ -234,6 +307,7 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
     protected void onPause() {
         Log.d(LOG_TAG, "----- onPause -----");
         isForeground = false;
+        stopTime();
         super.onPause();
     }
 
@@ -242,6 +316,7 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
     protected void onDestroy() {
         Log.d(LOG_TAG, "----- onDestroy -----");
         impl.detachView();
+        stopTime();
         if (unbinder != null) {
             unbinder.unbind();
         }
