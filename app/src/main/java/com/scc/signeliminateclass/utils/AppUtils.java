@@ -40,7 +40,7 @@ public class AppUtils {
     /**
      * 参数storeid
      */
-    public static final String STORE_ID = "3";
+    public static final String STORE_ID = "25";
 
     /**
      * 获取上下文对象

@@ -8,21 +8,24 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.scc.signeliminateclass.MainActivity;
 import com.scc.signeliminateclass.R;
+import com.scc.signeliminateclass.base.BaseMvpActivity;
+import com.scc.signeliminateclass.mvp.impl.StartClassPresenterImpl;
+import com.scc.signeliminateclass.mvp.uiinterface.StartClassUiInterface;
 import com.scc.signeliminateclass.utils.AppUtils;
 import com.scc.signeliminateclass.utils.SPUtils;
 import com.scc.signeliminateclass.utils.TimeUtil;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * StartClassActivity
  */
-public class StartClassActivity extends AppCompatActivity {
+public class StartClassActivity extends BaseMvpActivity<StartClassPresenterImpl> implements StartClassUiInterface {
     /**
      * classSuccess
      */
@@ -83,12 +86,31 @@ public class StartClassActivity extends AppCompatActivity {
      */
     @BindView(R.id.view_selector)
     CheckBox viewSelector;
+    /**
+     * 连接P层
+     */
+    @Inject
+    StartClassPresenterImpl impl;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_class);
-        ButterKnife.bind(this);
+    protected StartClassPresenterImpl initInjector() {
+        component.inject(this);
+        return impl;
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_start_class;
+    }
+
+    @Override
+    protected void findViews(Bundle savedInstanceState) {
+        impl.setUiInterface(this);
+    }
+
+    @Override
+    protected void init() {
         setPrivateUi();
         setUserUi();
         tvStartClass.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +161,7 @@ public class StartClassActivity extends AppCompatActivity {
         // 改变中间的连接线状态
         viewSelector.setSelected(true);
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // 当按下返回键时所执行的命令

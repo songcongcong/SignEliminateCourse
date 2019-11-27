@@ -6,6 +6,7 @@ package com.scc.signeliminateclass.di.compontent;
 import com.scc.signeliminateclass.MainActivity;
 import com.scc.signeliminateclass.di.module.ActivityModule;
 import com.scc.signeliminateclass.mvp.ui.SignInActivity;
+import com.scc.signeliminateclass.mvp.ui.StartClassActivity;
 import com.scc.signeliminateclass.mvp.ui.TestErrorActivity;
 import com.scc.signeliminateclass.mvp.ui.UserErrorActivity;
 
@@ -39,4 +40,10 @@ public interface ActivityCompontent {
      * @param userErrorActivity userErrorActivity
      */
     void inject(UserErrorActivity userErrorActivity);
+
+    /**
+     * inject
+     * @param startClassActivity startClassActivity
+     */
+    void inject(StartClassActivity startClassActivity);
 }
