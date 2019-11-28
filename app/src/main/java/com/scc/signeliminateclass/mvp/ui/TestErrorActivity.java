@@ -284,7 +284,7 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
             tvUserName.setText(getResources().getString(R.string.user_out_class_name));
         }
         // 请求接口---私教人脸识别失败，获取私教列表
-        impl.getPrivateEmployee(this, AppUtils.ORG_ID, AppUtils.STORE_ID);
+        impl.getPrivateEmployee(this, AppUtils.ORG_ID, AppUtils.STORE_ID, "1", "10000");
     }
 
     /**

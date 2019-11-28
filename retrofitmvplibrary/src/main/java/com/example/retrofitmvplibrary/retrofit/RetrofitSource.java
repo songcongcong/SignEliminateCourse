@@ -2,7 +2,6 @@ package com.example.retrofitmvplibrary.retrofit;
 
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -24,7 +30,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
 import okio.Buffer;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -60,6 +65,7 @@ public class RetrofitSource {
                                 }
                             })
                             .cookieJar(cookieJar)
+                            .sslSocketFactory(createSSLSocketFactory(), new TrustAllCerts())
                             .connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS)
                             .writeTimeout(WRITE_TIME_OUT, TimeUnit.SECONDS)
                             .readTimeout(READ_TIME_OUT, TimeUnit.SECONDS)
@@ -114,4 +120,40 @@ public class RetrofitSource {
         }
     }
 
+    /**
+     * 忽略证书
+     * @return SSLSocketFactory
+     */
+    private static SSLSocketFactory createSSLSocketFactory() {
+        SSLSocketFactory ssfFactory = null;
+
+        try {
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null, new TrustManager[]{new TrustAllCerts()}, new SecureRandom());
+
+            ssfFactory = sc.getSocketFactory();
+        } catch (Exception e) {
+        }
+
+        return ssfFactory;
+    }
+
+    /**
+     * 忽略ssl证书
+     */
+    static class TrustAllCerts implements X509TrustManager {
+        public TrustAllCerts() {
+        }
+
+        @Override
+        public void checkClientTrusted(X509Certificate[] chain, String authType) {}
+
+        @Override
+        public void checkServerTrusted(X509Certificate[] chain, String authType) {}
+
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return new java.security.cert.X509Certificate[] {};
+        }
+    }
 }

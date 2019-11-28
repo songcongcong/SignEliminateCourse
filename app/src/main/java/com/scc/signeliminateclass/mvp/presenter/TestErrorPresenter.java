@@ -12,8 +12,10 @@ public interface TestErrorPresenter {
      * @param context context
      * @param orgId orgId
      * @param storeId storeId
+     * @param pageNum pageNum
+     * @param pageSize  pageSize
      */
-    void getPrivateEmployee(Context context, String orgId, String storeId);
+    void getPrivateEmployee(Context context, String orgId, String storeId, String pageNum, String pageSize);
 
     /**
      * upLoadPicture

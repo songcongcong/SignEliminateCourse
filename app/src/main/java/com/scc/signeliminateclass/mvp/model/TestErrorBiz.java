@@ -32,12 +32,15 @@ public class TestErrorBiz {
      * @param context context
      * @param orgid orgid
      * @param storeid storeid
+     * @param pageNum pageNum
+     * @param pageSize pageSize
      * @return PrivateErrorListInfo
      */
 
-    public Observable<PrivateErrorListInfo> getPrivateEmployee(Context context, String orgid, String storeid) {
+    public Observable<PrivateErrorListInfo> getPrivateEmployee(Context context, String orgid, String storeid,
+                                                               String pageNum, String pageSize) {
         return RetrofitSource.createApi(RetrofitApi.class, context)
-                .getPrivateEmployee(orgid, storeid)
+                .getPrivateEmployee(orgid, storeid, pageNum, pageSize)
                 .compose(RxHelper.rxSchedulerHelper());
     }
 

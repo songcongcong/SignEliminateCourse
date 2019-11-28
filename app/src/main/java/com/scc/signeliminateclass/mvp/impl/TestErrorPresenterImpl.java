@@ -59,8 +59,9 @@ public class TestErrorPresenterImpl extends BasePresenterImpl<TestErrorUiInterfa
     private Disposable mDisposable;
 
     @Override
-    public void getPrivateEmployee(Context context, String orgId, String storeId) {
-        biz.getPrivateEmployee(context, orgId, storeId)
+    public void getPrivateEmployee(Context context, String orgId, String storeId, String pageNum,
+                                   String pageSize) {
+        biz.getPrivateEmployee(context, orgId, storeId, pageNum, pageSize)
                 .subscribe(new Observer<PrivateErrorListInfo>() {
                     @Override
                     public void onSubscribe(Disposable d) {

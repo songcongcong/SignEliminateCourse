@@ -55,11 +55,15 @@ public interface RetrofitApi {
      * 私教人脸识别失败----私教列表
      * @param mOrgId mOrgId
      * @param mStoreId mStoreId
+     * @param mPageNum mPageNum
+     * @param mPageSize mPageSize
      * @return PrivateErrorListInfo
      */
     @GET("ezapp/share/private/getPrivateEmployee")
     Observable<PrivateErrorListInfo> getPrivateEmployee(@Query("orgId") String mOrgId,
-                                                        @Query("store_id") String mStoreId);
+                                                        @Query("store_id") String mStoreId,
+                                                        @Query("pageNum") String mPageNum,
+                                                        @Query("pageSize") String mPageSize);
 
     /**
      * 会员识别失败------根据手机号查询会员
