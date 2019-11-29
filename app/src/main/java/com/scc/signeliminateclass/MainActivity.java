@@ -1,14 +1,22 @@
 package com.scc.signeliminateclass;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.scc.signeliminateclass.base.BaseMvpActivity;
+import com.scc.signeliminateclass.bean.CheckPrivateUdInfo;
 import com.scc.signeliminateclass.bean.MainCheckMessage;
 import com.scc.signeliminateclass.mvp.impl.MainPresenterImpl;
 import com.scc.signeliminateclass.mvp.ui.SignInActivity;
@@ -44,7 +52,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenterImpl> implements 
      */
     @BindView(R.id.main_liean)
     LinearLayout mainLiean;
-
+    /**
+     * 判断点击的事签课还是消课
+     */
+    private int isCheck = -1;
 
     @Override
     protected MainPresenterImpl initInjector() {
@@ -72,15 +83,18 @@ public class MainActivity extends BaseMvpActivity<MainPresenterImpl> implements 
         int stardend = getIntent().getIntExtra("startend", 0);
         if (stardend != 1) {
             startActivity(new Intent(this, SplashActivity.class));
+            finish();
         }
 
         // 签课
         subscribeClick(relaySignIn, o -> {
-            SignInActivity.startActivity(MainActivity.this, 1);
+            isCheck = 1;
+            getDialog();
         });
         // 消课
         subscribeClick(relaySignOut, o -> {
-            impl.checkMessage(this, AppUtils.ORG_ID, AppUtils.STORE_ID);
+            isCheck = 2;
+            getDialog();
         });
     }
 
@@ -99,6 +113,24 @@ public class MainActivity extends BaseMvpActivity<MainPresenterImpl> implements 
         }
     }
 
+    /**
+     * 检查私教id
+     *
+     * @param checkPrivateUdInfo checkPrivateUdInfo
+     */
+    @Override
+    public void checkedPrivatePersonal(CheckPrivateUdInfo checkPrivateUdInfo) {
+         if (checkPrivateUdInfo.getCode().equals("200")) {
+            if (isCheck == 1) {
+                SignInActivity.startActivity(MainActivity.this, 1);
+            } else if (isCheck == 2) {
+                impl.checkMessage(this, AppUtils.ORG_ID, AppUtils.STORE_ID);
+            }
+        } else {
+            Toast.makeText(this, checkPrivateUdInfo.getData(), Toast.LENGTH_LONG).show();
+        }
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // 当按下返回键时所执行的命令
@@ -108,5 +140,45 @@ public class MainActivity extends BaseMvpActivity<MainPresenterImpl> implements 
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 弹出对话框
+     */
+    private void getDialog() {
+        View view = View.inflate(this, R.layout.dialog_layout, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        EditText edUuid = view.findViewById(R.id.ed_uuid);
+        TextView mCancle = view.findViewById(R.id.tv_cancle);
+        TextView mSure = view.findViewById(R.id.tv_sure);
+        builder.setView(view);
+        AlertDialog  alertDialog = builder.create();
+        mCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+        mSure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String mEdUuid = edUuid.getText().toString().trim();
+                if (!TextUtils.isEmpty(mEdUuid)) {
+                    impl.checkedPrivatePersonal(MainActivity.this, mEdUuid);
+                } else {
+                    Toast.makeText(MainActivity.this, "私教id不能为空！", Toast.LENGTH_LONG).show();
+                }
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                alertDialog.dismiss();
+            }
+        });
+        if (!alertDialog.isShowing()) {
+            alertDialog.show();
+        }
     }
 }

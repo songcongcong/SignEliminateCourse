@@ -63,6 +63,15 @@ public class MainCheckMessage {
         return code;
     }
 
+    @Override
+    public String toString() {
+        return "MainCheckMessage{"
+                + "data='" + data + '\''
+                + ", isHaveExit=" + isHaveExit
+                + ", code='" + code + '\''
+                + '}';
+    }
+
     /**
      * setCode
      * @param code code

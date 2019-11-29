@@ -1,9 +1,9 @@
 package com.scc.signeliminateclass.mvp.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.ImageView;
 
 
@@ -100,5 +100,16 @@ public class SplashActivity extends AppCompatActivity implements  OnBannerListen
         intent.putExtra("startend", 1);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // 当按下返回键时所执行的命令
+        if ((keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)) {
+            // 此处写你按返回键之后要执行的事件的逻辑
+            System.exit(0);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

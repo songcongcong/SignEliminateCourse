@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.scc.signeliminateclass.base.BasePresenterImpl;
+import com.scc.signeliminateclass.bean.CheckPrivateUdInfo;
 import com.scc.signeliminateclass.bean.MainCheckMessage;
 import com.scc.signeliminateclass.mvp.model.MainBiz;
 import com.scc.signeliminateclass.mvp.presenter.MainPresenter;
@@ -72,6 +73,36 @@ public class MainPresenterImpl extends BasePresenterImpl<MainUiInterface> implem
                     public void onError(Throwable e) {
                         Log.d("song", "检查失败111：" + e.toString());
                         Toast.makeText(context, "网络连接失败！", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    /**
+     * 检查私教id
+     * @param context context context
+     * @param uniqueId uniqueId uniqueId
+     */
+    @Override
+    public void checkedPrivatePersonal(Context context, String uniqueId) {
+        biz.checkedPrivatePersonal(context, uniqueId)
+                .subscribe(new Observer<CheckPrivateUdInfo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(CheckPrivateUdInfo checkPrivateUdInfo) {
+                        uiInterface.checkedPrivatePersonal(checkPrivateUdInfo);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
                     }
 
                     @Override

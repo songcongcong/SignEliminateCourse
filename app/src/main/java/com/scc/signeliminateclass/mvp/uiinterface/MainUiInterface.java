@@ -1,11 +1,8 @@
 package com.scc.signeliminateclass.mvp.uiinterface;
 
 import com.example.retrofitmvplibrary.base.BaseUiInterface;
+import com.scc.signeliminateclass.bean.CheckPrivateUdInfo;
 import com.scc.signeliminateclass.bean.MainCheckMessage;
-import com.scc.signeliminateclass.bean.PictureInfo;
-import com.scc.signeliminateclass.bean.SaveMessageInfo;
-import com.scc.signeliminateclass.bean.TestFacePassInfo;
-import com.scc.signeliminateclass.bean.TestUserFacePassInfo;
 
 /**
  * @author
@@ -17,4 +14,10 @@ public interface MainUiInterface extends BaseUiInterface {
      * @param message message
      */
     void setExitMessage(MainCheckMessage message);
+
+    /**
+     * checkedPrivatePersonal
+     * @param checkPrivateUdInfo checkPrivateUdInfo
+     */
+    void checkedPrivatePersonal(CheckPrivateUdInfo checkPrivateUdInfo);
 }

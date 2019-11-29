@@ -14,4 +14,11 @@ public interface MainPresenter {
      * @param  store store
      */
     void checkMessage(Context context, String orgId, String store);
+
+    /**
+     * checkedPrivatePersonal
+     * @param context context
+     * @param uniqueId uniqueId
+     */
+    void checkedPrivatePersonal(Context context, String uniqueId);
 }

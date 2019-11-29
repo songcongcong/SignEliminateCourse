@@ -1,5 +1,6 @@
 package com.scc.signeliminateclass.api;
 
+import com.scc.signeliminateclass.bean.CheckPrivateUdInfo;
 import com.scc.signeliminateclass.bean.MainCheckMessage;
 import com.scc.signeliminateclass.bean.PictureInfo;
 import com.scc.signeliminateclass.bean.PrivateErrorListInfo;
@@ -177,4 +178,12 @@ public interface RetrofitApi {
                                                     @Field("exit_time") String mExitTime);
 
 //    212955240386200_2137860729
+
+    /**
+     * @param uniqueId uniqueId
+     * @return MainCheckMessage
+     */
+    @GET("ezapp/share/private/checkedPrivatePersonal")
+    Observable<CheckPrivateUdInfo> checkedPrivatePersonal(@Query("uniqueId") String uniqueId);
+
 }

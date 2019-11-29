@@ -6,6 +6,7 @@ import android.content.Context;
 import com.example.retrofitmvplibrary.retrofit.RetrofitSource;
 import com.example.retrofitmvplibrary.retrofit.RxHelper;
 import com.scc.signeliminateclass.api.RetrofitApi;
+import com.scc.signeliminateclass.bean.CheckPrivateUdInfo;
 import com.scc.signeliminateclass.bean.MainCheckMessage;
 
 
@@ -36,6 +37,18 @@ public class MainBiz {
     public Observable<MainCheckMessage> checkIsMessage(Context context, String orgId, String storeId) {
         return RetrofitSource.createApi(RetrofitApi.class, context)
                 .checkIsMessage(orgId, storeId)
+                .compose(RxHelper.rxSchedulerHelper());
+    }
+
+    /**
+     * 检查私教id
+     * @param context context
+     * @param uuid uuid
+     * @return CheckPrivateUdInfo
+     */
+    public Observable<CheckPrivateUdInfo> checkedPrivatePersonal(Context context, String uuid) {
+        return RetrofitSource.createApi(RetrofitApi.class, context)
+                .checkedPrivatePersonal(uuid)
                 .compose(RxHelper.rxSchedulerHelper());
     }
 }
