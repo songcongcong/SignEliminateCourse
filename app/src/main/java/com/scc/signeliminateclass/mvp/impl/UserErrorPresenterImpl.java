@@ -63,13 +63,11 @@ public class UserErrorPresenterImpl extends BasePresenterImpl<UserUiInterface> i
                 .subscribe(new Observer<UserPhoneListInfo>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        mDisposable = d;
                     }
 
                     @Override
                     public void onNext(UserPhoneListInfo userPhoneListInfo) {
                         uiInterface.setUserPhoneList(userPhoneListInfo);
-                        mDisposable.dispose();
                     }
 
                     @Override

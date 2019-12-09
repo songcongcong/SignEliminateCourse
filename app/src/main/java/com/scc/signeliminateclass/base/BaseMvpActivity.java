@@ -160,6 +160,7 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
                     //定时完成后的操作
                     //跳转到广告页面
                     startActivity(new Intent(BaseMvpActivity.this, SplashActivity.class));
+                    finish();
                 }
             };
             countDownTimer.start();

@@ -26,10 +26,6 @@ public interface SigninUiInterface extends BaseUiInterface {
      */
     void setUserFasePass(TestUserFacePassInfo info);
 
-    /**
-     * setUserError
-     */
-    void setUserError();
 
     /**
      * setUpLoadPicture

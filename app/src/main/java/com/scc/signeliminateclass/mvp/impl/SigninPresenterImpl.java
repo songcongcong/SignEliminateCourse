@@ -110,7 +110,6 @@ public class SigninPresenterImpl extends BasePresenterImpl<SigninUiInterface> im
                     public void onError(Throwable e) {
                         Log.d("song", "用户请求异常；" + e.toString());
                         if (e.toString().contains("com.google.gson.JsonSyntaxException")) {
-                            uiInterface.setUserError();
                             Toast.makeText(context, "未查到此人！", Toast.LENGTH_LONG).show();
                         }
                     }
@@ -134,14 +133,12 @@ public class SigninPresenterImpl extends BasePresenterImpl<SigninUiInterface> im
                 .subscribe(new Observer<PictureInfo>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-//                        mDisposable = d;
                     }
 
                     @Override
                     public void onNext(PictureInfo pictureInfo) {
                         uiInterface.setUpLoadPicture(pictureInfo);
                         Log.d("song", "上传成功：");
-//                        mDisposable.dispose();
                     }
 
                     @Override
@@ -163,20 +160,17 @@ public class SigninPresenterImpl extends BasePresenterImpl<SigninUiInterface> im
                 userImgUrl, time).subscribe(new Observer<SaveMessageInfo>() {
             @Override
             public void onSubscribe(Disposable d) {
-                mDisposable = d;
             }
 
             @Override
             public void onNext(SaveMessageInfo saveMessageInfo) {
                 uiInterface.setSaveMessage(saveMessageInfo);
                 Log.d("song", "签课保存成功：" + saveMessageInfo.getCode());
-                mDisposable.dispose();
             }
 
             @Override
             public void onError(Throwable e) {
                 Log.d("song", "签课保存识别：" + e.toString());
-
             }
 
             @Override
@@ -192,14 +186,12 @@ public class SigninPresenterImpl extends BasePresenterImpl<SigninUiInterface> im
                 .subscribe(new Observer<UserOutListInfo>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        mDisposable = d;
                     }
 
                     @Override
                     public void onNext(UserOutListInfo outListInfo) {
                         uiInterface.getPrivateCourse(outListInfo);
                         Log.d("song", "sign---onNext:" + outListInfo.getMessage());
-                        mDisposable.dispose();
                     }
 
                     @Override
@@ -221,13 +213,12 @@ public class SigninPresenterImpl extends BasePresenterImpl<SigninUiInterface> im
                 .subscribe(new Observer<UserOutFaceExitInfo>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        mDisposable = d;
                     }
 
                     @Override
                     public void onNext(UserOutFaceExitInfo outFaceExitInfo) {
                         uiInterface.testMemberFaceExit(outFaceExitInfo);
-                        mDisposable.dispose();
+
                     }
 
                     @Override

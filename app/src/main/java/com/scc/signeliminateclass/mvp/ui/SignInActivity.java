@@ -212,14 +212,6 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
      */
     private static final int RC_CHOOSE_PHOTO = 104;
 
-    /**
-     * 是否跳转成功
-     */
-    private boolean isIntent = false;
-    /**
-     * 是否检测失败
-     */
-    private boolean mDetecError = false;
 
     /**
      * 私教是否签课成功
@@ -227,40 +219,10 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
     private boolean isPrivateSuccess = false;
 
     /**
-     * 用户人脸识别是否成功
-     */
-    private boolean isUserSuccess = false;
-    /**
      * 是否点击签课
      */
     private boolean isCheckUser = false;
-    /**
-     * 私教人脸识别是否失败
-     */
-    private boolean isPrivateError = false;
 
-    /**
-     * 用户人脸识别是否失败
-     */
-    private boolean isUserError = false;
-
-    /**
-     * 消课---私教是否成功
-     */
-    private boolean isOutPrSucc = false;
-    /**
-     * 消课---用户是否成功
-     */
-    private boolean isOutUrSucc = false;
-
-    /**
-     * 消课---用户是否被点击
-     */
-    private boolean isOutCheck = false;
-    /**
-     * 消课----有签课列表---是否选中item
-     */
-    private boolean misSelector;
     /**
      * 消课---有签课列表----回调id
      */
@@ -299,10 +261,7 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
      * 用户---根据课程id查询人脸是否成功
      */
     private static final String CLASSOUT_URL = "outfile";
-//    /**
-//     * 用户保存成功时间
-//     */
-//    private static final String USER_TIME = "userTime";
+
     /**
      * 上课私教时间
      */
@@ -336,6 +295,44 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
      * signInAdapter
      */
     private SignInAdapter signInAdapter;
+
+    /**
+     * 失败的次数
+     */
+    private  int mErrorNum = 0;
+    /**
+     * faceid请求成功，并且查询有当前的数据---testFacePass
+     */
+    private boolean isFaceSuccess;
+    /**
+     * 按钮是否点击
+     */
+    private boolean isBtnCheck;
+    /**
+     * thread
+     */
+    private Thread thread;
+    /**
+     * 私教成功，UI以刷新
+     */
+    private boolean isPrSuccess;
+    /**
+     * mPvUrl
+     */
+    private String mPvUrl;
+    /**
+     * mUserImgUrl
+     */
+    private String mUserImgUrl;
+    /**
+     * mTime
+     */
+    private String mTime;
+    /**
+     * 判断私教查询列表点击返回键
+     */
+    private boolean isResult = false;
+
     /**
      * handler
      */
@@ -344,27 +341,25 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            if (msg.what == 0) {
+            if (msg.what == 1) {
+                if (mErrorNum >= 5 || isFaceSuccess) { // 如果失败次数大于等于5或者faceid查询有数据就return，不再往下走
+                    return;
+                }
                 JSONObject json = (JSONObject) msg.obj;
                 if (json != null) {
                     Log.d(TAG, "json：" + json.toString());
                     UserInfo userInfo = new Gson().fromJson(json.toString(), UserInfo.class);
                     if (userInfo.getError_msg().equals("SUCCESS")) {
-                        isInCheck = false;
                         for (int i = 0; i < userInfo.getResult().getUser_list().size(); i++) {
                             String mUserID = userInfo.getResult().getUser_list().get(i).getUser_id();
                             //  签课/消课--- 私教人脸识别成功 --- 接口传faceid查询是否有某一个私教信息
                             impl.testFacePass(SignInActivity.this, AppUtils.ORG_ID, AppUtils.STORE_ID, mUserID);
                             if (isCheckUser) {
                                 if (flag == 1) { // 根据faceID 查询是否有会员
-                                    Log.d("song", "私教id：" + mUserID + ",:" + AppUtils.ORG_ID
-                                            + ",:" + AppUtils.STORE_ID);
                                     impl.testUserFacePass(SignInActivity.this,
                                             AppUtils.ORG_ID, AppUtils.STORE_ID, mUserID);
                                 } else {
                                     if (mOutUserId != 0) {
-                                        Log.d("song", "用户id：" + mUserID + ",:"
-                                                + AppUtils.ORG_ID + ",:" + AppUtils.STORE_ID);
                                         impl.testMemberFaceExit(SignInActivity.this, AppUtils.ORG_ID, AppUtils.STORE_ID,
                                                 mUserID, String.valueOf(mOutUserId));
                                     }
@@ -372,48 +367,16 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                             }
                         }
                     } else {
-                        isInCheck = false;
-                        try {
-                            stopAnimtion();
-                            supSufviewIn.getHolder().getSurface().release();
-                            mCameraSurfaceHolder.Stop();
-                        } catch (Exception e) {
-                            Log.d("song", "已关闭相机！");
-                        }
-                        if (!isPrivateSuccess) {  //  isPrivateError判断失败只走一次
-                            TestErrorActivity.startActivity(SignInActivity.this,
-                                    TestErrorActivity.TEST_REQUESTCODE, flag);
-                        } else { // isPrivateSuccess 用来判断私教已经成功，才可以进行用户跳{
-                            // 用手机号查询页面
-                            UserErrorActivity.startActivity(SignInActivity.this,
-                                    UserErrorActivity.USER_REQUESTCODE, flag,
-                                    mPvUrl, mUserImgUrl, mTime);
-                        }
+                        faceErrorStart();
                     }
-                }  else {
-                    isInCheck = false;
-                    try {
-                        stopAnimtion();
-                        supSufviewIn.getHolder().getSurface().release();
-                        mCameraSurfaceHolder.Stop();
-                    } catch (Exception e) {
-                        Log.d("song", "已关闭相机！");
-                    }
-                    if (!isPrivateSuccess) {  //  isPrivateError判断失败只走一次
-                        TestErrorActivity.startActivity(SignInActivity.this, TestErrorActivity.TEST_REQUESTCODE, flag);
-                    } else { // isPrivateSuccess 用来判断私教已经成功，才可以进行用户跳{
-                        // 用手机号查询页面
-                        UserErrorActivity.startActivity(SignInActivity.this, UserErrorActivity.USER_REQUESTCODE, flag,
-                                mPvUrl, mUserImgUrl, mTime);
-                    }
+                } else {
+                   faceErrorStart();
                 }
 
             } else if (msg.what == 2) {
-                isInCheck = false;
-                stopAnimtion();
+               faceErrorStart();
                 Log.e(TAG, "人脸识别异常----检测失败");
             }
-
         }
     };
 
@@ -459,7 +422,7 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                 JSONObject json = MHFace.detectUserIdByFace(file, "ezu_kj2");
                 this.byteArrayOutputStream = file;
                 Message message = new Message();
-                message.what = 0;
+                message.what = 1;
                 message.obj = json;
                 handler.sendMessage(message);
             } catch (Exception e) {
@@ -476,33 +439,14 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
     @Override
     protected void onResume() {
         super.onResume();
-        siginRecycle.setVisibility(View.GONE);
-        supSufviewIn.setVisibility(View.VISIBLE);
-        supSufviewIn.setClickable(true);
-        mCameraSurfaceHolder.setCameraSurfaceHolder(this, supSufviewIn);
-        if (flag == 2 && isResult) {
+        mErrorNum = 0; // 初始化次数
+        surViewShowInit();
+        if (flag == 2 && isResult) { // 下课---
             siginRecycle.setVisibility(View.VISIBLE);
             if (signInAdapter != null) {
                 signInAdapter.notifyDataSetChanged();
             }
         }
-//        List<UserOutListInfo.MessageBean> flagList = (List<UserOutListInfo.MessageBean>)
-//        getIntent().getSerializableExtra("flagList");
-//        if (flagList != null && flagList.size()>0) {
-//            siginRecycle.setVisibility(View.VISIBLE);
-//        }
-
-//            getPrivateCourse();
-//            int prid = (int) SPUtils.get(this, "prid", 0);
-//            if (prid != 0) {
-//                Log.d("song","刷新："+prid);
-//                // 查询私教列表
-//                impl.getPrivateCourse(SignInActivity.this, AppUtils.ORG_ID,
-//                        AppUtils.STORE_ID, String.valueOf(prid));
-//            } else {
-//                Log.d("song","刷新222："+prid);
-//            }
-
     }
 
 
@@ -522,15 +466,14 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
             tvUserName.setText(getResources().getString(R.string.user_out_class_name));
         }
 
-        siginRecycle.setVisibility(View.GONE);
-        supSufviewIn.setVisibility(View.VISIBLE);
-        supSufviewIn.setClickable(true);
-        mCameraSurfaceHolder.setCameraSurfaceHolder(this, supSufviewIn);
+       surViewShowInit(); //初始化surView
         // 点击签课
         subscribeClick(tvIn, o -> {
+            isInCheck = false;
             if (!isInCheck) {
                 startAnimtion();
-                setScanFace();
+                isBtnCheck = true;
+                mErrorNum = 0;
             }
         });
     }
@@ -554,7 +497,6 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                         SPUtils.put(this, PRIVATE_ID, prId);
                         SPUtils.put(this, PRIVATE_URL, primgUrl);
                         if (flag == 2) {
-                            Log.d("song", "识别失败");
                             isResult = true;
                             SPUtils.remove(this, "prid");
                             SPUtils.put(this, "prid", prId);
@@ -570,11 +512,9 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                     setPrivateUi();
                     // 点击消课
                     subscribeClick(tvOut, o -> {
+                        isInCheck = false;
                         if (!isInCheck) {
-                            mCameraSurfaceHolder.setCameraSurfaceHolder(this, supSufviewIn);
-                            isCheckUser = true;
-                            startAnimtion();
-                            setScanFace();
+                           onCheckUserBtn();
                         }
                     });
                 }
@@ -632,7 +572,9 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
      * 关闭动画
      */
     private void stopAnimtion() {
-        signLinear.setVisibility(View.INVISIBLE);
+        if (signLinear != null) {
+            signLinear.setVisibility(View.INVISIBLE);
+        }
         if (animaition != null) {
             animaition.stop();
         }
@@ -649,12 +591,8 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
         checkboxIn.setSelected(true);
         tvPrivateName.setSelected(true);
         tvPrivateTime.setVisibility(View.VISIBLE);
-        String time1 = (String) SPUtils.get(this, CURRENT_TIME, "");
-        Log.d("song", "获取时间111" + time1);
         SPUtils.put(this, CURRENT_TIME, TimeUtil.getCurrentTime());
         String time = (String) SPUtils.get(this, CURRENT_TIME, "");
-        String time2 = (String) SPUtils.get(this, CURRENT_TIME, "");
-        Log.d("song", "获取时间22221" + time2);
         tvPrivateTime.setText(time);
     }
 
@@ -680,29 +618,36 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
      * 接受到的File文件
      *
      * @param fileEventBus fileEventBus
+     * @throws InterruptedException InterruptedException
      */
     @Subscribe
-    public void onMessageEvent(FileEventBus fileEventBus) {
+    public void onMessageEvent(FileEventBus fileEventBus) throws InterruptedException {
         if (fileEventBus.getFile() != null) {
             this.mFile = fileEventBus.getFile();
+            if (isBtnCheck || isPrSuccess) {
+                Thread.sleep(1000);
+                setScanFace(mFile);
+            }
         }
     }
 
 
     /**
      * 请求人脸识别
+     * @param file file
      */
-    private void setScanFace() {
-        new Thread(new Runnable() {
+    private void setScanFace(ByteArrayOutputStream file) {
+     thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 isInCheck = true;
-                synchronized (obj) {
+//                synchronized (obj) { // 保证一个请求执行完再执行下一个请求
                     // 检测人脸
-                    queryFaceUserId(mFile);
-                }
+                    queryFaceUserId(file);
+//                }
             }
-        }).start();
+        });
+        thread.start();
     }
 
     /**
@@ -727,38 +672,40 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
     @Override
     public void setFasePass(TestFacePassInfo info) {
         if (info.isIsPass()) {
+            isBtnCheck = false; // 请求成功，就不在调人脸识别接口
             isPrivateSuccess = true;
-            if (flag == 2) { //如果是从消课进入---点击私教人脸识别成功，查询已签课的私教列表
-                if (!isCheckUser) {
+            isFaceSuccess = true;
+            if (flag == 1) { //如果是从消课进入---点击私教人脸识别成功，查询已签课的私教列表
+                if (isCheckUser) { // 判断如果点击了用户按钮，并且人脸识别私教也通过了（只有一个faceid），就继续人脸查询
+                    isFaceSuccess = false;
+                } else {
+                    stopAnimtion();
+                    setPrivateUi();
+                    // 点击签课
+                    subscribeClick(tvOut, o -> {
+                        isInCheck = false;
+                        if (!isInCheck) {
+                           onCheckUserBtn();
+                        }
+                    });
+                }
+            } else {
+                if (isCheckUser) { // 用户继续查询
+                    isFaceSuccess = false;
+                } else { // 下课---如果未点击用户按钮，就进行私教处理
                     isResult = true;
                     // 查询私教列表
                     impl.getPrivateCourse(SignInActivity.this, AppUtils.ORG_ID, AppUtils.STORE_ID,
                             String.valueOf(info.getPrivateMessage().getId()));
-                } else {
-                    isUserSaveSucc = true;
                 }
-
-            } else if (flag == 1) {
-                stopAnimtion();
-                setPrivateUi();
-                // 点击签课
-                subscribeClick(tvOut, o -> {
-                    if (!isInCheck) {
-                        startAnimtion();
-                        mCameraSurfaceHolder.setCameraSurfaceHolder(SignInActivity.this, supSufviewIn);
-                        isCheckUser = true;
-                        setScanFace();
-                    }
-                });
             }
             SPUtils.put(this, PRIVATE_ID, info.getPrivateMessage().getId());  // 将私教id存入sp
 
             if (byteArrayOutputStream != null) {  // 根据拍照成功的file流添加水印，并上传有水印的图片
                 privatePass = 1;  // 区分是签课人脸图片上传成功
-                final Bitmap rawbitmap = BitmapFactory.decodeByteArray(byteArrayOutputStream.toByteArray(),
-                        0, byteArrayOutputStream.size());
                 if (!TextUtils.isEmpty(info.getPrivateMessage().getNickname())) {
-                    File file = AppUtils.drawTextFaceSuccPicture(this, rawbitmap,
+                    Bitmap bitmap = pictDrawText();
+                    File file = AppUtils.drawTextFaceSuccPicture(this, bitmap,
                             info.getPrivateMessage().getNickname());
                     if (!netWorkAvalible) {
                         SPUtils.put(this, NO_NETWORK, file.toString());
@@ -767,22 +714,7 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                 }
             }
         } else {
-            isInCheck = false;
-            try {
-                stopAnimtion();
-                supSufviewIn.getHolder().getSurface().release();
-                mCameraSurfaceHolder.Stop();
-            } catch (Exception e) {
-                Log.d(TAG, "相机已关闭！");
-            }
-            if (!isPrivateSuccess) {  //  isPrivateError判断失败只走一次
-                TestErrorActivity.startActivity(SignInActivity.this, TestErrorActivity.TEST_REQUESTCODE, flag);
-            }
-            if (isPrivateSuccess) {
-                // 用手机号查询页面
-                UserErrorActivity.startActivity(SignInActivity.this, UserErrorActivity.USER_REQUESTCODE, flag,
-                        mPvUrl, mUserImgUrl, mTime);
-            }
+            faceErrorStart();
         }
     }
 
@@ -795,16 +727,16 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
     public void setUserFasePass(TestUserFacePassInfo info) {
         if (info.isIsPass()) {
             stopAnimtion();
+            isBtnCheck = false;
+            isPrSuccess = false;
             isUserSaveSucc = true; // 只用来最后一步保存数据（私教和用户全部识别完成）
-            isUserSuccess = true;  // 用来判断签课--会员通过只执行一次
             setUserUi();
             SPUtils.put(this, USER_ID, info.getMemberMessage().getMembership_id());  // 把会员id存入sp
             if (byteArrayOutputStream != null) {  // 将成功的图片添加水印，并上传返回有水印的URL
                 privatePass = 2;
-                final Bitmap rawbitmap = BitmapFactory.decodeByteArray(byteArrayOutputStream.toByteArray(),
-                        0, byteArrayOutputStream.size());
                 if (!TextUtils.isEmpty(info.getMemberMessage().getName())) {
-                    File file = AppUtils.drawTextFaceSuccPicture(this, rawbitmap, info.getMemberMessage().getName());
+                    Bitmap bitmap = pictDrawText();
+                    File file = AppUtils.drawTextFaceSuccPicture(this, bitmap, info.getMemberMessage().getName());
                     if (!netWorkAvalible) {
                         SPUtils.put(this, NO_NETWORK, file.toString());
                     }
@@ -812,43 +744,10 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                 }
             }
         } else {
-            isInCheck = false;
-            try {
-                stopAnimtion();
-                supSufviewIn.getHolder().getSurface().release();
-                mCameraSurfaceHolder.Stop();
-            } catch (Exception e) {
-                Log.d(TAG, "相机已关闭setUserFasePass");
-            }
-            if (!isPrivateSuccess) {  //  isPrivateError判断失败只走一次
-                TestErrorActivity.startActivity(SignInActivity.this, TestErrorActivity.TEST_REQUESTCODE, flag);
-            }
-            if (isPrivateSuccess) {
-                // 用手机号查询页面
-                UserErrorActivity.startActivity(SignInActivity.this, UserErrorActivity.USER_REQUESTCODE, flag,
-                        mPvUrl, mUserImgUrl, mTime);
-            }
+            faceErrorStart();
         }
     }
 
-    @Override
-    public void setUserError() {
-        try {
-            stopAnimtion();
-            supSufviewIn.getHolder().getSurface().release();
-            mCameraSurfaceHolder.Stop();
-        } catch (Exception e) {
-            Log.d(TAG, "相机已关闭setUserError");
-        }
-        if (!isPrivateSuccess) {  //  isPrivateError判断失败只走一次
-            TestErrorActivity.startActivity(SignInActivity.this, TestErrorActivity.TEST_REQUESTCODE, flag);
-        }
-        if (isPrivateSuccess) {
-            // 用手机号查询页面
-            UserErrorActivity.startActivity(SignInActivity.this, UserErrorActivity.USER_REQUESTCODE, flag,
-                    mPvUrl, mUserImgUrl, mTime);
-        }
-    }
 
     /**
      * 图片上传成功
@@ -890,15 +789,9 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
     @Override
     public void setSaveMessage(SaveMessageInfo saveMessage) {
         if (saveMessage.getCode() == 200) {
-            stopAnimtion();
-            supSufviewIn.getHolder().getSurface().release();
             setUserUi();
             isPrivateSuccess = false;
-            try {
-                mCameraSurfaceHolder.Stop();
-            } catch (Exception e) {
-                Log.d(TAG, "私教成功相机已关闭");
-            }
+            stopCameraIntent();
             Intent intent = new Intent(this, StartClassActivity.class);
             intent.putExtra("isStart", 1);
             startActivity(intent);
@@ -907,22 +800,9 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
     }
 
     /**
-     * mPvUrl
+     * 下课---获取已签课列表
+     * @param outListInfo outListInfo
      */
-    private String mPvUrl;
-    /**
-     * mUserImgUrl
-     */
-    private String mUserImgUrl;
-    /**
-     * mTime
-     */
-    private String mTime;
-    /**
-     * 判断私教查询列表点击返回键
-     */
-    private boolean isResult = false;
-
     @Override
     public void getPrivateCourse(UserOutListInfo outListInfo) {
         mList = outListInfo.getMessage();
@@ -931,10 +811,6 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
         getPrivateCourse(mList, false, -1);
     }
 
-    @Override
-    protected void onNightModeChanged(int mode) {
-        super.onNightModeChanged(mode);
-    }
 
     // 消课---用户识别成功传faceid和课程id
     @Override
@@ -943,13 +819,11 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
         if (outFaceExitInfo.isIsPass()) {
             stopAnimtion();
             isUserSaveSucc = true; // 只用来最后一步保存数据（私教和用户全部识别完成）
-            isUserSuccess = true;  // 用来判断签课--会员通过只执行一次
             setUserUi();
             if (byteArrayOutputStream != null) {  // 将成功的图片添加水印，并上传返回有水印的URL
                 privatePass = 3;
-                final Bitmap rawbitmap = BitmapFactory.decodeByteArray(byteArrayOutputStream.toByteArray(),
-                        0, byteArrayOutputStream.size());
-                File file = AppUtils.drawTextFaceSuccPicture(this, rawbitmap,
+                Bitmap bitmap = pictDrawText();
+                File file = AppUtils.drawTextFaceSuccPicture(this, bitmap,
                         outFaceExitInfo.getMemberMessage().getName());
                 if (!netWorkAvalible) {
                     SPUtils.put(this, NO_NETWORK, file.toString());
@@ -957,21 +831,7 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                 impl.upLoadPicture(this, file.toString()); // 上传有水印图片
             }
         } else {
-            try {
-                stopAnimtion();
-                supSufviewIn.getHolder().getSurface().release();
-                mCameraSurfaceHolder.Stop();
-            } catch (Exception e) {
-                Log.d(TAG, "消课---用户识别成功传faceid和课程id-----相机已关闭");
-            }
-            if (!isPrivateSuccess) {  //  isPrivateError判断失败只走一次
-                TestErrorActivity.startActivity(SignInActivity.this, TestErrorActivity.TEST_REQUESTCODE, flag);
-            }
-            if (isPrivateSuccess) {
-                // 用手机号查询页面
-                UserErrorActivity.startActivity(SignInActivity.this, UserErrorActivity.USER_REQUESTCODE, flag,
-                        mPvUrl, mUserImgUrl, mTime);
-            }
+            faceErrorStart(); //跳转失败页面
         }
     }
 
@@ -980,14 +840,8 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
     public void saveExitMessage(UserSaveMessageInfo userSaveMessageInfo) {
         Log.d(TAG, "消课完成" + userSaveMessageInfo.isSuccess());
         if (userSaveMessageInfo.isSuccess()) {
-            try {
-                supSufviewIn.getHolder().getSurface().release();
-                mCameraSurfaceHolder.Stop();
-            } catch (Exception e) {
-                Log.d(TAG, "消课成功相机已关闭");
-            }
-            stopAnimtion();
-            setUserUi();
+            stopCameraIntent(); //关闭相机
+            setUserUi(); // 刷新UI
             Intent intent = new Intent(this, StartClassActivity.class);
             intent.putExtra("isStart", 2);
             startActivity(intent);
@@ -1016,46 +870,22 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
 //        }
 //    }
 
-    /**
-     * 将bitmap转化为string
-     *
-     * @param bitmap bitmap
-     * @return string
-     */
-    public String bitmapToString(Bitmap bitmap) {
-        //将Bitmap转换成字符串
-        String string = null;
-        ByteArrayOutputStream bStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream);
-        byte[] bytes = bStream.toByteArray();
-        string = Base64.encodeToString(bytes, Base64.DEFAULT);
-        return string;
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        if (handler != null) {
-            handler.removeMessages(0);
-            handler.removeMessages(2);
-        }
-        if (animaition != null) {
-            animaition.stop();
-        }
-        if (mCameraSurfaceHolder != null) {
-            try {
-                supSufviewIn.getHolder().getSurface().release();
-                mCameraSurfaceHolder.Stop();
-            } catch (Exception e) {
-                Log.d(TAG, "onDestroy--相机已关闭！");
-            }
-        }
+        pauseRelease(); //释放资源
         if (signInAdapter != null) {
             List<SignInAdapter.MyViewHolder> myViewHolderList = SignInAdapter.getMyViewHolderList();
             myViewHolderList.clear();
             myViewHolderList = null;
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+         pauseRelease(); // 释放资源
     }
 
     /**
@@ -1076,18 +906,14 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
             signInAdapter.setOnItemListener(new SignInAdapter.onItemListener() {
                 @Override
                 public void onChilkListener(boolean isSelector, int id, int position) {
-
-                    misSelector = isSelector;
                     mOutUserId = id;
                     SPUtils.put(SignInActivity.this, "outUserId", id); //已签课的课程id存入sp
                     if (isSelector) {
                         // 点击签课
                         subscribeClick(tvOut, o -> {
-                            if (!isInCheck) {
-                                startAnimtion();
-                                mCameraSurfaceHolder.setCameraSurfaceHolder(SignInActivity.this, supSufviewIn);
-                                isCheckUser = true;
-                                setScanFace();
+                            isInCheck = false;
+                            if (!isInCheck) { // 判断按钮只点击一次
+                                onCheckUserBtn();
                             }
                         });
                     }
@@ -1125,5 +951,100 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
         return super.onKeyDown(keyCode, event);
     }
 
+    /**
+     * 人脸识别或者查询未有私教和会员失败时跳转失败页面
+     */
+    private void faceErrorStart() {
+        mErrorNum++;
+        if (mErrorNum >= 5) {
+            isInCheck = false;
+            isBtnCheck = false;
+            isPrSuccess = false;
+            stopCameraIntent();
+            if (!isPrivateSuccess) {  //  isPrivateError判断失败只走一次
+                TestErrorActivity.startActivity(SignInActivity.this, TestErrorActivity.TEST_REQUESTCODE, flag);
+            }
+            if (isPrivateSuccess) {
+                // 用手机号查询页面
+                UserErrorActivity.startActivity(SignInActivity.this, UserErrorActivity.USER_REQUESTCODE, flag,
+                        mPvUrl, mUserImgUrl, mTime);
+            }
+        }
+    }
 
+    /**
+     * onpause/ondestory释放资源
+     */
+    private void pauseRelease() {
+        isBtnCheck = false;
+        isInCheck = false;
+        isPrSuccess = false;
+        if (handler != null) {
+            handler.removeMessages(1);
+            handler.removeMessages(2);
+        }
+        if (animaition != null) {
+            animaition.stop();
+        }
+       stopCameta();
+    }
+
+    /**
+     * 初始化时显示supSufvView
+     */
+    private void surViewShowInit() {
+        siginRecycle.setVisibility(View.GONE);
+        supSufviewIn.setVisibility(View.VISIBLE);
+        supSufviewIn.setClickable(true);
+        mCameraSurfaceHolder.setCameraSurfaceHolder(this, supSufviewIn);
+    }
+
+    /**
+     * 点击用户按钮的操作
+     */
+    private void onCheckUserBtn() {
+        startAnimtion();
+        mCameraSurfaceHolder.setCameraSurfaceHolder(SignInActivity.this, supSufviewIn);
+        isCheckUser = true; // 是否点击下课按钮
+        isBtnCheck = true; // 判断请求成功或者失败，终止人脸调用
+        mErrorNum = 0; // 人脸识别的请求次数
+        isFaceSuccess = false; // 用来判断私教签课是否成功
+        isPrSuccess = true; // 判断私教请求成功，不走人脸识别接口
+    }
+
+    /**
+     * 关闭相机--页面销毁时
+     */
+    private void stopCameta() {
+        if (mCameraSurfaceHolder != null) {
+            try {
+                supSufviewIn.getHolder().getSurface().release();
+                mCameraSurfaceHolder.Stop();
+            } catch (Exception e) {
+                Log.d(TAG, "onDestroy--相机已关闭！");
+            }
+        }
+    }
+
+    /**
+     * 关闭相机---页面跳转时
+     */
+    private void stopCameraIntent() {
+        try {
+            stopAnimtion();
+            supSufviewIn.getHolder().getSurface().release();
+            mCameraSurfaceHolder.Stop();
+        } catch (Exception e) {
+            Log.d(TAG, "相机已关闭!");
+        }
+    }
+
+    /**
+     * 给图片添加水印
+     */
+    private Bitmap pictDrawText() {
+        final Bitmap rawbitmap = BitmapFactory.decodeByteArray(byteArrayOutputStream.toByteArray(),
+                0, byteArrayOutputStream.size());
+        return rawbitmap;
+    }
 }
