@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -125,6 +126,7 @@ public abstract class BaseMvpActivity<T extends BasePresenterImpl> extends BaseA
         Log.d(LOG_TAG, "----- onCreate ----- Bundle=" + savedInstanceState);
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // 禁用横屏
         unbinder = ButterKnife.bind(this);
         parseIntentData(getIntent(), false);
         //向activity容器中添加

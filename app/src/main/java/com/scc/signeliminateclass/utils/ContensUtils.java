@@ -8,6 +8,8 @@ import android.os.Build;
 
 import androidx.core.content.ContextCompat;
 
+import com.scc.signeliminateclass.widget.ScreenUtil;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -431,6 +433,18 @@ public class ContensUtils {
             return true;
         }
         lastTime = time;
+        return false;
+    }
+
+    /**
+     * 判断屏幕宽度
+     * @param context context
+     * @return boolean
+     */
+    public static boolean getScrenn(Context context) {
+        if (ScreenUtil.getScreenWidth(context) == 1200) {
+            return true;
+        }
         return false;
     }
 }

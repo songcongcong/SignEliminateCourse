@@ -249,6 +249,26 @@ public class AppUtils {
         return null;
     }
 
+
+    /**
+     * 为图片添加水印---适配平板
+     *
+     * @param context   context
+     * @param mbitmap   mbitmap
+     * @param mNickName mNickName
+     * @return file
+     */
+    public static File drawTextPictureScreen(Context context, Bitmap mbitmap, String mNickName) {
+        if (!TextUtils.isEmpty(mNickName)) {
+            Bitmap bitmap = ImageUtil.drawTextToCenter(context, mbitmap, mNickName,
+                    70, context.getResources().getColor(R.color.img_color));
+            Bitmap bitmap1 = ImageUtil.drawTextToLeftBottom(context, bitmap, TimeUtil.getPictureCurrentTime(), 50,
+                    context.getResources().getColor(R.color.img_color), 95, 220);
+            File file = FileUtil.getFile(bitmap1);
+            return file;
+        }
+        return null;
+    }
     /**
      * 为图片添加水印
      *
@@ -268,6 +288,27 @@ public class AppUtils {
         }
         return null;
     }
+
+    /**
+     * 为图片添加水印---适配平板
+     *
+     * @param context   context
+     * @param mbitmap   mbitmap
+     * @param mNickName mNickName
+     * @return file
+     */
+    public static File drawTextFaceSuccPictureScreen(Context context, Bitmap mbitmap, String mNickName) {
+        if (!TextUtils.isEmpty(mNickName)) {
+            Bitmap bitmap = ImageUtil.drawTextToCenter(context, mbitmap, mNickName,
+                    50, context.getResources().getColor(R.color.img_color));
+            Bitmap bitmap1 = ImageUtil.drawTextToLeftBottom(context, bitmap, TimeUtil.getPictureCurrentTime(), 50,
+                    context.getResources().getColor(R.color.img_color), 50, 200);
+            File file = FileUtil.getFile(bitmap1);
+            return file;
+        }
+        return null;
+    }
+
 
     /**
      * 退出当前页面

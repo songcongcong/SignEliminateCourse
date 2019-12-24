@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.scc.signeliminateclass.R;
 import com.scc.signeliminateclass.bean.UserOutListInfo;
+import com.scc.signeliminateclass.utils.ContensUtils;
 import com.scc.signeliminateclass.widget.GlideCircleTransform;
 
 import java.util.ArrayList;
@@ -57,6 +58,10 @@ public class SignInAdapter extends RecyclerView.Adapter<SignInAdapter.MyViewHold
      * index
      */
     private int index;
+    /**
+     * view
+     */
+    private View view;
 
     /**
      * SignInAdapter
@@ -84,14 +89,17 @@ public class SignInAdapter extends RecyclerView.Adapter<SignInAdapter.MyViewHold
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = View.inflate(context, R.layout.sign_recycle_item, null);
+        if (ContensUtils.getScrenn(context)) {
+            view = View.inflate(context, R.layout.sign_recycle_item_screen, null);
+        } else {
+            view = View.inflate(context, R.layout.sign_recycle_item, null);
+        }
         return new MyViewHolder(view);
     }
 
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Log.d("song", "消课请求成功：" + mList.get(position).getSign_time());
         holder.mTvName.setText(mList.get(position).getSign_time());
         // 私教图片
         Glide.with(context).load(mList.get(position).getEmployee_sign_image())
@@ -145,8 +153,6 @@ public class SignInAdapter extends RecyclerView.Adapter<SignInAdapter.MyViewHold
 
         if (mList.get(position).isSelector()) {
             if (onItemListener != null) {
-                Log.d("song", "默认选中:" + mList.get(position).isSelector() + "m:"
-                        + mList.get(position).getId() + ",:" + position);
                 onItemListener.onChilkListener(mList.get(position).isSelector(), mList.get(position).getId(), position);
             }
             if (onItemChilkListener != null) {

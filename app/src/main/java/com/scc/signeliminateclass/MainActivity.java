@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -23,6 +24,8 @@ import com.scc.signeliminateclass.mvp.ui.SignInActivity;
 import com.scc.signeliminateclass.mvp.ui.SplashActivity;
 import com.scc.signeliminateclass.mvp.uiinterface.MainUiInterface;
 import com.scc.signeliminateclass.utils.AppUtils;
+import com.scc.signeliminateclass.utils.ContensUtils;
+import com.scc.signeliminateclass.widget.ScreenUtil;
 
 import javax.inject.Inject;
 
@@ -70,6 +73,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenterImpl> implements 
 
     @Override
     protected int getLayoutId() {
+        if (ContensUtils.getScrenn(this)) {
+            return R.layout.activity_main_screen;
+        }
         return R.layout.activity_main;
     }
 
@@ -80,6 +86,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenterImpl> implements 
 
     @Override
     protected void init() {
+
         int stardend = getIntent().getIntExtra("startend", 0);
         if (stardend != 1) {
             startActivity(new Intent(this, SplashActivity.class));

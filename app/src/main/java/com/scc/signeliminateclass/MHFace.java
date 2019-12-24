@@ -337,7 +337,6 @@ public class MHFace {
      */
     public static String addUser(ByteArrayOutputStream file, String userInfo, String userId,
                                  String groupId, Context context) {
-        Log.d("song", "444444444添加：");
         byte[] bytes = MHFace.face2Bytes(file);
         String imgStr = Base64Util.encode(bytes);
         String imageType = "BASE64";
@@ -351,7 +350,6 @@ public class MHFace {
             return res.toString(2);
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.d("song", "555添加：" + e.toString());
         }
         return "";
     }

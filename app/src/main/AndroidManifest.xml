@@ -22,7 +22,8 @@
         android:largeHeap="true"
         android:hardwareAccelerated="false"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".mvp.ui.SplashActivity"></activity>
+        <activity android:name=".mvp.ui.SplashActivity"
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".mvp.ui.StartClassActivity" />
         <activity android:name=".mvp.ui.UserErrorActivity" />
         <activity android:name=".mvp.ui.TestErrorActivity" />
@@ -37,7 +38,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.scc.customview.fileprovider"
+            android:authorities="com.class.customview.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

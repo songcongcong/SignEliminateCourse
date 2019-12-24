@@ -71,7 +71,6 @@ public class MainPresenterImpl extends BasePresenterImpl<MainUiInterface> implem
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("song", "检查失败111：" + e.toString());
                         Toast.makeText(context, "网络连接失败！", Toast.LENGTH_LONG).show();
                     }
 

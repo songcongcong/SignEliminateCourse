@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/x10"
+        android:layout_margin="@dimen/x5"
         android:background="@drawable/recycle_item_bg"
         android:paddingBottom="@dimen/y8">
 
@@ -21,7 +21,7 @@
 
         <TextView
             android:id="@+id/tv_user_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x10"
@@ -29,7 +29,7 @@
             android:layout_toRightOf="@id/img_user"
             android:text="小明"
             android:textColor="@color/tv_user_color"
-            android:textSize="@dimen/x11" />
+            android:textSize="@dimen/x8" />
     </RelativeLayout>
 
 </RelativeLayout>

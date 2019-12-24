@@ -9,11 +9,11 @@
 
     <ImageView
         android:id="@+id/img_back"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/x25"
+        android:layout_height="@dimen/x25"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginLeft="@dimen/x15"
+        android:layout_marginTop="@dimen/y10"
         android:background="@mipmap/icon_back" />
 
     <LinearLayout
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="@dimen/y50"
         android:orientation="horizontal">
 
         <ImageView
@@ -36,10 +36,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="@dimen/x10"
             android:text="抱歉，人脸识别不成功，请手动拍照"
             android:textColor="@color/check_selector"
-            android:textSize="28sp"/>
+            android:textSize="@dimen/x17"/>
 
     </LinearLayout>
 
@@ -48,8 +48,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/user_linear"
-        android:layout_marginLeft="150dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginLeft="@dimen/x75"
+        android:layout_marginTop="@dimen/y25"
         android:orientation="horizontal"
         android:visibility="visible">
 
@@ -65,39 +65,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="@dimen/x5"
             android:text="请手动输入用户手机号查询"
             android:textColor="@color/check_selector"
-            android:textSize="28sp" />
+            android:textSize="@dimen/x17" />
 
         <RelativeLayout
             android:id="@+id/relat_user_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="@dimen/x15"
             android:background="@drawable/recycle_item_bg"
             android:orientation="vertical"
-            android:paddingBottom="15dp"
+            android:paddingBottom="@dimen/y7"
             android:visibility="gone">
 
             <ImageView
                 android:id="@+id/img_error_user"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp" />
+                android:layout_width="@dimen/x50"
+                android:layout_height="@dimen/x50"
+                android:layout_marginLeft="@dimen/x10"
+                android:layout_marginTop="@dimen/y5" />
 
             <TextView
                 android:id="@+id/tv_error_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginLeft="@dimen/x10"
+                android:layout_marginRight="@dimen/x10"
                 android:layout_toRightOf="@id/img_error_user"
                 android:text="小明"
                 android:textColor="@color/tv_user_color"
-                android:textSize="22sp" />
+                android:textSize="@dimen/x11" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -114,15 +114,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/liear_error_user"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="50dp"
+        android:layout_marginLeft="@dimen/x25"
+        android:layout_marginTop="@dimen/y10"
+        android:layout_marginRight="@dimen/x25"
         android:background="@drawable/recycle_item_bg"
         android:hint="输入用户手机号码："
-        android:paddingLeft="20dp"
-        android:paddingTop="25dp"
-        android:paddingBottom="25dp"
-        android:textSize="20sp"
+        android:paddingLeft="@dimen/x10"
+        android:paddingTop="@dimen/y2"
+        android:paddingBottom="@dimen/y12"
+        android:textSize="@dimen/x11"
         android:visibility="visible" />
 
 
@@ -132,32 +132,32 @@
         android:layout_above="@id/check_layout"
         android:layout_below="@id/liear_error_user"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp">
+        android:layout_marginTop="@dimen/y25">
 
         <TextView
             android:id="@+id/tv_picture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_blue_bg"
-            android:paddingLeft="40dp"
-            android:paddingTop="20dp"
-            android:paddingRight="40dp"
-            android:paddingBottom="20dp"
+            android:paddingLeft="@dimen/x20"
+            android:paddingTop="@dimen/y10"
+            android:paddingRight="@dimen/x20"
+            android:paddingBottom="@dimen/y10"
             android:text="拍照"
             android:textColor="@color/white"
-            android:textSize="22sp"
+            android:textSize="@dimen/x11"
             android:visibility="gone" />
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/user_error_recycleview"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="@dimen/y175"
         android:layout_above="@id/check_layout"
         android:layout_below="@id/ed_user_phone"
-        android:layout_marginLeft="150dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginRight="50dp"
+        android:layout_marginLeft="@dimen/x75"
+        android:layout_marginTop="@dimen/y50"
+        android:layout_marginRight="@dimen/x25"
         android:visibility="visible" />
 
     <include
@@ -166,7 +166,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/check_layout"
         android:layout_below="@id/ed_user_phone"
-        android:layout_marginLeft="150dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginLeft="@dimen/x75"
+        android:layout_marginTop="@dimen/y50"
         android:visibility="gone"/>
 </RelativeLayout>

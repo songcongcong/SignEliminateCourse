@@ -7,21 +7,20 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/x45"
+        android:layout_marginLeft="@dimen/x75"
         android:layout_marginTop="@dimen/y15"
         android:layout_marginRight="@dimen/x45">
 
         <LinearLayout
             android:id="@+id/liear_in"
-            android:layout_width="@dimen/x56"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <CheckBox
                 android:id="@+id/checkbox_in"
-                android:layout_width="@dimen/x35"
-                android:layout_height="@dimen/x35"
-                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@drawable/selector_icon_check"
                 android:button="@null" />
 
@@ -31,34 +30,31 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/y5"
                 android:text="@string/private_class_name"
-                android:layout_gravity="center"
                 android:textColor="@drawable/selector_text_color"
                 android:textSize="@dimen/x11" />
 
             <TextView
                 android:id="@+id/tv_private_time"
-                android:layout_width="@dimen/x56"
+                android:layout_width="@dimen/x35"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/y5"
                 android:text="2019-12-12 14:02:29"
                 android:textColor="@color/check_selector"
                 android:textSize="@dimen/x11"
-                android:visibility="gone"
-                android:layout_gravity="center"/>
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/lear_out"
-            android:layout_width="@dimen/x56"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:orientation="vertical">
 
             <CheckBox
                 android:id="@+id/checkbox_out"
-                android:layout_width="@dimen/x35"
-                android:layout_height="@dimen/x35"
-                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@drawable/selector_icon_check"
                 android:button="@null" />
 
@@ -68,20 +64,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/y5"
                 android:text="@string/user_class_name"
-                android:layout_gravity="center"
                 android:textColor="@drawable/selector_text_color"
                 android:textSize="@dimen/x11" />
 
             <TextView
                 android:id="@+id/tv_user_time"
-                android:layout_width="@dimen/x56"
+                android:layout_width="@dimen/x35"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/y5"
                 android:text="@string/user_class_name"
                 android:textColor="@color/check_selector"
                 android:textSize="@dimen/x11"
-                android:visibility="gone"
-                android:layout_gravity="center"/>
+                android:visibility="gone" />
         </LinearLayout>
 
 
@@ -89,10 +83,9 @@
             android:id="@+id/view_selector"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/y1"
-            android:layout_marginTop="@dimen/y15"
+            android:layout_marginTop="@dimen/y17"
             android:layout_toLeftOf="@id/lear_out"
             android:layout_toRightOf="@id/liear_in"
-            android:layout_marginRight="@dimen/x2"
             android:background="@drawable/selector_icon_check_color"
             android:button="@null" />
     </RelativeLayout>

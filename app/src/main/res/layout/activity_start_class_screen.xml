@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/y150">
+        android:layout_marginTop="@dimen/y100">
 
         <ImageView
             android:layout_width="@dimen/x25"
@@ -42,12 +42,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/liear_success"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/y40"
+        android:layout_marginTop="@dimen/y60"
         android:background="@drawable/shape_blue_bg"
         android:paddingLeft="@dimen/x20"
-        android:paddingTop="@dimen/y15"
+        android:paddingTop="@dimen/y12"
         android:paddingRight="@dimen/x20"
-        android:paddingBottom="@dimen/y15"
+        android:paddingBottom="@dimen/y12"
         android:text="开始上课吧"
         android:textColor="@color/white"
         android:textSize="@dimen/x14" />
@@ -57,5 +57,5 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_below="@id/tv_start_class"
-        android:layout_marginTop="@dimen/y35" />
+        android:layout_marginTop="@dimen/y80" />
 </RelativeLayout>

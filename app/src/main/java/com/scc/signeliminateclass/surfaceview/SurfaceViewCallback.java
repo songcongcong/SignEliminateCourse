@@ -69,13 +69,13 @@ public final class SurfaceViewCallback implements SurfaceHolder.Callback, Camera
     }
 
     /**
-     * surfaceCreated
+     *
      * @param holder holder
      */
     public void surfaceCreated(SurfaceHolder holder) {
         //初始化前置摄像头
         mFrontCamera.setCamera(mCamera);
-        mCamera = mFrontCamera.initCamera();
+        mCamera = mFrontCamera.initCamera(context);
         if (mCamera != null) {
             mCamera.setPreviewCallback(this);
             //适配竖排固定角度
@@ -83,6 +83,7 @@ public final class SurfaceViewCallback implements SurfaceHolder.Callback, Camera
             Log.i(TAG, "mFrontCamera: " + mFrontCamera.toString());
             Log.i(TAG, "mCamera: " + mCamera.toString());
             FrontCamera.setCameraDisplayOrientation((Activity) context, mFrontCamera.getCurrentCamIndex(), mCamera);
+//            FrontCamera.setCameraDisplayOrientationScreen((Activity) context, mFrontCamera.getCurrentCamIndex(), mCamera);
         }
 
 

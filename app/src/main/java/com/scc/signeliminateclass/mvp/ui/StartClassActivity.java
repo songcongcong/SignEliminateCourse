@@ -15,6 +15,7 @@ import com.scc.signeliminateclass.base.BaseMvpActivity;
 import com.scc.signeliminateclass.mvp.impl.StartClassPresenterImpl;
 import com.scc.signeliminateclass.mvp.uiinterface.StartClassUiInterface;
 import com.scc.signeliminateclass.utils.AppUtils;
+import com.scc.signeliminateclass.utils.ContensUtils;
 import com.scc.signeliminateclass.utils.SPUtils;
 import com.scc.signeliminateclass.utils.TimeUtil;
 
@@ -101,6 +102,9 @@ public class StartClassActivity extends BaseMvpActivity<StartClassPresenterImpl>
 
     @Override
     protected int getLayoutId() {
+        if (ContensUtils.getScrenn(this)) {
+            return R.layout.activity_start_class_screen;
+        }
         return R.layout.activity_start_class;
     }
 

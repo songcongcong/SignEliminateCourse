@@ -4,13 +4,19 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -24,6 +30,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,9 +53,11 @@ import com.scc.signeliminateclass.mvp.impl.SigninPresenterImpl;
 import com.scc.signeliminateclass.mvp.uiinterface.SigninUiInterface;
 import com.scc.signeliminateclass.surfaceview.CameraSurfaceHolder;
 import com.scc.signeliminateclass.utils.AppUtils;
+import com.scc.signeliminateclass.utils.ContensUtils;
 import com.scc.signeliminateclass.utils.NetWorkUtils;
 import com.scc.signeliminateclass.utils.SPUtils;
 import com.scc.signeliminateclass.utils.TimeUtil;
+import com.scc.signeliminateclass.widget.ScreenUtil;
 import com.scc.signeliminateclass.widget.SurFaceView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -299,7 +308,7 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
     /**
      * 失败的次数
      */
-    private  int mErrorNum = 0;
+    private int mErrorNum = 0;
     /**
      * faceid请求成功，并且查询有当前的数据---testFacePass
      */
@@ -332,6 +341,19 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
      * 判断私教查询列表点击返回键
      */
     private boolean isResult = false;
+
+    /**
+     * facePacefile
+     */
+    private File facePacefile;
+    /**
+     * userFaceFile
+     */
+    private File userFaceFile;
+    /**
+     * memberFile
+     */
+    private File memberFile;
 
     /**
      * handler
@@ -370,15 +392,16 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                         faceErrorStart();
                     }
                 } else {
-                   faceErrorStart();
+                    faceErrorStart();
                 }
 
             } else if (msg.what == 2) {
-               faceErrorStart();
+                faceErrorStart();
                 Log.e(TAG, "人脸识别异常----检测失败");
             }
         }
     };
+
 
     @Override
     protected SigninPresenterImpl initInjector() {
@@ -388,6 +411,9 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
 
     @Override
     protected int getLayoutId() {
+        if (ContensUtils.getScrenn(this)) {
+            return R.layout.activity_sign_in_screen;
+        }
         return R.layout.activity_sign_in;
     }
 
@@ -439,8 +465,16 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
     @Override
     protected void onResume() {
         super.onResume();
+        if (ContensUtils.checkAndApplyfPermissionActivity(SignInActivity.this,
+                new String[]{Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                RC_CHOOSE_CAMERA)) {
+            surViewShowInit();
+        } else {
+            surViewShowInit();
+        }
         mErrorNum = 0; // 初始化次数
-        surViewShowInit();
         if (flag == 2 && isResult) { // 下课---
             siginRecycle.setVisibility(View.VISIBLE);
             if (signInAdapter != null) {
@@ -466,7 +500,7 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
             tvUserName.setText(getResources().getString(R.string.user_out_class_name));
         }
 
-       surViewShowInit(); //初始化surView
+        surViewShowInit(); //初始化surView
         // 点击签课
         subscribeClick(tvIn, o -> {
             isInCheck = false;
@@ -477,7 +511,21 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
             }
         });
     }
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case RC_CHOOSE_CAMERA:
+                if (permissions[0].equals(CAMERA_PERMISSION)) {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        Log.e(TAG, "===========权限回调---用户同意了");
+                        surViewShowInit();
+                    }
+                    break;
+                }
+            default:
+                break;
+        }
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -514,7 +562,7 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                     subscribeClick(tvOut, o -> {
                         isInCheck = false;
                         if (!isInCheck) {
-                           onCheckUserBtn();
+                            onCheckUserBtn();
                         }
                     });
                 }
@@ -551,6 +599,9 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                         }
                     }
                 }
+                break;
+            case RC_CHOOSE_CAMERA:
+                surViewShowInit();
                 break;
             default:
                 break;
@@ -614,11 +665,12 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
 
     }
 
+
+
     /**
      * 接受到的File文件
      *
      * @param fileEventBus fileEventBus
-     * @throws InterruptedException InterruptedException
      */
     @Subscribe
     public void onMessageEvent(FileEventBus fileEventBus) throws InterruptedException {
@@ -634,16 +686,17 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
 
     /**
      * 请求人脸识别
+     *
      * @param file file
      */
     private void setScanFace(ByteArrayOutputStream file) {
-     thread = new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 isInCheck = true;
 //                synchronized (obj) { // 保证一个请求执行完再执行下一个请求
-                    // 检测人脸
-                    queryFaceUserId(file);
+                // 检测人脸
+                queryFaceUserId(file);
 //                }
             }
         });
@@ -685,7 +738,7 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                     subscribeClick(tvOut, o -> {
                         isInCheck = false;
                         if (!isInCheck) {
-                           onCheckUserBtn();
+                            onCheckUserBtn();
                         }
                     });
                 }
@@ -705,18 +758,73 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                 privatePass = 1;  // 区分是签课人脸图片上传成功
                 if (!TextUtils.isEmpty(info.getPrivateMessage().getNickname())) {
                     Bitmap bitmap = pictDrawText();
-                    File file = AppUtils.drawTextFaceSuccPicture(this, bitmap,
-                            info.getPrivateMessage().getNickname());
-                    if (!netWorkAvalible) {
-                        SPUtils.put(this, NO_NETWORK, file.toString());
+                    if (ContensUtils.getScrenn(this)) {
+                        facePacefile = AppUtils.drawTextFaceSuccPictureScreen(this, bitmap,
+                                info.getPrivateMessage().getNickname());
+                    } else {
+                        facePacefile = AppUtils.drawTextFaceSuccPicture(this, bitmap,
+                                info.getPrivateMessage().getNickname());
                     }
-                    impl.upLoadPicture(this, file.toString()); // 上传图片
+
+                    if (!netWorkAvalible) {
+                        SPUtils.put(this, NO_NETWORK, facePacefile.toString());
+                    }
+                    impl.upLoadPicture(this, facePacefile.toString()); // 上传图片
                 }
             }
         } else {
             faceErrorStart();
         }
     }
+    private  Bitmap rotateImage(int angle,Bitmap bitmap) {
+        //旋转图片
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        // 创建新的图片
+        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        return resizedBitmap;
+    }
+    /**
+     * 对人脸识别图片旋转角度
+     * @param bm
+     * @param orientationDegree
+     * @return
+     */
+   private Bitmap adjustPhotoRotation(Bitmap bm, final int orientationDegree) {
+
+        Matrix m = new Matrix();
+        m.setRotate(orientationDegree, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
+        float targetX, targetY;
+        if (orientationDegree == 90) {
+            targetX = bm.getHeight();
+            targetY = 0;
+        } else {
+            targetX = bm.getHeight();
+            targetY = bm.getWidth();
+        }
+
+        final float[] values = new float[9];
+        m.getValues(values);
+
+        float x1 = values[Matrix.MTRANS_X];
+        float y1 = values[Matrix.MTRANS_Y];
+
+        m.postTranslate(targetX - x1, targetY - y1);
+
+        Bitmap bm1 = Bitmap.createBitmap(bm.getHeight(), bm.getWidth(), Bitmap.Config.ARGB_8888);
+
+        Paint paint = new Paint();
+        Canvas canvas = new Canvas(bm1);
+        canvas.drawBitmap(bm, m, paint);
+
+
+        return bm1;
+    }
+
+
+
+
 
     /**
      * 签课---会员---根据faceID查询某一个会员信息
@@ -736,11 +844,15 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
                 privatePass = 2;
                 if (!TextUtils.isEmpty(info.getMemberMessage().getName())) {
                     Bitmap bitmap = pictDrawText();
-                    File file = AppUtils.drawTextFaceSuccPicture(this, bitmap, info.getMemberMessage().getName());
-                    if (!netWorkAvalible) {
-                        SPUtils.put(this, NO_NETWORK, file.toString());
+                    if (ContensUtils.getScrenn(this)) {
+                        userFaceFile = AppUtils.drawTextFaceSuccPictureScreen(this, bitmap, info.getMemberMessage().getName());
+                    } else {
+                        userFaceFile = AppUtils.drawTextFaceSuccPicture(this, bitmap, info.getMemberMessage().getName());
                     }
-                    impl.upLoadPicture(this, file.toString()); // 上传有水印图片
+                    if (!netWorkAvalible) {
+                        SPUtils.put(this, NO_NETWORK, userFaceFile.toString());
+                    }
+                    impl.upLoadPicture(this, userFaceFile.toString()); // 上传有水印图片
                 }
             }
         } else {
@@ -801,6 +913,7 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
 
     /**
      * 下课---获取已签课列表
+     *
      * @param outListInfo outListInfo
      */
     @Override
@@ -823,12 +936,17 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
             if (byteArrayOutputStream != null) {  // 将成功的图片添加水印，并上传返回有水印的URL
                 privatePass = 3;
                 Bitmap bitmap = pictDrawText();
-                File file = AppUtils.drawTextFaceSuccPicture(this, bitmap,
-                        outFaceExitInfo.getMemberMessage().getName());
-                if (!netWorkAvalible) {
-                    SPUtils.put(this, NO_NETWORK, file.toString());
+                if (ContensUtils.getScrenn(this)) {
+                    memberFile = AppUtils.drawTextFaceSuccPictureScreen(this, bitmap,
+                            outFaceExitInfo.getMemberMessage().getName());
+                } else {
+                    memberFile = AppUtils.drawTextFaceSuccPicture(this, bitmap,
+                            outFaceExitInfo.getMemberMessage().getName());
                 }
-                impl.upLoadPicture(this, file.toString()); // 上传有水印图片
+                if (!netWorkAvalible) {
+                    SPUtils.put(this, NO_NETWORK, memberFile.toString());
+                }
+                impl.upLoadPicture(this, memberFile.toString()); // 上传有水印图片
             }
         } else {
             faceErrorStart(); //跳转失败页面
@@ -885,7 +1003,7 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
     @Override
     protected void onPause() {
         super.onPause();
-         pauseRelease(); // 释放资源
+        pauseRelease(); // 释放资源
     }
 
     /**
@@ -986,7 +1104,7 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
         if (animaition != null) {
             animaition.stop();
         }
-       stopCameta();
+        stopCameta();
     }
 
     /**
@@ -1045,6 +1163,10 @@ public class SignInActivity extends BaseMvpActivity<SigninPresenterImpl> impleme
     private Bitmap pictDrawText() {
         final Bitmap rawbitmap = BitmapFactory.decodeByteArray(byteArrayOutputStream.toByteArray(),
                 0, byteArrayOutputStream.size());
+        if (ContensUtils.getScrenn(this)) {
+            Bitmap rotateImage = rotateImage(-90, rawbitmap);
+            return rotateImage;
+        }
         return rawbitmap;
     }
 }

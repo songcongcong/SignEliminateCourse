@@ -123,7 +123,6 @@ public class SigninPresenterImpl extends BasePresenterImpl<SigninUiInterface> im
 
     @Override
     public void upLoadPicture(Context context, String file) {
-        Log.d("song", "upLoadPicture：");
         // string转化为file文件
         File filePath = new File(file);
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), filePath);

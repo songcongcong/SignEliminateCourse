@@ -12,15 +12,15 @@
         android:layout_width="@dimen/x25"
         android:layout_height="@dimen/x25"
         android:layout_marginLeft="@dimen/x15"
-        android:layout_marginTop="@dimen/y10"
+        android:layout_marginTop="@dimen/y15"
         android:background="@mipmap/icon_back" />
 
     <LinearLayout
         android:id="@+id/test_linear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/y50"
+        android:layout_marginLeft="@dimen/x15"
         android:orientation="horizontal">
 
         <ImageView
@@ -35,10 +35,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginLeft="@dimen/x15"
             android:text="抱歉，人脸识别不成功，请手动设置"
             android:textColor="@color/check_selector"
-            android:textSize="@dimen/x17"/>
+            android:textSize="@dimen/x14"/>
     </LinearLayout>
 
 
@@ -47,8 +47,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/test_linear"
-        android:layout_marginLeft="@dimen/x100"
-        android:layout_marginTop="@dimen/y25"
+        android:layout_marginLeft="@dimen/x25"
+        android:layout_marginTop="@dimen/y15"
         android:orientation="horizontal">
 
         <ImageView
@@ -63,16 +63,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginLeft="@dimen/x15"
             android:text="请手动选择签课私教"
             android:textColor="@color/check_selector"
-            android:textSize="@dimen/x17" />
+            android:textSize="@dimen/x14" />
 
         <RelativeLayout
             android:id="@+id/relat_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x15"
+            android:layout_marginLeft="@dimen/x5"
             android:background="@drawable/recycle_item_bg"
             android:orientation="vertical"
             android:paddingBottom="@dimen/y7"
@@ -95,7 +95,7 @@
                 android:layout_toRightOf="@id/iv_user"
                 android:text="小明"
                 android:textColor="@color/tv_user_color"
-                android:textSize="@dimen/x11" />
+                android:textSize="@dimen/x10" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -105,7 +105,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/y35" />
+        android:layout_marginBottom="@dimen/y15" />
 
     <RelativeLayout
         android:id="@+id/test_relayout"
@@ -137,9 +137,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/check_layout"
         android:layout_below="@id/liear_error"
-        android:layout_marginLeft="@dimen/x100"
+        android:layout_marginLeft="@dimen/x25"
         android:layout_marginTop="@dimen/y10"
-        android:layout_marginRight="@dimen/x75"
+        android:layout_marginRight="@dimen/x25"
         android:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -147,9 +147,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/y200"
         android:layout_below="@id/test_relayout"
-        android:layout_marginLeft="@dimen/x100"
-        android:layout_marginTop="@dimen/y25"
-        android:layout_marginRight="@dimen/x75"
+        android:layout_marginLeft="@dimen/x25"
+        android:layout_marginTop="@dimen/y10"
+        android:layout_marginRight="@dimen/x25"
         android:visibility="gone" />
 
 

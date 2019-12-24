@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.scc.signeliminateclass.R;
 import com.scc.signeliminateclass.bean.PrivateErrorListInfo;
+import com.scc.signeliminateclass.utils.ContensUtils;
+import com.scc.signeliminateclass.widget.ScreenUtil;
 
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class ErrorRecycleAdapter extends RecyclerView.Adapter<ErrorRecycleAdapte
      * 上下文
      */
     private Context context;
+    private View view;
 
     /**
      * 构造器
@@ -44,7 +47,11 @@ public class ErrorRecycleAdapter extends RecyclerView.Adapter<ErrorRecycleAdapte
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = View.inflate(context, R.layout.error_item_layout, null);
+        if (ContensUtils.getScrenn(context)) {
+            view = View.inflate(context, R.layout.error_item_layout_screen, null);
+        } else {
+            view = View.inflate(context, R.layout.error_item_layout, null);
+        }
         MyViewHolder myViewHolder = new MyViewHolder(view);
         return myViewHolder;
     }

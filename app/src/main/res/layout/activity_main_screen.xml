@@ -17,8 +17,8 @@
 
         <RelativeLayout
             android:id="@+id/relay_sign_in"
-            android:layout_width="@dimen/x150"
-            android:layout_height="@dimen/x175"
+            android:layout_width="@dimen/x135"
+            android:layout_height="@dimen/x155"
             android:background="@drawable/shape_class_bg">
 
             <ImageView
@@ -41,9 +41,9 @@
 
         <RelativeLayout
             android:id="@+id/relay_sign_out"
-            android:layout_width="@dimen/x150"
-            android:layout_height="@dimen/x175"
-            android:layout_marginLeft="@dimen/x90"
+            android:layout_width="@dimen/x135"
+            android:layout_height="@dimen/x155"
+            android:layout_marginLeft="@dimen/x45"
             android:background="@drawable/shape_outclass_bg">
 
             <ImageView

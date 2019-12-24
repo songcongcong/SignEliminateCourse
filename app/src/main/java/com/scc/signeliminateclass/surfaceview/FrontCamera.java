@@ -1,11 +1,14 @@
 package com.scc.signeliminateclass.surfaceview;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.Surface;
+
+import com.scc.signeliminateclass.utils.ContensUtils;
 
 /**
  * Created by zhousong on 2016/9/18.
@@ -28,6 +31,7 @@ public class FrontCamera {
      * previewing
      */
     boolean previewing;
+    private Camera camera;
 
     /**
      * setCamera
@@ -116,7 +120,7 @@ public class FrontCamera {
      * 初始化相机
      * @return Camera
      */
-    public Camera initCamera() {
+    public Camera initCamera(Context context) {
         int cameraCount = 0;
         Camera cam = null;
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
@@ -128,17 +132,45 @@ public class FrontCamera {
             Camera.getCameraInfo(camIdx, cameraInfo);
             //在这里打开的是前置摄像头,可修改打开后置OR前置   Camera.CameraInfo.CAMERA_FACING_FRONT  前置，
             // Camera.CameraInfo.CAMERA_FACING_BACK  后置
-            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
-                try {
-                    cam = Camera.open(camIdx);
-                    mCurrentCamIndex = camIdx;
+            if (ContensUtils.getScrenn(context)) { // 判断屏幕宽度为1200
+                camera = setCameraFace(cameraInfo, cam, camIdx, Camera.CameraInfo.CAMERA_FACING_FRONT);
+            } else {
+                camera = setCameraFace(cameraInfo, cam, camIdx, Camera.CameraInfo.CAMERA_FACING_BACK);
+            }
+//            if (cameraInfo.facing ==  Camera.CameraInfo.CAMERA_FACING_BACK) {
+//                try {
+//                    cam = Camera.open(camIdx);
+//                    mCurrentCamIndex = camIdx;
+////                    Camera.Parameters parameters = cam.getParameters();
+////                    parameters.setPictureSize(1920,1080);
+////                    Log.e("song","分辨率："+parameters.getPictureSize().width+":"+parameters.getPictureSize().height);
+////                    cam.setParameters(parameters);
+//                    Log.d("song","后置摄像头");
+//                } catch (RuntimeException e) {
+//                    Log.e(TAG, "Camera failed to open: " + e.getLocalizedMessage());
+//                }
+//            }
+        }
+        return camera;
+    }
+
+    /**
+     * 设置摄像头的前置或后置，并开启摄像头
+     * @param cameraInfo cameraInfo
+     * @param cam cam
+     * @param camIdx camIdx
+     */
+    private Camera setCameraFace( Camera.CameraInfo cameraInfo, Camera cam, int camIdx, int screen) {
+        if (cameraInfo.facing == screen) {
+            try {
+                cam = Camera.open(camIdx);
+                mCurrentCamIndex = camIdx;
 //                    Camera.Parameters parameters = cam.getParameters();
 //                    parameters.setPictureSize(1920,1080);
 //                    Log.e("song","分辨率："+parameters.getPictureSize().width+":"+parameters.getPictureSize().height);
 //                    cam.setParameters(parameters);
-                } catch (RuntimeException e) {
-                    Log.e(TAG, "Camera failed to open: " + e.getLocalizedMessage());
-                }
+            } catch (RuntimeException e) {
+                Log.e(TAG, "Camera failed to open: " + e.getLocalizedMessage());
             }
         }
         return cam;
@@ -202,4 +234,43 @@ public class FrontCamera {
         camera.setDisplayOrientation(result);
     }
 
+    /**
+     * 解决平板上的预览图片旋转
+     * @param activity activity
+     * @return int
+     */
+    public static int getDisplayRotation(Activity activity) {
+        int rotation = activity.getWindowManager().getDefaultDisplay()
+                .getRotation();
+        switch (rotation) {
+            case Surface.ROTATION_0: return 0;
+            case Surface.ROTATION_90: return 90;
+            case Surface.ROTATION_180: return 180;
+            case Surface.ROTATION_270: return 270;
+        }
+        return 0;
+    }
+
+    /**
+     * 解决平板上预览图片旋转其他方向
+     * @param activity  activity
+     * @param cameraId cameraId
+     * @param camera camera
+     */
+    public static void setCameraDisplayOrientationScreen(Activity activity,
+                                                   int cameraId, Camera camera) {
+        // See android.hardware.Camera.setCameraDisplayOrientation for
+        // documentation.
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        Camera.getCameraInfo(cameraId, info);
+        int degrees = getDisplayRotation(activity);
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360; // compensate the mirror
+        } else { // back-facing
+            result = (info.orientation - degrees + 360) % 360;
+        }
+        camera.setDisplayOrientation(result);
+    }
 }

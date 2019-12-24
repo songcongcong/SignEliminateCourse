@@ -245,6 +245,14 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
      * inputStream
      */
     private InputStream inputStream;
+    /**
+     * imgToFile
+     */
+    private File imgToFile;
+    /**
+     * imgNllToFile
+     */
+    private File imgNllToFile;
 
     @Override
     protected TestErrorPresenterImpl initInjector() {
@@ -254,6 +262,9 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
 
     @Override
     protected int getLayoutId() {
+        if (ContensUtils.getScrenn(this)) {
+            return R.layout.activity_test_error_screen;
+        }
         return R.layout.activity_test_error;
     }
 
@@ -294,7 +305,7 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             //改变Uri  com.xykj.customview.fileprovider注意和xml中的一致
-            tempUri = FileProvider.getUriForFile(this, "com.scc.customview.fileprovider", cameraSavePath);
+            tempUri = FileProvider.getUriForFile(this, "com.class.customview.fileprovider", cameraSavePath);
             //添加权限
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);
@@ -443,8 +454,12 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
         if (extras != null) {
             Bitmap photo = extras.getParcelable("data");
             if (mNickName != null) {
-                File file = AppUtils.drawTextPicture(this, photo, mNickName);
-                impl.upLoadPicture(this, file.toString()); // 上传图片
+                if (ContensUtils.getScrenn(this)) {
+                    imgToFile = AppUtils.drawTextPictureScreen(this, photo, mNickName);
+                } else {
+                    imgToFile = AppUtils.drawTextPicture(this, photo, mNickName);
+                }
+                impl.upLoadPicture(this, imgToFile.toString()); // 上传图片
             }
 
         }
@@ -457,8 +472,12 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
      */
     protected void setImageNllToView(Bitmap mbitmap) {
         if (mNickName != null) {
-            File file = AppUtils.drawTextPicture(this, mbitmap, mNickName);
-            impl.upLoadPicture(this, file.toString()); // 上传图片
+            if (ContensUtils.getScrenn(this)) {
+                imgNllToFile = AppUtils.drawTextPictureScreen(this, mbitmap, mNickName);
+            } else {
+                imgNllToFile = AppUtils.drawTextPicture(this, mbitmap, mNickName);
+            }
+            impl.upLoadPicture(this, imgNllToFile.toString()); // 上传图片
         }
     }
 
@@ -556,7 +575,6 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
                 public void OnItemChilkListener(String nickName, String imgUrl, int id) {
                     mId = id;
                     mNickName = nickName;
-                    Log.d("song", "点击私教：" + mNickName + ":" + mId);
                     SPUtils.put(TestErrorActivity.this, "nickName", nickName);
                     // 列表隐藏，展示拍照按钮
                     errorRecycle.setVisibility(View.GONE);
@@ -578,7 +596,6 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
                             }
                         });
                     } else {
-                        Log.d("song", "点击课程");
                         // 消课--检查是否有课程--根据课程id
                         impl.getPrivateCourse(TestErrorActivity.this, AppUtils.ORG_ID,
                                 AppUtils.STORE_ID, String.valueOf(id));
@@ -609,7 +626,6 @@ public class TestErrorActivity extends BaseMvpActivity<TestErrorPresenterImpl> i
         errorRecycle.setVisibility(View.GONE);
         errorRecycleOut.setVisibility(View.VISIBLE);
         List<UserOutListInfo.MessageBean> message = outListInfo.getMessage();
-        Log.d("song", "暂无可消课程:" + message.size());
         if (message.size() <= 0) {
             Toast.makeText(this, "暂无可消课程！", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, MainActivity.class);

@@ -11,7 +11,7 @@
         android:layout_height="@dimen/x25"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="@dimen/x15"
-        android:layout_marginTop="@dimen/y10"
+        android:layout_marginTop="@dimen/y15"
         android:background="@mipmap/icon_back" />
 
     <RelativeLayout
@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/y100"
+        android:layout_marginTop="@dimen/y30"
         android:background="@drawable/circle_stroke_bg">
 
         <RelativeLayout
@@ -32,8 +32,8 @@
 
             <com.scc.signeliminateclass.widget.SurFaceView
                 android:id="@+id/sup_sufview_in"
-                android:layout_width="@dimen/x300"
-                android:layout_height="@dimen/x300"
+                android:layout_width="@dimen/x150"
+                android:layout_height="@dimen/x150"
                 android:layout_centerHorizontal="true"
                 android:background="#00000000"
                 android:clickable="false"
@@ -45,17 +45,17 @@
 
     <LinearLayout
         android:id="@+id/liear_li"
-        android:layout_width="@dimen/x150"
+        android:layout_width="@dimen/x120"
         android:layout_height="wrap_content"
         android:layout_below="@id/sign_relate"
-        android:layout_marginLeft="@dimen/x100"
-        android:layout_marginTop="@dimen/y75"
+        android:layout_marginLeft="@dimen/x35"
+        android:layout_marginTop="@dimen/y20"
         android:orientation="horizontal">
 
         <CheckBox
             android:id="@+id/tv_in"
             android:layout_width="0dp"
-            android:layout_height="@dimen/y50"
+            android:layout_height="@dimen/y45"
             android:layout_weight="1"
             android:background="@drawable/selector_btn_color"
             android:button="@null"
@@ -65,24 +65,24 @@
             android:paddingBottom="@dimen/y4"
             android:text="私教签课"
             android:textColor="#fff"
-            android:textSize="@dimen/x18" />
+            android:textSize="@dimen/x16" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/liear"
-        android:layout_width="@dimen/x150"
+        android:layout_width="@dimen/x120"
         android:layout_height="wrap_content"
         android:layout_below="@id/sign_relate"
-        android:layout_marginLeft="@dimen/x60"
-        android:layout_marginTop="@dimen/y75"
+        android:layout_marginLeft="@dimen/x40"
+        android:layout_marginTop="@dimen/y20"
         android:layout_toRightOf="@id/liear_li"
         android:orientation="horizontal">
 
         <CheckBox
             android:id="@+id/tv_out"
             android:layout_width="0dp"
-            android:layout_height="@dimen/y150"
+            android:layout_height="@dimen/y45"
             android:layout_gravity="center"
             android:layout_marginRight="@dimen/x5"
             android:layout_weight="1"
@@ -94,7 +94,7 @@
             android:paddingBottom="@dimen/y4"
             android:text="用户签课"
             android:textColor="#fff"
-            android:textSize="@dimen/x18" />
+            android:textSize="@dimen/x16" />
     </LinearLayout>
 
     <RelativeLayout
@@ -106,9 +106,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/sigin_recycle"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/y150"
-            android:layout_marginLeft="@dimen/x75"
-            android:layout_marginTop="@dimen/y25"
+            android:layout_height="@dimen/y120"
+            android:layout_marginLeft="@dimen/x25"
+            android:layout_marginTop="@dimen/y5"
             android:layout_marginRight="@dimen/x25"
             android:visibility="visible" />
 
@@ -117,10 +117,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/sigin_recycle"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/y40"
+            android:layout_marginTop="@dimen/y2"
             android:orientation="horizontal"
-            android:visibility="invisible">
+            android:visibility="invisible"
+            android:layout_marginBottom="@dimen/y5"
+            android:layout_marginLeft="@dimen/y30">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -129,7 +130,8 @@
                 android:gravity="center"
                 android:text="正在识别中。。。"
                 android:textColor="@color/white"
-                android:textSize="@dimen/x18" />
+                android:textSize="@dimen/x14"
+                />
 
             <ImageView
                 android:id="@+id/winpay_loading_bg"
@@ -146,12 +148,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/y35" />
+        android:layout_marginBottom="@dimen/y15" />
 
     <ImageView
         android:id="@+id/img"
-        android:layout_width="@dimen/x50"
-        android:layout_height="@dimen/y50" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <ImageView
         android:id="@+id/img_ic"

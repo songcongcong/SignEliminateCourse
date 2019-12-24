@@ -259,6 +259,14 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
      * mMiuiInputStream
      */
     private InputStream mMiuiInputStream;
+    /**
+     * imgToFile
+     */
+    private File imgToFile;
+    /**
+     * imgNllToFile
+     */
+    private File imgNllToFile;
 
     @Override
     protected UserErrorPresenterImpl initInjector() {
@@ -268,6 +276,9 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
 
     @Override
     protected int getLayoutId() {
+        if (ContensUtils.getScrenn(this)) {
+            return R.layout.activity_user_error_screen;
+        }
         return R.layout.activity_user_error;
     }
 
@@ -294,7 +305,6 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
 
 
         int privated = (int) SPUtils.get(this, "orgId", 0);
-        Log.d("song", "用户activity：" + privated);
         int outClassId = (int) SPUtils.get(this, "outUserId", 0); //已签课的课程id存入sp
 //        impl.getMemberByCourse(this, AppUtils.ORG_ID, AppUtils.STORE_ID, String.valueOf(outClassId));
         String nickName = (String) SPUtils.get(this, "nickName", "");
@@ -328,7 +338,6 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
             });
         } else {
             if (privated != 0) {
-                Log.d("song", "用户activity----不等于0：" + privated);
                 tvPrivateName.setText(getResources().getString(R.string.private_out_class_name));
                 tvUserName.setText(getResources().getString(R.string.user_out_class_name));
                 liearErrorUser.setVisibility(View.GONE);
@@ -354,7 +363,8 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
                             RC_CHOOSE_CAMERA)) {
 //                        mCameraSurfaceHolder.Stop();
                         startCamera();
-                        Log.d("song", "点击用户条目监听");
+                    }  else {
+                        startCamera();
                     }
                 });
             }
@@ -402,7 +412,7 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             //改变Uri  com.xykj.customview.fileprovider注意和xml中的一致
-            tempUri = FileProvider.getUriForFile(this, "com.scc.customview.fileprovider", cameraSavePath);
+            tempUri = FileProvider.getUriForFile(this, "com.class.customview.fileprovider", cameraSavePath);
             //添加权限
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);
@@ -413,7 +423,7 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
         try {
             startActivityForResult(intent, RC_CHOOSE_CAMERA);
         } catch (Exception e) {
-            Log.d("song", "相机：" + e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -510,8 +520,12 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
         if (extras != null) {
             Bitmap photo = extras.getParcelable("data");
             if (mName != null) {
-                File file = AppUtils.drawTextPicture(this, photo, mName);
-                impl.upLoadPicture(this, file.toString());
+                if (ContensUtils.getScrenn(this)) {
+                    imgToFile = AppUtils.drawTextPictureScreen(this, photo, mName);
+                } else {
+                    imgToFile = AppUtils.drawTextPicture(this, photo, mName);
+                }
+                impl.upLoadPicture(this, imgToFile.toString());
             }
 
         }
@@ -523,8 +537,12 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
      */
     protected void setImageNllToView(Bitmap mbitmap) {
         if (mName != null) {
-            File file = AppUtils.drawTextPicture(this, mbitmap, mName);
-            impl.upLoadPicture(this, file.toString()); // 上传图片
+            if (ContensUtils.getScrenn(this)) {
+                imgNllToFile = AppUtils.drawTextPictureScreen(this, mbitmap, mName);
+            } else {
+                imgNllToFile = AppUtils.drawTextPicture(this, mbitmap, mName);
+            }
+            impl.upLoadPicture(this, imgNllToFile.toString()); // 上传图片
         }
     }
 
@@ -621,6 +639,8 @@ public class UserErrorActivity extends BaseMvpActivity<UserErrorPresenterImpl> i
                                         Manifest.permission.READ_EXTERNAL_STORAGE,
                                         Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                 RC_CHOOSE_CAMERA)) {
+                            startCamera();
+                        } else {
                             startCamera();
                         }
                     });
